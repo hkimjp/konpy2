@@ -16,7 +16,7 @@
           (handler request))
         (do
           (t/log! :debug "not found")
-          (-> (resp/redirect "/")
+          (-> (resp/redirect "/login")
               (assoc :session {} :flash "need login")))))))
 
 (defn wrap-admin [handler]
@@ -25,5 +25,5 @@
       (t/log! :debug (str "wrap-admin " user))
       (if (= (env :admin) user)
         (handler request)
-        (-> (resp/redirect "/")
+        (-> (resp/redirect "/login")
             (assoc :session {} :flash "admin only"))))))

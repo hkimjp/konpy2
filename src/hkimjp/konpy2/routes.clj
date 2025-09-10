@@ -6,15 +6,29 @@
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
    [hkimjp.konpy2.help :refer [help]]
-   [hkimjp.konpy2.login :refer [login login! logout!]]))
+   [hkimjp.konpy2.login :refer [login login! logout!]]
+   [hkimjp.konpy2.view :refer [page]]))
+
+(defn dummy [request]
+  (page [:div (:request-method request) " " (:uri request)]))
 
 (defn routes
   []
-  [["/"         {:get login :post login!}]
-   ["/logout"   logout!]
-   ["/help"     {:get help}]
-   ["/admin"    {:middleware [m/wrap-admin]}
-    [""           {:get admin/admin}]]])
+  [["/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    ["" {:get {:handler dummy}}]]
+   ["/login" {:middleware [[wrap-defaults site-defaults]]}
+    ["" {:get login :post login!}]]
+   ["logout" logout!]])
+
+   ; ["/scores" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+   ;  ["" dummy]]
+   ; ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+   ;  ["" dummy]]
+   ; ["/help"     {:get help}]
+   ; ["/api" {:middleware [[wrap-defaults api-defaults]]}
+   ;  "" dummy]
+   ; ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+   ;  ["" {:get admin/admin}]]])
 
 (defn root-handler
   [request]
