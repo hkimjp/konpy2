@@ -18,17 +18,16 @@
     ["" {:get {:handler dummy}}]]
    ["/login" {:middleware [[wrap-defaults site-defaults]]}
     ["" {:get login :post login!}]]
-   ["logout" logout!]])
-
-   ; ["/scores" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-   ;  ["" dummy]]
-   ; ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-   ;  ["" dummy]]
-   ; ["/help"     {:get help}]
-   ; ["/api" {:middleware [[wrap-defaults api-defaults]]}
-   ;  "" dummy]
-   ; ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
-   ;  ["" {:get admin/admin}]]])
+   ["/logout" logout!]
+   ["/scores" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    ["" {:get dummy}]]
+   ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    ["" {:get dummy}]]
+   ["/help" {:get help}]
+   ["/api" {:middleware [[wrap-defaults api-defaults]]}
+    ["" dummy]]
+   ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+    ["" {:get admin/admin}]]])
 
 (defn root-handler
   [request]

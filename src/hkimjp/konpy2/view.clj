@@ -6,14 +6,14 @@
 
 (def version "0.1.1")
 
-(def ^:private menu "text-xl font-medium text-white px-1 hover:bg-green-700")
+(def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
 (defn navbar []
-  [:div.flex.bg-red-900.items-baseline.gap-x-4
+  [:div.flex.bg-red-600.items-baseline.gap-x-4
    [:div.text-2xl.font-medium.text-white "KONPY2"]
-   [:div {:class menu} "tasks"]
-   [:div {:class menu} "scores"]
-   [:div {:class menu} "stocks"]
+   [:div {:class menu} [:a {:href "/"} "tasks"]]
+   [:div {:class menu} [:a {:href "/scores"} "scores"]]
+   [:div {:class menu} [:a {:href "/stocks"} "stocks"]]
    [:div {:class menu} [:a {:href "/logout"} "logout"]]
    [:div {:class menu} [:a {:href "/help"} "HELP"]]
    [:div {:class menu} [:a {:href "/admin"} "(admin)"]]])
