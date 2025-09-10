@@ -2,9 +2,9 @@
   (:refer-clojure :exclude [test])
   (:require [clojure.tools.build.api :as b]))
 
-(def lib 'net.clojars.hkimjp/konpy2)
-(def version "0.1.0")
-(def main 'hkimjp.konpy2)
+(def lib 'io.github.com/konpy2)
+(def version "0.1.1")
+(def main 'hkimjp.konpy2.main)
 (def class-dir "target/classes")
 
 (defn test "Run all the tests." [opts]
