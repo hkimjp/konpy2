@@ -1,3 +1,7 @@
+# 0.1.2-SNAPSHOT (2025-09-10)
+
+- renamed `view.clj` to `response.clj`. the namespace provides `page` and `hx`.
+
 # 0.1.1 (2025-09-10)
 
 - renamed `core.clj` to `main.clj`

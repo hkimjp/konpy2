@@ -1,8 +1,8 @@
 (ns hkimjp.konpy2.admin
   (:require
-   [hkimjp.konpy2.view :refer [page]]))
+   [hkimjp.konpy2.response :refer [page]]))
 
 (defn admin
   [_request]
   (page
-   [:div "admin"]))
+   [:div "admin only"]))
