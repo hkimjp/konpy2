@@ -30,5 +30,7 @@
 .nrepl-port
 .repl-port
 resources/public/assets/css/output.css
-
-
+/storage/*
+!/storage/.keep
+/log/*
+!/log/.keep
