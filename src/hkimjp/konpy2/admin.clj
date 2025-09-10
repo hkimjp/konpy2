@@ -4,17 +4,23 @@
 
 (defn admin [_request]
   (page
-   [:div "admin only"]))
+   [:div
+    [:div "admin only"]
+    [:ul
+     [:li [:a {:href "/admin/problems"} "problems"]]
+     [:li [:a {:href "/admin/new"} "new"]]
+     [:li [:a {:href "/admin/update/0"} "edit"]]
+     [:li [:a {:href "/admin/delete/0"} "delete!"]]]]))
 
-(defn list [request]
+(defn problems [request]
   (page
-   [:div "list"]))
+   [:div "problems"]))
 
 (defn new [request]
   (page
    [:div "new"]))
 
-(defn create! [reqest]
+(defn create! [request]
   (page
    [:div "create!"]))
 
