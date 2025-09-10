@@ -1,4 +1,4 @@
-# 0.2.0-SNAPSHOT (2025-09-10) (2025-09-10)
+# 0.2.0-SNAPSHOT
 
 - renamed `view.clj` to `response.clj`. the namespace provides `page` and `hx`.
 
