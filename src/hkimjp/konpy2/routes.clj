@@ -7,7 +7,7 @@
    [hkimjp.konpy2.admin :as admin]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
-   [hkimjp.konpy2.view :refer [page]]))
+   [hkimjp.konpy2.response :refer [page hx]]))
 
 (defn dummy [request]
   (page [:div (:request-method request) " " (:uri request)]))
@@ -24,10 +24,14 @@
    ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["" {:get dummy}]]
    ["/help" {:get help}]
-   ["/api" {:middleware [[wrap-defaults api-defaults]]}
-    ["" dummy]]
    ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
-    ["" {:get admin/admin}]]])
+    ["" {:get admin/admin}]
+    ["/problems" {:get admin/problems}]
+    ["/new"  {:get admin/new :post admin/create!}]
+    ["/update/:e" {:get admin/edit :post admin/update!}]
+    ["/delete/:e" {:delete admin/delete!}]]
+   ["/hx" {:middleware [[wrap-defaults api-defaults]]}
+    ["/hello" (fn [_] (hx [:p "hello"]))]]])
 
 (defn root-handler
   [request]

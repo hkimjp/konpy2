@@ -1,4 +1,4 @@
-(ns hkimjp.konpy2.view
+(ns hkimjp.konpy2.response
   (:require
    [hiccup2.core :as h]
    [ring.util.response :as resp]
@@ -54,5 +54,10 @@
 
 ;; htmx requires html response.
 ;; appropriate in this namespace?
-(defn html [content]
-  (resp/response (str (h/html content))))
+(defn hx [content]
+  (-> content
+      h/html
+      str
+      resp/response
+      (resp/content-type "text/html")))
+

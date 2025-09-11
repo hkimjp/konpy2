@@ -26,10 +26,17 @@
 (defn start-system []
   (t/log! :info (str "start-system develop: " (env :develop)))
   (t/log! :info (str "redis " (env :redis) " ds " (env :datascript)))
-  (c/redis-server (env :redis))
-  (ds/start-or-restore {:url (env :datascript)})
-  (start-jetty))
+  (try
+    (c/redis-server (env :redis))
+    (ds/start-or-restore {:url (env :datascript)})
+    (start-jetty)
+    (catch Exception e
+      (t/log! :fatal (.getMessage e))
+      (System/exit 0))))
 
 (defn stop-system []
   (stop-server)
   (ds/stop))
+
+
+
