@@ -27,8 +27,8 @@
 
 (defn upsert [])
 
-(defn create! [params :params]
-  (t/log! :info "create! params)
+(defn create! [{params :params}]
+  (t/log! :info "create! params")
   (page
    [:div "create!"]))
 
