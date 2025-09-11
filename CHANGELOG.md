@@ -1,4 +1,4 @@
-# 0.2.0-SNAPSHOT
+# 0.2.0 (2025-09-11)
 
 - renamed `view.clj` to `response.clj`. the namespace provides `page` and `hx`.
 - (System/exit 0) if startup fails
