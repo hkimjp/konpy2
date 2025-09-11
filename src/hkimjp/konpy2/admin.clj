@@ -1,6 +1,6 @@
 (ns hkimjp.konpy2.admin
   (:require
-   [taoensso.telemere :as tel]
+   [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page]]))
 
@@ -25,9 +25,14 @@
     [?e :gpt ?gpt]
     [?e :updated ?updated]])
 
-(ds/qq get-problems)
-
 (defn upsert [])
+
+(defn create! [params :params]
+  (t/log! :info "create! params)
+  (page
+   [:div "create!"]))
+
+(def ta-class "w-180 h-10 p-2 outline outline-black/5 shadow-lg")
 
 (defn- problem-form
   [{:keys [db/id
@@ -37,29 +42,33 @@
            problem
            test
            gpt] :as params}]
-  [:form
-   (str params)
-   [:button]])
+  [:form {:method "post" :action "/admin/create"}
+   [:input {:type "hidden" :name "db/id" :value id}]
+   [:input {:type "hidden" :name "problem/valid" :value valid}]
+   [:div
+    [:input {:name "week" :value week}] "-" [:input {:name "num" :value num}]]
+   [:div [:textarea {:class ta-class :name "problem"} problem]]
+   [:div [:textarea {:class ta-class :name "test"} test]]
+   [:div [:textarea {:class ta-class :name "gpt"} gpt]]
+   [:button "create"]])
 
-(defn div-new []
-  (problem-form {:db/id -1
-                 :problem/valid ""
-                 :week ""
-                 :num ""
-                 :problem ""
-                 :test ""
-                 :gpt ""}))
+(defn new [request]
+  (t/log! :info "new")
+  (page
+   (problem-form {:db/id -1
+                  :problem/valid true
+                  :week ""
+                  :num ""
+                  :problem ""
+                  :test ""
+                  :gpt ""})))
 
 (defn problems [request]
   (page
    [:div
     [:div.text-2xl.font-bold "Problems"]
-    [:a {:href "/admin/new"} [:span.hover:underline "new"]]
+    [:a.hover:underline {:href "/admin/new"} "new"]
     [:div "LIST"]]))
-
-(defn create! [request]
-  (page
-   [:div "create!"]))
 
 (def q-pr '[:find ?e
             :where
