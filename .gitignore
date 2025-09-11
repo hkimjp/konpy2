@@ -32,5 +32,3 @@
 resources/public/assets/css/output.css
 /storage/*
 !/storage/.keep
-/log/*
-!/log/.keep
