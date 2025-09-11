@@ -1,5 +1,6 @@
 (ns hkimjp.konpy2.admin
   (:require
+   [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page]]))
 
 (defn admin [_request]
@@ -11,6 +12,10 @@
      [:li [:a {:href "/admin/new"} "new"]]
      [:li [:a {:href "/admin/update/0"} "edit"]]
      [:li [:a {:href "/admin/delete/0"} "delete!"]]]]))
+
+(def q-pr '[:find ?e
+            :where
+            [?e :kp2/problem _]])
 
 (defn problems [request]
   (page
