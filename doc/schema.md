@@ -15,7 +15,7 @@
 :db/id id
 :answer/valid true|false # delete uses
 :to id
-:author user
+:user
 :answer s
 :digest n or s?
 :updated jt
