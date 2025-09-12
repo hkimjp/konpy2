@@ -17,11 +17,12 @@
 (defn routes
   []
   [["/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get tasks/konpy}]
-    ["problem/:e" {:get tasks/problem}]]
+    ["" {:get tasks/konpy}]]
    ["/login" {:middleware [[wrap-defaults site-defaults]]}
     ["" {:get login :post login!}]]
    ["/logout" logout!]
+   ["/problem" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    "/:e" {:get tasks/problem}]
    ["/scores" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["" {:get dummy}]]
    ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
