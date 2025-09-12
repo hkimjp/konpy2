@@ -46,6 +46,8 @@
 
   (def data {:__anti-forgery-token "NWBjeO+Hg6pHpdtpdB8f6Uf1BSm3L46VUeZom/kAiGmP14hXRYTzAoBB1n3BytLqh5ytXXCcaUwj/pOP", "db/id" "2", "problem/valid" "true", :week "0", :num "1", :problem "10", :test "10", :gpt "10"})
 
+  (:apple data)
+  (data "apple")
   (-> data
       (dissoc :__anti-forgery-token "problem/valid"))
   :rcf)

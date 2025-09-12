@@ -65,35 +65,39 @@
                   :test ""
                   :gpt ""})))
 
-(defn- upsert! [params]
+(defn upsert! [{params :params}]
   (t/log! {:level :info :id "upsert!" :data params})
-  (ds/put! params))
-
-(defn new! [{params :params}]
-  (t/log! {:level :info :id "new!" :data params})
-  (let [params (-> params
-                   (dissoc :__anti-forgery-token "problem/valid" "db/id")
-                   (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time))
-                   (update :week parse-long)
-                   (update :num parse-long))]
-    (t/log! {:level :debug :data params :msg "updated params"})
-    (upsert! params)
+  (let [[id true?] (if (= -1 (params "db/id"))
+                     [-1 true]
+                     [(params "db/id") (params "problem/valid")])]
+    (ds/put! (-> params
+                 (dissoc :__anti-forgery-token "problem/valid" "db/id")
+                 (assoc :db/id id :problem/valid true? :updated (jt/local-date-time))
+                 (update :week parse-long)
+                 (update :num parse-long)))
     (resp/redirect "/admin/problems")))
 
-(defn edit! [{params :params}]
-  (t/log! {:level :info :id "edit!" :data params})
-  (try
-    (let [id (params "db/id")
-          valid (= "true" (params "problem/valid"))
-          params (-> params
-                     (dissoc :__anti-forgery-token "problem/valid" "db/id")
-                     (assoc :db/id id :problem/valid valid :updated (jt/local-date-time))
-                     (update :week parse-long)
-                     (update :num parse-long))]
-      (t/log! {:level :debug :id "edit!" :data params})
-      (upsert! params)
-      (resp/redirect "/admin/problems"))
-    (catch Exception _ (t/log! :error "what happens?"))))
+; (defn new! [{params :params}]
+;   (t/log! {:level :info :id "new!" :data params})
+;   (let [params (-> params
+;                    (dissoc :__anti-forgery-token "problem/valid" "db/id")
+;                    (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time))
+;                    (update :week parse-long)
+;                    (update :num parse-long))]
+;     (ds/put! params)
+;     (resp/redirect "/admin/problems")))
+
+; (defn edit! [{params :params}]
+;   (t/log! {:level :info :id "edit!" :data params})
+;   (let [id (-> (params "db/id") parse-long)
+;         valid (= "true" (params "problem/valid"))
+;         params (-> params
+;                    (dissoc :__anti-forgery-token "problem/valid" "db/id")
+;                    (assoc :db/id id :problem/valid valid :updated (jt/local-date-time))
+;                    (update :week parse-long)
+;                    (update :num parse-long))]
+;     (ds/put! params)
+;     (resp/redirect "/admin/problems")))
 
 (def get-problems
   '[:find ?e ?valid ?week ?num ?problem ?test ?gpt ?updated
