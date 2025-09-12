@@ -40,7 +40,12 @@
   (ds/qq '[:find ?e ?valid
            :where
            [?e :problem/valid ?valid]])
-  (put 100 0)
-  (put 1 1)
-  (put 1 4 true)
+  (put 0 2 false)
+  (def m (ds/pl 2))
+  (keys m)
+
+  (def data {:__anti-forgery-token "NWBjeO+Hg6pHpdtpdB8f6Uf1BSm3L46VUeZom/kAiGmP14hXRYTzAoBB1n3BytLqh5ytXXCcaUwj/pOP", "db/id" "2", "problem/valid" "true", :week "0", :num "1", :problem "10", :test "10", :gpt "10"})
+
+  (-> data
+      (dissoc :__anti-forgery-token "problem/valid"))
   :rcf)

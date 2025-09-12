@@ -33,17 +33,17 @@
 
 (defn- problem-form
   [{:keys [db/id problem/valid week num problem test gpt] :as params}]
-  (t/log! {:level :debug :data params :msg "problem-form"})
+  (t/log! {:level :debug :id "problem-form" :data params})
   [:div
    [:div.text-2xl.font-bold "Problem-Form"]
    [:form.mx-4 {:method "post"}
     (h/raw (anti-forgery-field))
     [:input {:type "hidden" :name "db/id" :value id}]
     (section "problem/valid")
-    [:input (merge {:type "radio" :name "problem/valid" :value true}
+    [:input (merge {:type "radio" :name "problem/valid" :value "true"}
                    (when valid {:checked "checked"})) "true "]
-    [:input (merge {:type "radio" :name "problem/valid" :value false}
-                   (when-not valid {:checked "checked"})) "false"] "true when ever new"
+    [:input (merge {:type "radio" :name "problem/valid" :value "false"}
+                   (when-not valid {:checked "checked"})) "false"]
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section "problem")
@@ -52,7 +52,7 @@
     (div-textarea "test" test)
     (section "gpt")
     (div-textarea "gpt" gpt)
-    [:div [:button {:class btn} "new"]]]])
+    [:div [:button {:class btn} "upsert"]]]])
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})
@@ -72,7 +72,7 @@
 (defn new! [{params :params}]
   (t/log! {:level :info :id "new!" :data params})
   (let [params (-> params
-                   (dissoc :__anti-forgery-token :valid "db/id")
+                   (dissoc :__anti-forgery-token "problem/valid" "db/id")
                    (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time))
                    (update :week parse-long)
                    (update :num parse-long))]
@@ -82,13 +82,18 @@
 
 (defn edit! [{params :params}]
   (t/log! {:level :info :id "edit!" :data params})
-  (let [params (-> params
-                   (dissoc :__anti-forgery-token)
-                   (update :db/id parse-long)
-                   (update :week parse-long)
-                   (update :num parse-long))])
-  ;;(upsert! params)
-  (resp/redirect "/admin/problems"))
+  (try
+    (let [id (params "db/id")
+          valid (params "problem/valid")
+          params (-> params
+                     (dissoc :__anti-forgery-token "problem/valid" "db/id")
+                     (assoc :db/id id :problem/valid valid :updated (jt/local-date-time))
+                     (update :week parse-long)
+                     (update :num parse-long))]
+      (t/log! {:level :debug :id "edit!" :data params})
+      (upsert! params)
+      (resp/redirect "/admin/problems"))
+    (catch Exception _ (t/log! :error "what happens?"))))
 
 (def get-problems
   '[:find ?e ?valid ?week ?num ?problem ?test ?gpt ?updated
