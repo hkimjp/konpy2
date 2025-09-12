@@ -1,4 +1,4 @@
-# 0.2.2-SNAPSHOT
+# 0.2.2 (2025-09-12)
 
 - /admin/problems
 - /admin/new
