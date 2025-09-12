@@ -11,12 +11,6 @@
 
 (def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
 
-(def btn-admin "p-1 rounded-xl text-white bg-red-500 hover:bg-red-700 active:bg-red-900")
-
-(def box "text-center size-10 outline  shadow-lg outline-black/5")
-
-(def te "my-2 p-2 text-md font-mono grow h-60 outline outline-black")
-
 (defn admin [_request]
   (page
    [:div
@@ -71,20 +65,25 @@
                   :test ""
                   :gpt ""})))
 
-(defn upsert! [params]
-  (ds/put! params)
-  (t/log! {:level :info :data params}))
+(defn- upsert! [params]
+  (t/log! {:level :info :id "upsert!"})
+  (ds/put! params))
 
-(defn create! [{params :params}]
+(defn new! [{params :params}]
   (t/log! {:level :info :data params :msg "create!"})
   (let [params (-> params
-                   (dissoc :__anti-forgery-token "db/id" "problem/valid")
+                   (dissoc :__anti-forgery-token :valid "db/id")
                    (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time))
                    (update :week parse-long)
                    (update :num parse-long))]
     (t/log! {:level :debug :data params :msg "updated params"})
     (upsert! params)
     (resp/redirect "/admin/problems")))
+
+(defn edit! [{params :params}]
+  (t/log! {:level :info :id "update!" :data params})
+  (upsert! params)
+  (resp/redirect "/admin/problems"))
 
 (def get-problems
   '[:find ?e ?valid ?week ?num ?problem ?test ?gpt ?updated
@@ -98,22 +97,24 @@
     [?e :gpt ?gpt]
     [?e :updated ?updated]])
 
-(comment
-  (first (ds/qq get-problems))
-
-  :rcf)
-
-; (defn- order [week num]
-;   [(* -1 (parse-long week)) (parse-long num)])
-
-;; FIXME: sort
 (defn- div-problems []
   (t/log! :debug "div-problems")
   [:div
    [:div
     (for [p (->> (ds/qq get-problems)
                  (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
-      [:div (:week p) (:num p) (:problem p)])]])
+      [:div.flex.gap-4
+       [:div.flex.gap-2
+        [:div [:button.text-bold.text-red-600.hover:bg-red-600.hover:text-white
+               {:hx-delete (str "/admin/delete/" (:e p))}
+               "D"]]
+        [:div [:a.text-bold.text-sky-600.hover:bg-sky-600.hover:text-white
+               {:href (str "/admin/update/" (:e p))}
+               "E"]]
+        [:div (:week p) "-" (:num p)]]
+       [:div (:problem p)]
+       [:div (:test p)]
+       [:div (:gpt p)]])]])
 
 (defn problems [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
@@ -128,13 +129,10 @@
             :where
             [?e :kp2/problem _]])
 
-(defn edit [request]
+(defn edit [{{:keys [e]} :path-params}]
+  (t/log! {:level :info :id "edit" :data {:e e}})
   (page
-   [:div "edit"]))
-
-(defn update! [request]
-  (page
-   [:div "update!"]))
+   (problem-form (ds/pl (parse-long e)))))
 
 (defn delete! [request]
   (page [:div "delete!"]))

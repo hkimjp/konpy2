@@ -27,8 +27,8 @@
    ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
     ["" {:get admin/admin}]
     ["/problems" {:get admin/problems}]
-    ["/new"  {:get admin/new :post admin/create!}]
-    ["/update/:e" {:get admin/edit :post admin/update!}]
+    ["/new"  {:get admin/new :post admin/new!}]
+    ["/update/:e" {:get admin/edit :post admin/edit!}]
     ["/delete/:e" {:delete admin/delete!}]]
    ["/hx" {:middleware [[wrap-defaults api-defaults]]}
     ["/hello" (fn [_] (hx [:p "hello"]))]]])
