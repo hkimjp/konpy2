@@ -8,7 +8,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.konpy2.util :refer [user]]
-   [hkimjp.konpy2.view :refer [page]]))
+   [hkimjp.konpy2.response :refer [page]]))
 
 (def l22 (or (env :auth) "https://l22.melt.kyutech.ac.jp"))
 

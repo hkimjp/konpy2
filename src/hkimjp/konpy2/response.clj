@@ -1,10 +1,10 @@
-(ns hkimjp.konpy2.view
+(ns hkimjp.konpy2.response
   (:require
    [hiccup2.core :as h]
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.1.1")
+(def version "0.2.2")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
@@ -54,5 +54,10 @@
 
 ;; htmx requires html response.
 ;; appropriate in this namespace?
-(defn html [content]
-  (resp/response (str (h/html content))))
+(defn hx [content]
+  (-> content
+      h/html
+      str
+      resp/response
+      (resp/content-type "text/html")))
+
