@@ -34,13 +34,11 @@
     ["/update/:e" {:get admin/edit :post admin/upsert!}]
     ["/delete/:e" {:delete admin/delete!}]]
    ["/answers" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    "/:e" {:get get-answers}
-    "/" {:post post-answer}]
+    "/:e" {:get answers/get-answers}
+    "/" {:post answers/post-answer}]
    ["/comments" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}]
    ["/hx" {:middleware [[wrap-defaults api-defaults]]}
-    ["/hello" hx]
-    ["/answers/:e" get-answers]
-    ["/answer" {:post post-answer}]]])
+    ["/hello" hx]]])
 
 (defn root-handler
   [request]
