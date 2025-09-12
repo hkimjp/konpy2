@@ -84,7 +84,7 @@
   (t/log! {:level :info :id "edit!" :data params})
   (try
     (let [id (params "db/id")
-          valid (params "problem/valid")
+          valid (= "true" (params "problem/valid"))
           params (-> params
                      (dissoc :__anti-forgery-token "problem/valid" "db/id")
                      (assoc :db/id id :problem/valid valid :updated (jt/local-date-time))
