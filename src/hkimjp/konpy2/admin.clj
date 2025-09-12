@@ -1,11 +1,13 @@
 (ns hkimjp.konpy2.admin
   (:require
+   [java-time.api :as jt]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page]]))
+   [hkimjp.konpy2.response :refer [page]]
+   [hkimjp.konpy2.util :refer [user]]))
 
 (def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
 
@@ -67,7 +69,7 @@
     [:div [:button {:class btn} "create"]]]])
 
 (defn new [request]
-  (t/log! :info "new")
+  (t/log! {:lelvel :info :id (user request)})
   (page
    (problem-form {:db/id -1
                   :problem/valid true
@@ -77,9 +79,25 @@
                   :test ""
                   :gpt ""})))
 
+(defn upsert! [params]
+  (ds/put! params)
+  (t/log! {:level :info :data params}))
+
+(comment
+  (ds/qq '[:find ?e
+           :where
+           [?e :problem/valid _]])
+  (:updated (ds/pl 3))
+  :rcf)
+
 (defn create! [{params :params}]
-  (t/log! :info (str "create! " params))
-  (resp/redirect "/admin/problems"))
+  (t/log! {:level :info :data params :msg "create!"})
+  (let [params (-> params
+                   (dissoc :__anti-forgery-token "db/id" "problem/valid")
+                   (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time)))]
+    (t/log! {:level :debug :data params :msg "updated params"})
+    (upsert! params)
+    (resp/redirect "/admin/problems")))
 
 (defn problems [request]
   (page
