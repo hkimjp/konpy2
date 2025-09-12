@@ -1,5 +1,8 @@
 (ns hkimjp.konpy2.admin
   (:require
+   [hiccup2.core :as h]
+   [ring.util.anti-forgery :refer [anti-forgery-field]]
+   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page]]))
@@ -35,11 +38,6 @@
 
 (defn upsert [])
 
-(defn create! [{params :params}]
-  (t/log! :info "create! params")
-  (page
-   [:div "create!"]))
-
 (defn- div-textarea [label text]
   [:textarea.w-full.h-20.p-2.outline.outline-black.shadow-lg
    {:name label} text])
@@ -54,7 +52,8 @@
   [{:keys [db/id problem/valid week num problem test gpt] :as params}]
   [:div
    [:div.text-2xl.font-bold "Problem-Form"]
-   [:form.mx-4 {:method "post" :action "/admin/create"}
+   [:form.mx-4 {:method "post"}
+    (h/raw (anti-forgery-field))
     [:input {:type "hidden" :name "db/id" :value id}]
     [:input {:type "hidden" :name "problem/valid" :value valid}]
     (section "week-num")
@@ -77,6 +76,10 @@
                   :problem ""
                   :test ""
                   :gpt ""})))
+
+(defn create! [{params :params}]
+  (t/log! :info (str "create! " params))
+  (resp/redirect "/admin/problems"))
 
 (defn problems [request]
   (page
