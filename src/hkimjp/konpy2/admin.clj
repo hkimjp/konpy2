@@ -33,7 +33,8 @@
 
 (defn- problem-form
   [{:keys [db/id problem/valid week num problem test gpt] :as params}]
-  (t/log! {:level :debug :id "problem-form" :data params})
+  (t/log! {:level :info :id "problem-form"})
+  (t/log! {:level :debug :data params})
   [:div
    [:div.text-2xl.font-bold "Problem-Form"]
    [:form.mx-4 {:method "post"}
@@ -66,38 +67,16 @@
                   :gpt ""})))
 
 (defn upsert! [{params :params}]
-  (t/log! {:level :info :id "upsert!" :data params})
-  (let [[id true?] (if (= -1 (params "db/id"))
+  (t/log! {:level :info :id "upsert!" :data (params "db/id")})
+  (let [[id true?] (if (= "-1" (params "db/id"))
                      [-1 true]
-                     [(params "db/id") (params "problem/valid")])]
+                     [(parse-long (params "db/id")) (= "true" (params "problem/valid"))])]
     (ds/put! (-> params
                  (dissoc :__anti-forgery-token "problem/valid" "db/id")
                  (assoc :db/id id :problem/valid true? :updated (jt/local-date-time))
                  (update :week parse-long)
                  (update :num parse-long)))
     (resp/redirect "/admin/problems")))
-
-; (defn new! [{params :params}]
-;   (t/log! {:level :info :id "new!" :data params})
-;   (let [params (-> params
-;                    (dissoc :__anti-forgery-token "problem/valid" "db/id")
-;                    (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time))
-;                    (update :week parse-long)
-;                    (update :num parse-long))]
-;     (ds/put! params)
-;     (resp/redirect "/admin/problems")))
-
-; (defn edit! [{params :params}]
-;   (t/log! {:level :info :id "edit!" :data params})
-;   (let [id (-> (params "db/id") parse-long)
-;         valid (= "true" (params "problem/valid"))
-;         params (-> params
-;                    (dissoc :__anti-forgery-token "problem/valid" "db/id")
-;                    (assoc :db/id id :problem/valid valid :updated (jt/local-date-time))
-;                    (update :week parse-long)
-;                    (update :num parse-long))]
-;     (ds/put! params)
-;     (resp/redirect "/admin/problems")))
 
 (def get-problems
   '[:find ?e ?valid ?week ?num ?problem ?test ?gpt ?updated

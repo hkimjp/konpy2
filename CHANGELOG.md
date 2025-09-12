@@ -1,8 +1,9 @@
 # 0.2.2-SNAPSHOT
 
-- problems list
-
-
+- /admin/problems
+- /admin/new
+- /admin/update/:e
+- unified /admin/new! and /admin/edit! into /admin/upsert!
 
 # 0.2.1 (2025-09-12)
 
