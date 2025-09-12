@@ -1,8 +1,13 @@
 (ns hkimjp.konpy2.admin
   (:require
+   [java-time.api :as jt]
+   [hiccup2.core :as h]
+   [ring.util.anti-forgery :refer [anti-forgery-field]]
+   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page]]))
+   [hkimjp.konpy2.response :refer [page]]
+   [hkimjp.konpy2.util :refer [user]]))
 
 (def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
 
@@ -35,11 +40,6 @@
 
 (defn upsert [])
 
-(defn create! [{params :params}]
-  (t/log! :info "create! params")
-  (page
-   [:div "create!"]))
-
 (defn- div-textarea [label text]
   [:textarea.w-full.h-20.p-2.outline.outline-black.shadow-lg
    {:name label} text])
@@ -54,7 +54,8 @@
   [{:keys [db/id problem/valid week num problem test gpt] :as params}]
   [:div
    [:div.text-2xl.font-bold "Problem-Form"]
-   [:form.mx-4 {:method "post" :action "/admin/create"}
+   [:form.mx-4 {:method "post"}
+    (h/raw (anti-forgery-field))
     [:input {:type "hidden" :name "db/id" :value id}]
     [:input {:type "hidden" :name "problem/valid" :value valid}]
     (section "week-num")
@@ -68,7 +69,7 @@
     [:div [:button {:class btn} "create"]]]])
 
 (defn new [request]
-  (t/log! :info "new")
+  (t/log! {:lelvel :info :id (user request)})
   (page
    (problem-form {:db/id -1
                   :problem/valid true
@@ -77,6 +78,26 @@
                   :problem ""
                   :test ""
                   :gpt ""})))
+
+(defn upsert! [params]
+  (ds/put! params)
+  (t/log! {:level :info :data params}))
+
+(comment
+  (ds/qq '[:find ?e
+           :where
+           [?e :problem/valid _]])
+  (:updated (ds/pl 3))
+  :rcf)
+
+(defn create! [{params :params}]
+  (t/log! {:level :info :data params :msg "create!"})
+  (let [params (-> params
+                   (dissoc :__anti-forgery-token "db/id" "problem/valid")
+                   (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time)))]
+    (t/log! {:level :debug :data params :msg "updated params"})
+    (upsert! params)
+    (resp/redirect "/admin/problems")))
 
 (defn problems [request]
   (page
