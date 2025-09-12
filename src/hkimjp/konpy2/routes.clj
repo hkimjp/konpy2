@@ -7,6 +7,8 @@
    [hkimjp.konpy2.admin :as admin]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
+   [hkimjp.konpy2.tasks :as tasks]
+   [hkimjp.konpy2.answers :as answers]
    [hkimjp.konpy2.response :refer [page hx]]))
 
 (defn dummy [request]
@@ -15,7 +17,8 @@
 (defn routes
   []
   [["/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get {:handler dummy}}]]
+    ["" {:get tasks/konpy}]
+    ["problem/:e" {:get tasks/problem}]]
    ["/login" {:middleware [[wrap-defaults site-defaults]]}
     ["" {:get login :post login!}]]
    ["/logout" logout!]
@@ -30,8 +33,14 @@
     ["/new"  {:get admin/new :post admin/upsert!}]
     ["/update/:e" {:get admin/edit :post admin/upsert!}]
     ["/delete/:e" {:delete admin/delete!}]]
+   ["/answers" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    "/:e" {:get get-answers}
+    "/" {:post post-answer}]
+   ["/comments" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}]
    ["/hx" {:middleware [[wrap-defaults api-defaults]]}
-    ["/hello" (fn [_] (hx [:p "hello"]))]]])
+    ["/hello" hx]
+    ["/answers/:e" get-answers]
+    ["/answer" {:post post-answer}]]])
 
 (defn root-handler
   [request]
