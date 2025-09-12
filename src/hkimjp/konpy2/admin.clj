@@ -27,17 +27,6 @@
      [:li [:a {:href "/admin/update/0"} "edit"]]
      [:li [:a {:href "/admin/delete/0"} "delete!"]]]]))
 
-(def get-problems
-  '[:find ?e ?week ?num ?problem ?test ?gpt ?updated
-    :where
-    [?e :probrem/valie true]
-    [?e :week ?week]
-    [?e :num ?num]
-    [?e :problem ?problem]
-    [?e :test ?test]
-    [?e :gpt ?gpt]
-    [?e :updated ?updated]])
-
 (defn upsert [])
 
 (defn- div-textarea [label text]
@@ -52,12 +41,17 @@
 
 (defn- problem-form
   [{:keys [db/id problem/valid week num problem test gpt] :as params}]
+  (t/log! {:level :debug :data params :mesg "problem-form"})
   [:div
    [:div.text-2xl.font-bold "Problem-Form"]
    [:form.mx-4 {:method "post"}
     (h/raw (anti-forgery-field))
     [:input {:type "hidden" :name "db/id" :value id}]
-    [:input {:type "hidden" :name "problem/valid" :value valid}]
+    (section "problem/valid")
+    [:input (merge {:type "radio" :name "valid" :value 1}
+                   (when (= valid "true") {:checked "checked"})) "true "]
+    [:input (merge {:type "radio" :name "valid" :value 0}
+                   (when-not (= valid "true") {:checked "checked"})) "false"]
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section "problem")
@@ -72,7 +66,7 @@
   (t/log! {:lelvel :info :id (user request)})
   (page
    (problem-form {:db/id -1
-                  :problem/valid true
+                  :problem/valid "true"
                   :week ""
                   :num ""
                   :problem ""
@@ -83,13 +77,6 @@
   (ds/put! params)
   (t/log! {:level :info :data params}))
 
-(comment
-  (ds/qq '[:find ?e
-           :where
-           [?e :problem/valid _]])
-  (:updated (ds/pl 3))
-  :rcf)
-
 (defn create! [{params :params}]
   (t/log! {:level :info :data params :msg "create!"})
   (let [params (-> params
@@ -99,12 +86,35 @@
     (upsert! params)
     (resp/redirect "/admin/problems")))
 
+(def get-problems
+  '[:find ?e ?valid ?week ?num ?problem ?test ?gpt ?updated
+    :where
+    [?e :problem/valid ?valid]
+    [?e :week ?week]
+    [?e :num ?num]
+    [?e :problem ?problem]
+    [?e :test ?test]
+    [?e :gpt ?gpt]
+    [?e :updated ?updated]])
+
+(comment
+  (count (ds/qq get-problems))
+  (map :problem/valid (ds/qq get-problems))
+  (:problem/valid (ds/pl 1))
+  :rcf)
+
+(defn- div-problems []
+  [:div
+   [:div "PROBLEMS"]
+   (for [p (ds/qq get-problems)])])
+
 (defn problems [request]
   (page
    [:div
     [:div.text-2xl.font-bold "Problems"]
-    [:a.hover:underline {:href "/admin/new"} "new"]
-    [:div "LIST"]]))
+    [:div.m-4
+     [:a.hover:underline {:href "/admin/new"} "new"]
+     (div-problems)]]))
 
 (def q-pr '[:find ?e
             :where
