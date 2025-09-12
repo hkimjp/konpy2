@@ -1,3 +1,10 @@
+# 0.2.1 (2025-09-12)
+
+- problem creation
+- tailwindcss > /dev/null 2> &1
+- get  admin/new => admin/new
+- post admin/new => admin/create! => admin/upsert!
+
 # 0.2.0 (2025-09-11)
 
 - renamed `view.clj` to `response.clj`. the namespace provides `page` and `hx`.
