@@ -26,3 +26,21 @@
 ;; (reload/reload)
 ;; (restart-system)
 
+(defn put [w n tf]
+  (ds/puts! [{:db/id -1
+              :problem/valid tf
+              :week w
+              :num n
+              :problem "s"
+              :test "t"
+              :gpt "g"
+              :updated jt/local-date-time}]))
+
+(comment
+  (ds/qq '[:find ?e ?valid
+           :where
+           [?e :problem/valid ?valid]])
+  (put 100 0)
+  (put 1 1)
+  (put 1 4 true)
+  :rcf)

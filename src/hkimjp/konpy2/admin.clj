@@ -33,17 +33,17 @@
 
 (defn- problem-form
   [{:keys [db/id problem/valid week num problem test gpt] :as params}]
-  (t/log! {:level :debug :data params :mesg "problem-form"})
+  (t/log! {:level :debug :data params :msg "problem-form"})
   [:div
    [:div.text-2xl.font-bold "Problem-Form"]
    [:form.mx-4 {:method "post"}
     (h/raw (anti-forgery-field))
     [:input {:type "hidden" :name "db/id" :value id}]
     (section "problem/valid")
-    [:input (merge {:type "radio" :name "valid" :value 1}
-                   (when (= valid "true") {:checked "checked"})) "true "]
-    [:input (merge {:type "radio" :name "valid" :value 0}
-                   (when-not (= valid "true") {:checked "checked"})) "false"]
+    [:input (merge {:type "radio" :name "problem/valid" :value true}
+                   (when valid {:checked "checked"})) "true "]
+    [:input (merge {:type "radio" :name "problem/valid" :value false}
+                   (when-not valid {:checked "checked"})) "false"]
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section "problem")
@@ -66,7 +66,7 @@
                   :gpt ""})))
 
 (defn- upsert! [params]
-  (t/log! {:level :info :id "upsert!"})
+  (t/log! {:level :info :id "upsert!" :data params})
   (ds/put! params))
 
 (defn new! [{params :params}]
@@ -81,8 +81,13 @@
     (resp/redirect "/admin/problems")))
 
 (defn edit! [{params :params}]
-  (t/log! {:level :info :id "update!" :data params})
-  (upsert! params)
+  (t/log! {:level :info :id "edit!" :data params})
+  (let [params (-> params
+                   (dissoc :__anti-forgery-token)
+                   (update :db/id parse-long)
+                   (update :week parse-long)
+                   (update :num parse-long))])
+  ;;(upsert! params)
   (resp/redirect "/admin/problems"))
 
 (def get-problems
