@@ -1,5 +1,6 @@
-# 0.2.1-SNAPSHOT
+# 0.2.1 (2025-09-12)
 
+- problem creation
 - tailwindcss > /dev/null 2> &1
 - get  admin/new => admin/new
 - post admin/new => admin/create! => admin/upsert!
