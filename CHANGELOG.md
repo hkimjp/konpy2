@@ -1,3 +1,9 @@
+# 0.2.2-SNAPSHOT
+
+- problems list
+
+
+
 # 0.2.1 (2025-09-12)
 
 - problem creation

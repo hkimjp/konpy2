@@ -60,7 +60,7 @@
     (div-textarea "test" test)
     (section "gpt")
     (div-textarea "gpt" gpt)
-    [:div [:button {:class btn} "create"]]]])
+    [:div [:button {:class btn} "upsert"]]]])
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})
@@ -88,6 +88,7 @@
 
 (def get-problems
   '[:find ?e ?valid ?week ?num ?problem ?test ?gpt ?updated
+    :keys e  valid  week  num  problem  test  gpt  updated
     :where
     [?e :problem/valid ?valid]
     [?e :week ?week]
@@ -98,22 +99,23 @@
     [?e :updated ?updated]])
 
 (comment
-  (count (ds/qq get-problems))
-  (map :problem/valid (ds/qq get-problems))
-  (:problem/valid (ds/pl 1))
+  (first (ds/qq get-problems))
   :rcf)
 
 (defn- div-problems []
+  (t/log! :debug "div-problems")
   [:div
-   [:div "PROBLEMS"]
-   (for [p (ds/qq get-problems)])])
+   [:div
+    (for [p (ds/qq get-problems)]
+      [:div (:e p) (:problem p)])]])
 
 (defn problems [request]
+  (t/log! {:level :info :id "problems" :msg (user request)})
   (page
    [:div
     [:div.text-2xl.font-bold "Problems"]
     [:div.m-4
-     [:a.hover:underline {:href "/admin/new"} "new"]
+     [:a {:class btn :href "/admin/new"} "new"]
      (div-problems)]]))
 
 (def q-pr '[:find ?e
