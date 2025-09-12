@@ -27,8 +27,6 @@
      [:li [:a {:href "/admin/update/0"} "edit"]]
      [:li [:a {:href "/admin/delete/0"} "delete!"]]]]))
 
-(defn upsert [])
-
 (defn- div-textarea [label text]
   [:textarea.w-full.h-20.p-2.outline.outline-black.shadow-lg
    {:name label} text])
@@ -81,7 +79,9 @@
   (t/log! {:level :info :data params :msg "create!"})
   (let [params (-> params
                    (dissoc :__anti-forgery-token "db/id" "problem/valid")
-                   (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time)))]
+                   (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time))
+                   (update :week parse-long)
+                   (update :num parse-long))]
     (t/log! {:level :debug :data params :msg "updated params"})
     (upsert! params)
     (resp/redirect "/admin/problems")))
@@ -100,14 +100,20 @@
 
 (comment
   (first (ds/qq get-problems))
+
   :rcf)
 
+; (defn- order [week num]
+;   [(* -1 (parse-long week)) (parse-long num)])
+
+;; FIXME: sort
 (defn- div-problems []
   (t/log! :debug "div-problems")
   [:div
    [:div
-    (for [p (ds/qq get-problems)]
-      [:div (:e p) (:problem p)])]])
+    (for [p (->> (ds/qq get-problems)
+                 (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
+      [:div (:week p) (:num p) (:problem p)])]])
 
 (defn problems [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
