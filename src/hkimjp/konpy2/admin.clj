@@ -43,7 +43,7 @@
     [:input (merge {:type "radio" :name "problem/valid" :value true}
                    (when valid {:checked "checked"})) "true "]
     [:input (merge {:type "radio" :name "problem/valid" :value false}
-                   (when-not valid {:checked "checked"})) "false"]
+                   (when-not valid {:checked "checked"})) "false"] "true when ever new"
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section "problem")
@@ -52,7 +52,7 @@
     (div-textarea "test" test)
     (section "gpt")
     (div-textarea "gpt" gpt)
-    [:div [:button {:class btn} "upsert"]]]])
+    [:div [:button {:class btn} "new"]]]])
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})
@@ -70,7 +70,7 @@
   (ds/put! params))
 
 (defn new! [{params :params}]
-  (t/log! {:level :info :data params :msg "create!"})
+  (t/log! {:level :info :id "new!" :data params})
   (let [params (-> params
                    (dissoc :__anti-forgery-token :valid "db/id")
                    (assoc :db/id -1 :problem/valid true :updated (jt/local-date-time))
