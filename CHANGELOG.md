@@ -7,7 +7,7 @@
 * htmx from problems page
 
 
-# 0.2.3-SNAPSHOT (2025-09-12)
+# 0.2.3 (2025-09-13)
 
 - tasks
 - util/week
