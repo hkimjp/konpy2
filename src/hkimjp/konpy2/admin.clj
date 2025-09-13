@@ -7,9 +7,9 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page]]
-   [hkimjp.konpy2.util :refer [user]]))
+   [hkimjp.konpy2.util :refer [btn user]]))
 
-(def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
+; (def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
 
 (defn admin [_request]
   (page
@@ -31,12 +31,13 @@
 (defn- input-box [label val]
   [:input.text-center.size-6.outline {:name label :value val}])
 
+;; FIXME: 削るより足したら？
 (defn- problem-form
-  [{:keys [db/id problem/valid week num problem test gpt] :as params}]
+  [{:keys [db/id problem/valid week num problem test gpt updated] :as params}]
   (t/log! {:level :info :id "problem-form"})
   (t/log! {:level :debug :data params})
   [:div
-   [:div.text-2xl.font-bold "Problem-Form"]
+   [:div.text-2xl.font-bold "Problem"]
    [:form.mx-4 {:method "post"}
     (h/raw (anti-forgery-field))
     [:input {:type "hidden" :name "db/id" :value id}]
@@ -53,18 +54,10 @@
     (div-textarea "test" test)
     (section "gpt")
     (div-textarea "gpt" gpt)
+    (section "updated")
+    [:div updated]
+    [:br]
     [:div [:button {:class btn} "upsert"]]]])
-
-(defn new [request]
-  (t/log! {:lelvel :info :id (user request)})
-  (page
-   (problem-form {:db/id -1
-                  :problem/valid "true"
-                  :week ""
-                  :num ""
-                  :problem ""
-                  :test ""
-                  :gpt ""})))
 
 (defn upsert! [{params :params}]
   (t/log! {:level :info :id "upsert!" :data (params "db/id")})
@@ -118,9 +111,16 @@
      [:a {:class btn :href "/admin/new"} "new"]
      (div-problems)]]))
 
-(def q-pr '[:find ?e
-            :where
-            [?e :kp2/problem _]])
+(defn new [request]
+  (t/log! {:lelvel :info :id (user request)})
+  (page
+   (problem-form {:db/id -1
+                  :problem/valid "true"
+                  :week ""
+                  :num ""
+                  :problem ""
+                  :test ""
+                  :gpt ""})))
 
 (defn edit [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "edit" :data {:e e}})

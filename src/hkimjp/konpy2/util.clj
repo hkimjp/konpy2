@@ -3,6 +3,17 @@
    [clojure.string :as str]
    [java-time.api :as jt]))
 
+(def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
+
+(def start-day (jt/local-date 2025 10 7))
+
+(defn week
+  "Returns how many weeks have passed since the argument `date`.
+   If no argument given, use the `start`day` defnied above."
+  ([] (week (jt/local-date)))
+  ([date]
+   (quot (jt/time-between start-day date :days) 7)))
+
 (defn user [request]
   (get-in request [:session :identity]))
 
