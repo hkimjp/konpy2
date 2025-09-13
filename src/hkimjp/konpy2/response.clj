@@ -11,7 +11,7 @@
 (defn navbar []
   [:div.flex.bg-red-600.items-baseline.gap-x-4
    [:div.text-2xl.font-medium.text-white "KONPY2"]
-   [:div {:class menu} [:a {:href "/"} "tasks"]]
+   [:div {:class menu} [:a {:href "/tasks"} "tasks"]]
    [:div {:class menu} [:a {:href "/scores"} "scores"]]
    [:div {:class menu} [:a {:href "/stocks"} "stocks"]]
    [:div {:class menu} [:a {:href "/logout"} "logout"]]

@@ -35,7 +35,7 @@
   (if (empty? (env :auth))
     (do
       (t/log! :info (str "no auth mode: " login))
-      (-> (resp/redirect "/")
+      (-> (resp/redirect "/tasks")
           (assoc-in [:session :identity] login)))
     (try
       (let [resp (hc/get (str l22 "/api/user/" login) {:timeout 3000 :as :json})]
@@ -43,7 +43,7 @@
                  (hashers/check password (get-in resp [:body :password])))
           (do
             (t/log! :info (str "login success: " login))
-            (-> (resp/redirect "/")
+            (-> (resp/redirect "/tasks")
                 (assoc-in [:session :identity] login)))
           (do
             (t/log! :info (str "login failed: " login))

@@ -17,26 +17,28 @@
 (defn routes
   []
   [["/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get tasks/konpy}]]
+    ["" tasks/konpy]]
    ["/login" {:middleware [[wrap-defaults site-defaults]]}
     ["" {:get login :post login!}]]
    ["/logout" logout!]
+   ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+    [""           {:get admin/admin}]
+    ["/problems"  {:get admin/problems}]
+    ["/new"       {:get admin/new :post admin/upsert!}]
+    ["/update/:e" {:get admin/edit :post admin/upsert!}]
+    ["/delete/:e" {:delete admin/delete!}]]
+   ["/tasks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    ["" {:get tasks/konpy}]]
    ["/problem" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    "/:e" {:get tasks/problem}]
+    ["/:e" {:get tasks/problem}]]
    ["/scores" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["" {:get dummy}]]
    ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["" {:get dummy}]]
    ["/help" {:get help}]
-   ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
-    ["" {:get admin/admin}]
-    ["/problems" {:get admin/problems}]
-    ["/new"  {:get admin/new :post admin/upsert!}]
-    ["/update/:e" {:get admin/edit :post admin/upsert!}]
-    ["/delete/:e" {:delete admin/delete!}]]
    ["/answers" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    "/:e" {:get answers/get-answers}
-    "/" {:post answers/post-answer}]
+    ["/:e" {:get answers/get-answers}]
+    ["/"   {:post answers/post-answer}]]
    ["/comments" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}]
    ["/hx" {:middleware [[wrap-defaults api-defaults]]}
     ["/hello" hx]]])
@@ -62,3 +64,8 @@
                          :body "not acceptable"})}))
          {:middleware []})]
     (handler request)))
+
+; (root-handler {:request-method "get" :uri "/problem/3"})
+
+; (root-handler {:request-method "get" :uri "/scores"})
+
