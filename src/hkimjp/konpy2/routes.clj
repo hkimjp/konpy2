@@ -16,11 +16,17 @@
 
 (defn routes
   []
-  [["/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get tasks/konpy}]]
-   ["/login" {:middleware [[wrap-defaults site-defaults]]}
+  [["/login" {:middleware [[wrap-defaults site-defaults]]}
     ["" {:get login :post login!}]]
    ["/logout" logout!]
+   ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+    ["" {:get admin/admin}]
+    ["/problems" {:get admin/problems}]
+    ["/new"  {:get admin/new :post admin/upsert!}]
+    ["/update/:e" {:get admin/edit :post admin/upsert!}]
+    ["/delete/:e" {:delete admin/delete!}]]
+   ["/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    ["" {:get tasks/konpy}]]
    ["/problem" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     "/:e" {:get tasks/problem}]
    ["/scores" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
@@ -28,12 +34,6 @@
    ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["" {:get dummy}]]
    ["/help" {:get help}]
-   ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
-    ["" {:get admin/admin}]
-    ["/problems" {:get admin/problems}]
-    ["/new"  {:get admin/new :post admin/upsert!}]
-    ["/update/:e" {:get admin/edit :post admin/upsert!}]
-    ["/delete/:e" {:delete admin/delete!}]]
    ["/answers" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     "/:e" {:get answers/get-answers}
     "/" {:post answers/post-answer}]
