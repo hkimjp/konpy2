@@ -37,16 +37,13 @@
 
 ;; (ds/qq ans 1)
 
-;; FIXME:
-;; space between buttons,
-;;
 (defn- div-answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
   [:div
    [:div.font-bold "answers"]
-   (into [:div.my-4]
+   (into [:div.inline.my-4]
          (for [[eid user] (ds/qq answers e)]
-           [:button
+           [:button.pr-4
             {:hx-get (str "/k/answer/" eid)
              :hx-target "#answer"
              :hx-swap "innerHTML"}
@@ -63,6 +60,7 @@
       [:div.m-4
        [:p (:problem p)]
        (div-answerers e)
+       [:div.font-bold "your answer"]
        [:form {:method "post"
                :action "/k/answer"
                :enctype "multipart/form-data"}
