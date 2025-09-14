@@ -1,3 +1,27 @@
+# Unreleased
+
+* tasks
+* scores
+* stocks
+* delete toggle :problem/avail true/false, htmx.
+* htmx from problems page
+
+# 0.2.4 (2025-09-14)
+
+- checked routes
+
+# 0.2.3 (2025-09-13)
+
+- /tasks
+- util/week
+- /
+- /problem/:e
+- added `src/hkimjp/konpy2/answers.clj`
+- added `src/hkimjp/konpy2/comments.clj`
+- added `src/hkimjp/konpy2/hx.clj`
+- added `src/hkimjp/konpy2/tasks.clj`
+
+
 # 0.2.2 (2025-09-12)
 
 - /admin/problems

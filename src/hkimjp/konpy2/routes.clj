@@ -2,43 +2,47 @@
   (:require
    [reitit.ring :as rr]
    [ring.middleware.defaults :refer [wrap-defaults api-defaults site-defaults]]
+   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
+   [hkimjp.konpy2.tasks :as tasks]
+   [hkimjp.konpy2.answers :as answers]
    [hkimjp.konpy2.response :refer [page hx]]))
 
 (defn dummy [request]
   (page [:div (:request-method request) " " (:uri request)]))
 
-(defn routes
-  []
-  [["/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get {:handler dummy}}]]
-   ["/login" {:middleware [[wrap-defaults site-defaults]]}
-    ["" {:get login :post login!}]]
-   ["/logout" logout!]
-   ["/scores" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get dummy}]]
-   ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get dummy}]]
-   ["/help" {:get help}]
-   ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
-    ["" {:get admin/admin}]
-    ["/problems" {:get admin/problems}]
-    ["/new"  {:get admin/new :post admin/upsert!}]
-    ["/update/:e" {:get admin/edit :post admin/upsert!}]
-    ["/delete/:e" {:delete admin/delete!}]]
-   ["/hx" {:middleware [[wrap-defaults api-defaults]]}
-    ["/hello" (fn [_] (hx [:p "hello"]))]]])
+(def routes
+  [["/" {:middleware [[wrap-defaults site-defaults]]}
+    ["" {:get login :post login!}]
+    ["logout" logout!]]
+   ["/help"   {:get help}]
+   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+    [""           {:get admin/admin}]
+    ["problems"   {:get admin/problems}]
+    ["new"        {:get admin/new :post admin/upsert!}]
+    ["update/:e"  {:get admin/edit :post admin/upsert!}]
+    ["delete/:e"  {:delete admin/delete!}]]
+   ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    ["tasks"      {:get tasks/konpy}]
+    ["problem/:e" {:get tasks/problem}]
+    ["scores"     {:get dummy}]
+    ["stocks"     {:get dummy}]
+    ["answers/:e" {:get answers/get-answers}]
+    ["answer"     {:post answers/post-answer}]
+    ["comments"   {:get dummy :post dummy}]]
+   ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
+    ["hello" {:get dummy}]]])
 
 (defn root-handler
   [request]
   (t/log! :info (str (:request-method request) " - " (:uri request)))
   (let [handler
         (rr/ring-handler
-         (rr/router (routes))
+         (rr/router routes)
          (rr/routes
           (rr/create-resource-handler {:path "/"})
           (rr/create-default-handler
@@ -54,3 +58,10 @@
                          :body "not acceptable"})}))
          {:middleware []})]
     (handler request)))
+
+; (root-handler {:request-method "get" :uri "/k/problem/3"})
+
+; (root-handler {:request-method "get" :uri "/k/scores"})
+
+; (dummy {:request-method "get" :url "dummy"})
+
