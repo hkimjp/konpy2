@@ -24,7 +24,7 @@
     (into [:div.m-4]
           (for [{:keys [e num problem]} (->> (ds/qq q (wk))
                                              (sort-by :num))]
-            [:div.flex.gap-4 [:a {:href (str "/problem/" e)} num]  [:div problem]]))]))
+            [:div.flex.gap-4 [:a {:href (str "/k/problem/" e)} num]  [:div problem]]))]))
 
 (def ans '[:find ?e ?user
            :in $ ?id
@@ -41,7 +41,7 @@
    [:div.font-bold "div-answers"]
    (into [:div.my-4.gap-2]
          (for [[eid user] (ds/qq ans e)]
-           [:a {:href (str "/answer/" eid)} user]))])
+           [:a {:href (str "/k/answer/" eid)} user]))])
 
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})
