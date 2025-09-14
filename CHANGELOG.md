@@ -5,12 +5,10 @@
 * stocks
 * delete toggle :problem/avail true/false, htmx.
 * htmx from problems page
-* / for /login
-* error page
-
 
 # 0.2.4-SNAPSHOT
 
+- checked routes
 
 # 0.2.3 (2025-09-13)
 

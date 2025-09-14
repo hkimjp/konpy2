@@ -15,11 +15,10 @@
 (defn dummy [request]
   (page [:div (:request-method request) " " (:uri request)]))
 
-(defn routes
-  []
+(def routes
   [["/" {:middleware [[wrap-defaults site-defaults]]}
-    ["" {:get login :post login!}]]
-   ["/logout" logout!]
+    ["" {:get login :post login!}]
+    ["logout" logout!]]
    ["/help"   {:get help}]
    ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
     [""           {:get admin/admin}]
@@ -43,7 +42,7 @@
   (t/log! :info (str (:request-method request) " - " (:uri request)))
   (let [handler
         (rr/ring-handler
-         (rr/router (routes))
+         (rr/router routes)
          (rr/routes
           (rr/create-resource-handler {:path "/"})
           (rr/create-default-handler
@@ -66,6 +65,3 @@
 
 ; (dummy {:request-method "get" :url "dummy"})
 
-(root-handler {:request-method "get" :uri "/logout"})
-
-(login {})
