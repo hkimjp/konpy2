@@ -6,7 +6,7 @@
 * delete toggle :problem/avail true/false, htmx.
 * htmx from problems page
 
-# 0.2.4-SNAPSHOT
+# 0.2.4 (2025-09-14)
 
 - checked routes
 
