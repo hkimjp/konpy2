@@ -3,7 +3,11 @@
    [clojure.string :as str]
    [java-time.api :as jt]))
 
-(def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
+;(def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
+
+(def btn "mx-1 px-1 text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500 rounded")
+
+(def input-box "px-1 border-1 border-solid rounded")
 
 (def start-day (jt/local-date 2025 10 7))
 
@@ -20,8 +24,11 @@
 (defn today []
   (str (jt/local-date)))
 
+; (defn local-time []
+;   (subs (str (jt/local-time)) 0 8))
+
 (defn now []
-  (subs (str (jt/local-time)) 0 8))
+  (jt/local-date-time))
 
 (defn abbrev
   "shorten string s for concise log."
