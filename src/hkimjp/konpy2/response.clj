@@ -4,7 +4,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.2.4")
+(def version "0.2.5")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
@@ -16,7 +16,7 @@
    [:div {:class menu} [:a {:href "/k/stocks"} "stocks"]]
    [:div {:class menu} [:a {:href "/logout"} "logout"]]
    [:div {:class menu} [:a {:href "/help"} "HELP"]]
-   [:div {:class menu} [:a {:href "/admin"} "(admin)"]]])
+   [:div {:class menu} [:a {:href "/admin/"} "(admin)"]]])
 
 (def footer
   [:div.text-base
