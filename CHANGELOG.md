@@ -8,6 +8,10 @@
 * / for /login
 * error page
 
+
+# 0.2.4-SNAPSHOT
+
+
 # 0.2.3 (2025-09-13)
 
 - /tasks

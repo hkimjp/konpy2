@@ -2,6 +2,7 @@
   (:require
    [reitit.ring :as rr]
    [ring.middleware.defaults :refer [wrap-defaults api-defaults site-defaults]]
+   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
@@ -16,32 +17,26 @@
 
 (defn routes
   []
-  [["/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" tasks/konpy]]
-   ["/login" {:middleware [[wrap-defaults site-defaults]]}
+  [["/" {:middleware [[wrap-defaults site-defaults]]}
     ["" {:get login :post login!}]]
    ["/logout" logout!]
-   ["/admin" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+   ["/help"   {:get help}]
+   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
     [""           {:get admin/admin}]
-    ["/problems"  {:get admin/problems}]
-    ["/new"       {:get admin/new :post admin/upsert!}]
-    ["/update/:e" {:get admin/edit :post admin/upsert!}]
-    ["/delete/:e" {:delete admin/delete!}]]
-   ["/tasks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get tasks/konpy}]]
-   ["/problem" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["/:e" {:get tasks/problem}]]
-   ["/scores" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get dummy}]]
-   ["/stocks" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["" {:get dummy}]]
-   ["/help" {:get help}]
-   ["/answers" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["/:e" {:get answers/get-answers}]
-    ["/"   {:post answers/post-answer}]]
-   ["/comments" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}]
-   ["/hx" {:middleware [[wrap-defaults api-defaults]]}
-    ["/hello" hx]]])
+    ["problems"   {:get admin/problems}]
+    ["new"        {:get admin/new :post admin/upsert!}]
+    ["update/:e"  {:get admin/edit :post admin/upsert!}]
+    ["delete/:e"  {:delete admin/delete!}]]
+   ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    ["tasks"      {:get tasks/konpy}]
+    ["problem/:e" {:get tasks/problem}]
+    ["scores"     {:get dummy}]
+    ["stocks"     {:get dummy}]
+    ["answers/:e" {:get answers/get-answers}]
+    ["answer"     {:post answers/post-answer}]
+    ["comments"   {:get dummy :post dummy}]]
+   ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
+    ["hello" {:get dummy}]]])
 
 (defn root-handler
   [request]
@@ -65,7 +60,12 @@
          {:middleware []})]
     (handler request)))
 
-; (root-handler {:request-method "get" :uri "/problem/3"})
+; (root-handler {:request-method "get" :uri "/k/problem/3"})
 
-; (root-handler {:request-method "get" :uri "/scores"})
+; (root-handler {:request-method "get" :uri "/k/scores"})
 
+; (dummy {:request-method "get" :url "dummy"})
+
+(root-handler {:request-method "get" :uri "/logout"})
+
+(login {})
