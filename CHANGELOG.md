@@ -5,6 +5,13 @@
 * stocks
 * delete toggle :problem/avail true/false, htmx.
 * htmx from problems page
+* list answers
+* add comments
+
+
+# 0.2.5-SNAPSHOT
+
+* upload answers
 
 # 0.2.4 (2025-09-14)
 

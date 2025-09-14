@@ -1,9 +1,11 @@
 (ns hkimjp.konpy2.tasks
   (:require
+   [hiccup2.core :as h]
+   [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page]]
-   [hkimjp.konpy2.util :refer [btn user week]]))
+   [hkimjp.konpy2.util :refer [btn input-box user week]]))
 
 (def q '[:find ?e ?num ?problem
          :keys e  num  problem
@@ -38,7 +40,7 @@
 (defn- div-answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
   [:div
-   [:div.font-bold "div-answers"]
+   [:div.font-bold "answers"]
    (into [:div.my-4.gap-2]
          (for [[eid user] (ds/qq ans e)]
            [:a {:href (str "/k/answer/" eid)} user]))])
@@ -53,4 +55,10 @@
       [:div.m-4
        [:p (:problem p)]
        (div-answerers e)
-       [:button {:class btn} "upload yours"]]])))
+       [:form {:method "post"
+               :action "/k/answer"
+               :enctype "multipart/form-data"}
+        (h/raw (anti-forgery-field))
+        [:input {:type "hidden" :name "e" :value e}]
+        [:input {:class input-box :type "file" :accept ".py" :name "file"}]
+        [:button {:class btn} "upload"]]]])))

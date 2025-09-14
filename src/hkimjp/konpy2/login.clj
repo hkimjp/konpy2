@@ -7,7 +7,7 @@
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [ring.util.response :as resp]
    [taoensso.telemere :as t]
-   [hkimjp.konpy2.util :refer [user]]
+   [hkimjp.konpy2.util :refer [user btn]]
    [hkimjp.konpy2.response :refer [page]]))
 
 (def l22 (or (env :auth) "https://l22.melt.kyutech.ac.jp"))
@@ -23,10 +23,10 @@
     [:div.p-1
      [:form {:method "post"}
       (h/raw (anti-forgery-field))
-      [:input.border-1.border-solid.px-1 {:name "login" :placeholder "account" :autocomplete "username"}]
+      [:input.border-1.border-solid.px-1.rounded {:name "login" :placeholder "account" :autocomplete "username"}]
       [:span.mx-1 ""]
-      [:input.border-1.border-solid.px-1 {:name "password" :type "password" :placeholder "password" :autocomplete "current-password"}]
-      [:button.mx-1.px-1.text-white.bg-sky-500.hover:bg-sky-700.active:bg-red-500.rounded-xl "LOGIN"]]]
+      [:input.border-1.border-solid.px-1.rounded {:name "password" :type "password" :placeholder "password" :autocomplete "current-password"}]
+      [:button {:class btn} "LOGIN"]]]
     [:br]]))
 
 (defn login!

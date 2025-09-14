@@ -16,7 +16,7 @@
    [:div {:class menu} [:a {:href "/k/stocks"} "stocks"]]
    [:div {:class menu} [:a {:href "/logout"} "logout"]]
    [:div {:class menu} [:a {:href "/help"} "HELP"]]
-   [:div {:class menu} [:a {:href "/admin"} "(admin)"]]])
+   [:div {:class menu} [:a {:href "/admin/"} "(admin)"]]])
 
 (def footer
   [:div.text-base
