@@ -28,22 +28,30 @@
                                              (sort-by :num))]
             [:div.flex.gap-4 [:a {:href (str "/k/problem/" e)} num]  [:div problem]]))]))
 
-(def ans '[:find ?e ?user
-           :in $ ?id
-           :where
-           [?e :answer/valid true]
-           [?e :to ?div]
-           [?e :user ?user]])
+(def answers '[:find ?e ?user
+               :in $ ?id
+               :where
+               [?e :answer/valid true]
+               [?e :to ?div]
+               [?e :user ?user]])
 
 ;; (ds/qq ans 1)
 
+;; FIXME:
+;; space between buttons,
+;;
 (defn- div-answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
   [:div
    [:div.font-bold "answers"]
-   (into [:div.my-4.gap-2]
-         (for [[eid user] (ds/qq ans e)]
-           [:a {:href (str "/k/answer/" eid)} user]))])
+   (into [:div.my-4]
+         (for [[eid user] (ds/qq answers e)]
+           [:button
+            {:hx-get (str "/k/answer/" eid)
+             :hx-target "#answer"
+             :hx-swap "innerHTML"}
+            user]))
+   [:div#answer "show"]])
 
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})

@@ -6,7 +6,7 @@ help:
 CSS := "resources/public/assets/css"
 
 watch:
-  tailwindcss -i {{CSS}}/input.css -o {{CSS}}/output.css --watch=always >/dev/null 2>&1
+  tailwindcss -i {{CSS}}/input.css -o {{CSS}}/output.css --watch
 
 minify:
   tailwindcss -i {{CSS}}/input.css -o {{CSS}}/output.css --minify
