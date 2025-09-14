@@ -9,7 +9,7 @@
 * add comments
 
 
-# 0.2.5-SNAPSHOT (2025-09-14)
+# 0.2.5 (2025-09-14) (2025-09-14)
 
 - upload answers
 * tasks/div-answers do not wrap.
