@@ -4,7 +4,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.2.8")
+(def version "0.2.10")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
@@ -51,6 +51,9 @@
   (-> (str (h/html (h/raw "<!DOCTYPE html>") (base content)))
       resp/response
       (resp/header "Content-Type" "text/html")))
+
+(defn redirect [uri]
+  (resp/redirect uri))
 
 ;; htmx requires html response.
 (defn hx [content]

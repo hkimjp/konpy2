@@ -13,7 +13,7 @@
 
 :db/id id
 :answer/status "yes"|"no"
-:to id
+:to problem/id
 :author
 :answer s
 :digest n or s?
@@ -25,7 +25,7 @@
 :db/id id
 :comment/status "yes"|"no"
 :author user
-:to id
+:to answer/id
 :comment s
 :updated jt
 
@@ -33,4 +33,8 @@
 # stocks
 
 :db/id id
-:stock/valid # delete uses
+:stock/status "yes"|"no"
+:owner user
+:sid id
+:type "problem"|"answer"|"comment"
+:updated jt
