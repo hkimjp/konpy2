@@ -56,8 +56,9 @@
     [:br]
     [:div [:button {:class btn} "upsert"]]]])
 
+; FIEME: reconsider.
 (defn upsert! [{params :params}]
-  (t/log! {:level :info :id "upsert!" :data (params "db/id")})
+  (t/log! {:level :info :id "upsert!" :data params})
   (let [[id true?] (if (= "-1" (params "db/id"))
                      [-1 true]
                      [(parse-long (params "db/id")) (= "true" (params "problem/valid"))])]
@@ -83,21 +84,20 @@
 (defn- div-problems []
   (t/log! :debug "div-problems")
   [:div
-   [:div
-    (for [p (->> (ds/qq get-problems)
-                 (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
-      [:div.flex.gap-4
-       [:div.flex.gap-2
-        [:div [:button.text-bold.text-red-600.hover:bg-red-600.hover:text-white
-               {:hx-delete (str "/admin/delete/" (:e p))}
-               "D"]]
-        [:div [:a.text-bold.text-sky-600.hover:bg-sky-600.hover:text-white
-               {:href (str "/admin/update/" (:e p))}
-               "E"]]
-        [:div (:week p) "-" (:num p)]]
-       [:div (:problem p)]
-       [:div (:test p)]
-       [:div (:gpt p)]])]])
+   (for [p (->> (ds/qq get-problems)
+                (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
+     [:div.flex.gap-4
+      [:div.flex.gap-2
+       [:div [:button.text-bold.text-red-600.hover:bg-red-600.hover:text-white
+              {:hx-delete (str "/admin/delete/" (:e p))}
+              "D"]]
+       [:div [:a.text-bold.text-sky-600.hover:bg-sky-600.hover:text-white
+              {:href (str "/admin/update/" (:e p))}
+              "E"]]
+       [:div (:week p) "-" (:num p)]]
+      [:div (:problem p)]
+      [:div (:test p)]
+      [:div (:gpt p)]])])
 
 (defn problems [request]
   (t/log! {:level :info :id "problems" :msg (user request)})

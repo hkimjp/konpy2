@@ -3,13 +3,15 @@
 * tasks/answers - check having uploaded(necessary in chatGPT's world)
   restrict comments?
 * tasks/comments
-* scores
-* stocks
+* scores.clj
+* stocks.clj
 * delete - toggle :problem/avail true/false, htmx.
 * add comments
 * clj-reload
 * :chatgpt is unnecessary. if found chatgpt's answer, show it.
+* revice answers.clj
 * digest
+* valid=>status
 
 
 # 0.2.7-SNAPSHOT
