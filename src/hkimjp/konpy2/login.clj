@@ -31,7 +31,6 @@
 
 (defn login!
   [{{:keys [login password]} :params}]
-  ;; always login success when (env :auth) is empty
   (t/log! {:level :debug :id "login!" :msg (str login " " password)})
   (if (empty? (env :auth))
     (do
@@ -50,7 +49,6 @@
             (t/log! :info (str "login failed: " login))
             (-> (resp/redirect "/")
                 (assoc :session {} :flash "login failed")))))
-      ;; happens?
       (catch Exception e
         (t/log! :warn (.getMessage e))
         (-> (resp/redirect "/")
