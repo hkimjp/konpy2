@@ -9,11 +9,17 @@
 * admin/toggle-status
 * digest namespace
 * time restriction
-
+* sometime, author is empty when sending comments.
+* show comments
 
 # 0.2.9 (2025-09-15)
 
-* sometime, author is empty when sending comments.
+- **BREAKING**  get /k/answer takes two parameters.
+  e is answer id.
+  p is problem id.
+
+  ["answer/:e/:p"   {:get  answers/show-answer}]
+
 - can add comments
 - post /k/comment - create comment
 - get /k/comment/:e - fetch comment comment id `e`
