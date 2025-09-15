@@ -3,11 +3,25 @@
 * tasks/answers - check having uploaded(necessary in chatGPT's world)
   restrict comments?
 * tasks/comments
-* scores
-* stocks
+* scores.clj
+* stocks.clj
 * delete - toggle :problem/avail true/false, htmx.
 * add comments
 * clj-reload
+* :chatgpt is unnecessary. if found chatgpt's answer, show it.
+* revice answers.clj
+* digest
+* valid=>status
+
+
+# 0.2.7-SNAPSHOT
+
+- updated ring-defaults, ring-jetty-adapter
+
+| :file    | :name                   | :current | :latest |
+|----------|-------------------------|----------|---------|
+| deps.edn | ring/ring-defaults      | 0.6.0    | 0.7.0   |
+|          | ring/ring-jetty-adapter | 1.14.2   | 1.15.1  |
 
 
 # 0.2.6 (2025-09-15)

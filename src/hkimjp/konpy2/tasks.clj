@@ -8,16 +8,16 @@
    [hkimjp.konpy2.response :refer [page hx]]
    [hkimjp.konpy2.util :refer [btn input-box user week now]]))
 
-(def q '[:find ?e ?num ?problem
-         :keys e  num  problem
-         :in $ ?week
-         :where
-         [?e :problem/valid true]
-         [?e :week ?week]
-         [?e :num ?num]
-         [?e :problem ?problem]])
-
 (defn- wk [] (max 0 (week)))
+
+(def ^:private fetch-problems '[:find ?e ?num ?problem
+                                :keys e  num  problem
+                                :in $ ?week
+                                :where
+                                [?e :problem/valid true]
+                                [?e :week ?week]
+                                [?e :num ?num]
+                                [?e :problem ?problem]])
 
 (defn konpy [request]
   (t/log! {:level :info :id "list" :data (user request)})
@@ -25,25 +25,25 @@
    [:div
     [:div.text-2xl "今週の Python"]
     (into [:div.m-4]
-          (for [{:keys [e num problem]} (->> (ds/qq q (wk))
+          (for [{:keys [e num problem]} (->> (ds/qq fetch-problems (wk))
                                              (sort-by :num))]
             [:div.flex.gap-4 [:a {:href (str "/k/problem/" e)} num]  [:div problem]]))]))
 
 ;------------------------------
 
-(def answers '[:find ?e ?author
-               :in $ ?id
-               :where
-               [?e :answer/valid true]
-               [?e :to ?id]
-               [?e :author ?author]])
+(def ^:private fetch-answers '[:find ?e ?author
+                               :in $ ?id
+                               :where
+                               [?e :answer/valid true]
+                               [?e :to ?id]
+                               [?e :author ?author]])
 
 (defn- div-answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
   [:div
    [:div.font-bold "answers"]
    (into [:div.inline.my-4]
-         (for [[eid user] (ds/qq answers e)]
+         (for [[eid user] (ds/qq fetch-answers e)]
            [:button.pr-4
             {:hx-get (str "/k/answer/" eid)
              :hx-target "#answer"
@@ -66,18 +66,18 @@
   (t/log! {:level :debug :data {:e e :file file}})
   (try
     (ds/put! {:answer/valid true
-              :to     (parse-long e)
-              :author (user request)
-              :answer (slurp (:tempfile file))
-              :digest 0
+              :to      (parse-long e)
+              :author  (user request)
+              :answer  (slurp (:tempfile file))
+              :digest  0
               :updated (now)})
     (resp/redirect (str "/k/problem/" e))
-    (catch Exception e
+    (catch Exception ex
       (t/log! {:level :error :data file})
       (page
        [:div
         [:div.text-2xl.text-red-600 "Error"]
-        [:p (.getMessage e)]]))))
+        [:p (.getMessage ex)]]))))
 
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})
@@ -101,4 +101,5 @@
 ;------------------------------------
 
 (defn post-comment [{params :params}]
+  (t/log! {:level :info :id "post-comment" :data params})
   (page [:div "under construction"]))

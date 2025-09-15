@@ -6,7 +6,6 @@
 :num n
 :problem s
 :test s
-:gpt s
 :updated jt
 
 
@@ -15,7 +14,7 @@
 :db/id id
 :answer/valid true|false # delete uses
 :to id
-:user
+:author
 :answer s
 :digest n or s?
 :updated jt
@@ -35,4 +34,3 @@
 
 :db/id id
 :stock/valid # delete uses
-:
