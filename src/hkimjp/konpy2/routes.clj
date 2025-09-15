@@ -32,11 +32,9 @@
     ["problem/:e"  {:get tasks/problem}]
     ["answer"      {:post answers/post-answer}]
     ["answer/:e"   {:get  answers/show-answer}]
-
     ["comment"     {:post comments/post-comment}]
     ["comment/:e"  {:get  comments/comment}]
-    ;; ["comments/:e" {:get  comments/comments}]
-
+    ;;
     ["scores"      {:get dummy}]
     ["stocks"      {:get dummy}]]
    ; ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}

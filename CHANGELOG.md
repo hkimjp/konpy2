@@ -4,16 +4,19 @@
   restrict comments?
 * scores.clj
 * stocks.clj
-* add comments
 * clj-reload
 * attribute :chatgpt is unnecessary. if found chatgpt's answer, show it.
 * admin/toggle-status
 * digest namespace
+* time restriction
 
 
-# 0.2.9-SNAPSHOT
+# 0.2.9 (2025-09-15)
 
-* comments namespace
+- can add comments
+- post /k/comment - create comment
+- get /k/comment/:e - fetch comment comment id `e`
+  fetching comments to answer A is done by a htmx call.
 - answers namespace divided from tasks namespace
 
 # 0.2.8 (2025-09-15)
@@ -30,7 +33,6 @@
 | deps.edn | ring/ring-defaults      | 0.6.0    | 0.7.0   |
 |          | ring/ring-jetty-adapter | 1.14.2   | 1.15.1  |
 
-
 # 0.2.6 (2025-09-15)
 
 - list answers
@@ -42,7 +44,6 @@
 
 - upload answers
 * tasks/div-answers do not wrap.
-
 
 # 0.2.4 (2025-09-14)
 
@@ -58,7 +59,6 @@
 - added `src/hkimjp/konpy2/comments.clj`
 - added `src/hkimjp/konpy2/hx.clj`
 - added `src/hkimjp/konpy2/tasks.clj`
-
 
 # 0.2.2 (2025-09-12)
 
@@ -80,7 +80,6 @@
 - (System/exit 0) if startup fails
 - cardinarity many? no. answers/comments has an only one parent.
 - `doc/data-structure.md`. should be `schema.md`? renamed.
-
 
 # 0.1.1 (2025-09-10)
 

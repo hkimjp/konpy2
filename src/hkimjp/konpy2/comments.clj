@@ -1,5 +1,6 @@
 (ns hkimjp.konpy2.comments
   (:require
+   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx]]
@@ -14,25 +15,25 @@
     (t/log! {:level :info :id "comment" :data comm})
     (hx [:div comm])))
 
-(comment {:path-params {:e "31"}})
+(def ^:private problem-eid '[:find ?pid
+                             :in $ ?cid
+                             :where
+                             [?cid :to ?pid]])
 
-; (defn comments-to
-;   "returns comments sent to `e`"
-;   [{{:keys [e]} :path-params}]
-;   (t/log! {:level :info :id "get-comment" :data e})
-;   (hx [:div "user1 user2 user3"]))
+;; (-> (ds/qq problem-eid 23) first)
 
 (defn post-comment
   "send comments to `e`.
    returns clickable commenter's list"
-  [{params :params}]
-  (t/log! {:level :info :id "post-comment" :data params})
-  (try
-    (ds/put! {:comment/status "yes"
-              :author (:author params)
-              :to (parse-long (:e params))
-              :comment (:comment params)
-              :updated (now)})
-    (page [:div "under construction"])
-    (catch Exception e
-      (t/log! :error e))))
+  [{{:keys [author e comment]} :params}]
+  (t/log! {:level :info :id "post-comment" :data (parse-long e)})
+  (let [e (parse-long e)]
+    (try
+      (ds/put! {:comment/status "yes"
+                :author author
+                :to e
+                :comment comment
+                :updated (now)})
+      (resp/redirect (str "/k/problem/" (-> (ds/qq problem-eid e) ffirst)))
+      (catch Exception ex
+        (t/log! :error ex)))))
