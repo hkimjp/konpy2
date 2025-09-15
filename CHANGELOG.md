@@ -9,12 +9,15 @@
 * add comments
 * clj-reload
 * :chatgpt is unnecessary. if found chatgpt's answer, show it.
-* revice answers.clj
-* digest
-* valid=>status
+* digest namespace
 
 
-# 0.2.7-SNAPSHOT
+# 0.2.8 (2025-09-15)
+
+- changed valid => status (true/false => "yes"/"no")
+- changed admin/upsert!
+
+# 0.2.7 (2025-09-15)
 
 - updated ring-defaults, ring-jetty-adapter
 

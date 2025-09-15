@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>io.github.hkimjp</groupId>
   <artifactId>konpy2</artifactId>
-  <version>0.2.7-SNAPSHOT</version>
+  <version>0.2.8</version>
   <name>hkimjp/konpy2</name>
   <description>KONPY2</description>
   <url>https://github.com/hkimjp/konpy2</url>
@@ -22,7 +22,7 @@
     <url>https://github.com/hkimjp/konpy2</url>
     <connection>scm:git:git://github.com/hkimjp/konpy2.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/hkimjp/konpy2.git</developerConnection>
-    <tag>v0.2.7-SNAPSHOT</tag>
+    <tag>v0.2.8</tag>
   </scm>
   <dependencies>
     <dependency>

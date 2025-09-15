@@ -1,7 +1,7 @@
 # problems
 
 :db/id id
-:problem/valid true|false # delete uses
+:problem/status "yes"|"no"
 :week n
 :num n
 :problem s
@@ -12,7 +12,7 @@
 # answers
 
 :db/id id
-:answer/valid true|false # delete uses
+:answer/status "yes"|"no"
 :to id
 :author
 :answer s
@@ -23,7 +23,7 @@
 # comments
 
 :db/id id
-:comment/valid true|false # delete
+:comment/status "yes"|"no"
 :author user
 :to id
 :comment s
