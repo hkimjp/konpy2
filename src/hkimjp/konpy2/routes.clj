@@ -60,8 +60,6 @@
     (handler request)))
 
 ; (root-handler {:request-method "get" :uri "/k/problem/3"})
-
 ; (root-handler {:request-method "get" :uri "/k/scores"})
-
 ; (dummy {:request-method "get" :url "dummy"})
 
