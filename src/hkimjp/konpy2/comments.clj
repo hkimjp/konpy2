@@ -42,3 +42,8 @@
             :updated (now)})
   (redirect (str "/k/problem/" pid)))
 
+(defn show-comment [{{:keys [e]} :path-params}]
+  (let [c (ds/pl (parse-long e))]
+    (hx [:div (:comment c)])))
+
+; (show-comment {:path-params {:e "47"}})

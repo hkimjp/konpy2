@@ -10,15 +10,20 @@
 * digest namespace
 * time restriction
 * sometime, author is empty when sending comments.
-* show comments
+
+
+# 0.2.10-SNAPSHOT
+
+- can show comments
+- too narrow click on numbers?
 
 # 0.2.9 (2025-09-15)
 
-- **BREAKING**  get /k/answer takes two parameters.
+- **BREAKING**  `get /k/answer/:e/:p`
   e is answer id.
   p is problem id.
 
-  ["answer/:e/:p"   {:get  answers/show-answer}]
+    ["answer/:e/:p"   {:get  answers/show-answer}]
 
 - can add comments
 - post /k/comment - create comment

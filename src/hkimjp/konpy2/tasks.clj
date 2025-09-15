@@ -29,7 +29,10 @@
     (into [:div.m-4]
           (for [{:keys [e num problem]} (->> (ds/qq fetch-problems (wk))
                                              (sort-by :num))]
-            [:div.flex.gap-4 [:a {:href (str "/k/problem/" e)} num]  [:div problem]]))]))
+            [:div
+             [:a.hover:underline
+              {:href (str "/k/problem/" e)}
+              [:span.mr-4 num] [:span problem]]]))]))
 
 ;----------------------------------------------
 

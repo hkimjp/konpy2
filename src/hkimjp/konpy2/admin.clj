@@ -46,14 +46,15 @@
                    (when (= status "no")  {:checked "checked"})) "no "]
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
-    (section "problem")
+    (section  "problem")
     (textarea "problem" problem)
-    (section "test")
+    (section  "test")
     (textarea "test" test)
-    (section "updated")
+    (section  "updated")
     [:div updated]
     [:br]
-    [:div [:button {:class btn} "upsert"]]]])
+    [:div [:button {:class btn} "upsert"]]
+    [:br]]])
 
 (defn upsert! [{params :params}]
   (let [{:keys [id status week num problem test]} params

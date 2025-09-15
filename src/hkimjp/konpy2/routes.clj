@@ -33,7 +33,7 @@
     ["answer"      {:post answers/post-answer}]
     ["answer/:e/:p"   {:get  answers/show-answer}]
     ["comment"     {:post comments/post-comment}]
-    ;;["comment/:e"  {:get  comments/comment}]
+    ["comment/:e"  {:get  comments/show-comment}]
     ;;
     ["scores"      {:get dummy}]
     ["stocks"      {:get dummy}]]

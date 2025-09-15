@@ -33,4 +33,8 @@
 # stocks
 
 :db/id id
-:stock/valid # delete uses
+:stock/status "yes"|"no"
+:owner user
+:sid id
+:type "problem"|"answer"|"comment"
+:updated jt
