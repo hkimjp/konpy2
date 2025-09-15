@@ -2,14 +2,18 @@
 
 * tasks/answers - check having uploaded(necessary in chatGPT's world)
   restrict comments?
-* tasks/comments
 * scores.clj
 * stocks.clj
-* delete - toggle :problem/avail true/false, htmx.
 * add comments
 * clj-reload
-* :chatgpt is unnecessary. if found chatgpt's answer, show it.
+* attribute :chatgpt is unnecessary. if found chatgpt's answer, show it.
+* admin/toggle-status
 * digest namespace
+
+# 0.2.9-SNAPSHOT
+
+* comments namespace
+- answers namespace divided from tasks namespace
 
 
 # 0.2.8 (2025-09-15)

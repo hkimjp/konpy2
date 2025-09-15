@@ -11,29 +11,35 @@
 
 (t/set-min-level! :debug)
 
-(reload/init
- {:dirs ["src" "dev" "test"]
-  :no-reload '#{user}})
-
 (defn restart-system
   []
   (stop-system)
-  (reload/reload)
   (start-system))
 
 (start-system)
-
-;; (reload/reload)
 ;; (restart-system)
 
-(defn put [w n tf]
+(defn before-unload []
+  (stop-system))
+
+(defn after-reload []
+  (start-system))
+
+(reload/init
+ {:dirs ["src" "dev" "test"]
+  :no-reload '#{user}
+  :unload-hook 'before-unload
+  :after-reload 'start-system})
+
+;; (reload/reload)
+
+(defn put [w n yn]
   (ds/puts! [{:db/id -1
-              :problem/valid tf
+              :problem/status yn
               :week w
               :num n
-              :problem "s"
-              :test "t"
-              :gpt "g"
+              :problem "python"
+              :test "test code"
               :updated jt/local-date-time}]))
 
 (comment
