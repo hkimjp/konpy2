@@ -9,17 +9,31 @@
    [hkimjp.konpy2.response :refer [page hx]]
    [hkimjp.konpy2.util :refer [user now btn]]))
 
+(def ^:private comments-to '[:find ?e ?author
+                             :in $ ?to
+                             :where
+                             [?e :comment/status "yes"]
+                             [?e :to ?to]
+                             [?e :author ?author]])
+
 (defn show-answer [{{:keys [e]} :path-params :as request}]
   (t/log! {:level :info :id "show-answer" :data e})
   (let [e (parse-long e)
-        ans (ds/pl e)]
+        ans (ds/pl e)
+        comments (ds/qq comments-to e)]
     (hx [:div
+         [:div "e:" (:db/id ans)]
          [:div [:span.font-bold "author: "] (:author ans)]
          [:div [:span.font-bold "updated: "] (:updated ans)]
          [:pre.border-1.p-2 (:answer ans)]
          [:div.font-bold "comments"]
-         (div-comments e)
-         [:div#comments "[comments]"]
+         (for [[eid author] comments]
+           [:button.pr-4.hover:underline
+            {:hx-get (str "/k/comment/" eid)
+             :hx-target "#comment"
+             :hx-swap "innerHTML"}
+            author])
+         [:div#comment "[comment]"]
          [:div.font-bold "your comment"]
          [:form {:method "post" :action "/k/comment"}
           (h/raw (anti-forgery-field))

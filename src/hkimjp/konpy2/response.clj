@@ -4,7 +4,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.2.9-SNAPSHOT")
+(def version "0.2.9")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
@@ -57,7 +57,7 @@
 
 ;; htmx requires html response.
 (defn hx [content]
-  (t/log! {:level :debug :id "hx"})
+  (t/log! {:level :debug :id "hx" :data content})
   (-> content
       h/html
       str

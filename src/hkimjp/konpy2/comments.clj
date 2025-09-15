@@ -1,5 +1,6 @@
 (ns hkimjp.konpy2.comments
   (:require
+   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx redirect]]
@@ -16,7 +17,7 @@
 ; (ds/qq comments-to 26)
 ; (ds/pl 28)
 
-(defn comments [{params :path-params}])
+; (defn comments [{params :path-params}])
 
 (defn div-comments
   "returns comments sent to `e`"
@@ -42,3 +43,4 @@
             :comment comment
             :updated (now)})
   (redirect "/k/problem/1"))
+
