@@ -4,7 +4,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.2.5")
+(def version "0.2.6-SNAPSHOT-2")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
@@ -23,6 +23,7 @@
    [:hr]
    "hkimura " version])
 
+; footer
 (defn- base
   [content]
   [:html {:lang "en"}
@@ -61,3 +62,5 @@
       resp/response
       (resp/content-type "text/html")))
 
+; (defn redirect [uri]
+;   (resp/redirect uri))

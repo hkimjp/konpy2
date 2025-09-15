@@ -2,10 +2,11 @@
   (:require
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
+   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page]]
-   [hkimjp.konpy2.util :refer [btn input-box user week]]))
+   [hkimjp.konpy2.response :refer [page hx]]
+   [hkimjp.konpy2.util :refer [btn input-box user week now]]))
 
 (def q '[:find ?e ?num ?problem
          :keys e  num  problem
@@ -36,6 +37,10 @@
                [?e :user ?user]])
 
 ;; (ds/qq ans 1)
+
+(defn show-answer [{{:keys [e]} :path-parms}]
+  (t/log! {:level :info :id "answer" :data e})
+  (hx [:div "answer todays"]))
 
 (defn- div-answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
@@ -68,3 +73,21 @@
         [:input {:type "hidden" :name "e" :value e}]
         [:input {:class input-box :type "file" :accept ".py" :name "file"}]
         [:button {:class btn} "upload"]]]])))
+
+(defn post-answer [{{:keys [file e]} :params :as request}]
+  (t/log! {:level :info :id "post-answer"})
+  (t/log! {:level :debug :data {:e e :file file}})
+  (try
+    (ds/put! {:answer/valid true
+              :to (parse-long e)
+              :user (user request)
+              :answer (slurp (:tempfile file))
+              :digest 0
+              :updated (now)})
+    (resp/redirect (str "/k/problem/" e))
+    (catch Exception e
+      (t/log! {:level :error :data file})
+      (page
+       [:div
+        [:div.text-2xl.text-red-600 "Error"]
+        [:p (.getMessage e)]]))))

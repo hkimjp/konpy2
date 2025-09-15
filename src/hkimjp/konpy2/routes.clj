@@ -29,11 +29,11 @@
    ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["tasks"      {:get tasks/konpy}]
     ["problem/:e" {:get tasks/problem}]
+    ;["answers/:e" {:get answers/fetch-answers}]
+    ["answer"     {:post tasks/post-answer}]
+    ["answer/:e"  {:get tasks/show-answer}]
     ["scores"     {:get dummy}]
     ["stocks"     {:get dummy}]
-    ["answers/:e" {:get answers/answers}]
-    ["answer"     {:post answers/post-answer}]
-    ["answer/:e"  {:get answers/answer}]
     ["comments"   {:get dummy :post dummy}]]
    ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
     ["hello" {:get dummy}]]])
