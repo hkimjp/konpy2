@@ -10,11 +10,11 @@
 * admin/toggle-status
 * digest namespace
 
+
 # 0.2.9-SNAPSHOT
 
 * comments namespace
 - answers namespace divided from tasks namespace
-
 
 # 0.2.8 (2025-09-15)
 

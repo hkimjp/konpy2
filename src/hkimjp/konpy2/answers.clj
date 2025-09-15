@@ -8,10 +8,22 @@
    [hkimjp.konpy2.response :refer [page hx]]
    [hkimjp.konpy2.util :refer [user now btn]]))
 
+(def ^:private comments-to '[:find ?e
+                             :in $ ?to
+                             :where
+                             [?e :to ?to]])
+
+; (ds/qq comments-to 20)
+; (ds/pl 30)
+
 (defn show-answer [{{:keys [e]} :path-params :as request}]
   (t/log! {:level :info :id "show-answer" :data e})
-  (let [ans (ds/pl (parse-long e))]
+  (let [e (parse-long e)
+        ans (ds/pl e)
+        ;;comms (ds/qq comments-to ans)
+        ]
     (hx [:div
+         [:div "e:" (:db/id ans)]
          [:div [:span.font-bold "author: "] (:author ans)]
          [:div [:span.font-bold "updated: "] (:updated ans)]
          [:pre.border-1.p-2 (:answer ans)]
