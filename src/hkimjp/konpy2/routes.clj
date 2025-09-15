@@ -2,15 +2,13 @@
   (:require
    [reitit.ring :as rr]
    [ring.middleware.defaults :refer [wrap-defaults api-defaults site-defaults]]
-   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
    [hkimjp.konpy2.tasks :as tasks]
-   [hkimjp.konpy2.answers :as answers]
-   [hkimjp.konpy2.response :refer [page hx]]))
+   [hkimjp.konpy2.response :refer [page]]))
 
 (defn dummy [request]
   (page [:div (:request-method request) " " (:uri request)]))
@@ -29,14 +27,15 @@
    ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["tasks"      {:get tasks/konpy}]
     ["problem/:e" {:get tasks/problem}]
+    ["answer"     {:post tasks/post-answer}]
+    ["answer/:e"  {:get tasks/show-answer}]
+    ["comment"    {:post tasks/post-comment}]
+    ["comments"   {:get dummy}]
     ["scores"     {:get dummy}]
-    ["stocks"     {:get dummy}]
-    ["answers/:e" {:get answers/answers}]
-    ["answer"     {:post answers/post-answer}]
-    ["answer/:e"  {:get answers/answer}]
-    ["comments"   {:get dummy :post dummy}]]
-   ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
-    ["hello" {:get dummy}]]])
+    ["stocks"     {:get dummy}]]
+   ; ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
+   ;  ["hello" {:post hx/dummy-post}]]
+   ])
 
 (defn root-handler
   [request]
@@ -50,7 +49,7 @@
            {:not-found
             (constantly {:status 404
                          :headers {"Content-Type" "text/html"}
-                         :body "not found"})
+                         :body "<h1>ERROR</h1><p>not found</p>"})
             :method-not-allowed
             (constantly {:status 405
                          :body "not allowed"})

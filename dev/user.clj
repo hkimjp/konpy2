@@ -37,6 +37,8 @@
               :updated jt/local-date-time}]))
 
 (comment
+  (:user (ds/pl (parse-long "24")))
+
   (ds/qq '[:find ?e ?valid
            :where
            [?e :problem/valid ?valid]])

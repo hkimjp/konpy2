@@ -8,7 +8,6 @@
 (defn wrap-users
   [handler]
   (fn [request]
-    (println (:session request))
     (let [user (user request)]
       (t/log! :debug (str "wrap-users " user))
       (if (some? user)

@@ -4,7 +4,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.2.5")
+(def version "0.2.6-SNAPSHOT-4")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
@@ -23,6 +23,7 @@
    [:hr]
    "hkimura " version])
 
+; footer
 (defn- base
   [content]
   [:html {:lang "en"}
@@ -55,6 +56,7 @@
 ;; htmx requires html response.
 ;; appropriate in this namespace?
 (defn hx [content]
+  (t/log! {:level :debug :id "hx"})
   (-> content
       h/html
       str
