@@ -36,12 +36,6 @@
                [?e :to ?div]
                [?e :user ?user]])
 
-;; (ds/qq ans 1)
-
-(defn show-answer [{{:keys [e]} :path-parms}]
-  (t/log! {:level :info :id "answer" :data e})
-  (hx [:div "answer todays"]))
-
 (defn- div-answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
   [:div
@@ -53,7 +47,14 @@
              :hx-target "#answer"
              :hx-swap "innerHTML"}
             user]))
-   [:div#answer "show"]])
+   [:div#answer.border-1.p-2 "show"]])
+
+; FIXME: eid が渡っていない。
+(defn show-answer [{{:keys [e]} :path-params}]
+  (t/log! {:level :info :id "show-answer" :data e})
+  (hx [:div
+       [:pre (:answer (ds/pl (parse-long e)))]
+       [:div.font-bold "your comment"]]))
 
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})
