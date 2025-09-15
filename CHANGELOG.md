@@ -12,10 +12,11 @@
 * sometime, author is empty when sending comments.
 
 
-# 0.2.10-SNAPSHOT
+# 0.2.10 (2025-09-16)
 
 - can show comments
 - too narrow click on numbers?
+- hover:underline problem links
 
 # 0.2.9 (2025-09-15)
 
