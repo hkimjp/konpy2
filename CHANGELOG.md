@@ -4,16 +4,19 @@
   restrict comments?
 * scores.clj
 * stocks.clj
-* add comments
 * clj-reload
 * attribute :chatgpt is unnecessary. if found chatgpt's answer, show it.
 * admin/toggle-status
 * digest namespace
+* time restriction
 
 
 # 0.2.9-SNAPSHOT
 
-* comments namespace
+- can add comments
+- post /k/comment - create comment
+- get /k/comment/:e - fetch comment comment id `e`
+  fetching comments to answer A is done by a htmx call.
 - answers namespace divided from tasks namespace
 
 # 0.2.8 (2025-09-15)
