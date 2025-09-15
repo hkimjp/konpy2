@@ -31,7 +31,7 @@
                                              (sort-by :num))]
             [:div.flex.gap-4 [:a {:href (str "/k/problem/" e)} num]  [:div problem]]))]))
 
-;------------------------------
+;----------------------------------------------
 
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id
@@ -42,7 +42,7 @@
 
 ; (ds/qq fetch-answers 10)
 
-(defn- div-answerers [e]
+(defn- answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
   [:div
    [:div.font-bold "answers"]
@@ -55,34 +55,6 @@
             [:span.hover:underline user]]))
    [:div#answer "[answer]"]])
 
-(defn show-answer [{{:keys [e]} :path-params}]
-  (t/log! {:level :info :id "show-answer" :data e})
-  (let [ans (ds/pl (parse-long e))]
-    (hx [:div
-         [:div [:span.font-bold "author: "] (:author ans)]
-         [:div [:span.font-bold "updated: "] (:updated ans)]
-         [:pre.border-1.p-2 (:answer ans)]
-         [:div.font-bold "your comment"]
-         [:form {:method "post" :action "/k/comment"}]])))
-
-(defn post-answer [{{:keys [file e]} :params :as request}]
-  (t/log! {:level :info :id "post-answer"})
-  (t/log! {:level :debug :data {:e e :file file}})
-  (try
-    (ds/put! {:answer/status "yes"
-              :to      (parse-long e)
-              :author  (user request)
-              :answer  (slurp (:tempfile file))
-              :digest  0
-              :updated (now)})
-    (resp/redirect (str "/k/problem/" e))
-    (catch Exception ex
-      (t/log! {:level :error :data file})
-      (page
-       [:div
-        [:div.text-2xl.text-red-600 "Error"]
-        [:p (.getMessage ex)]]))))
-
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})
   (let [e (parse-long e)
@@ -92,7 +64,7 @@
       [:div.text-2xl (str "Problem " (:week p) "-" (:num p))]
       [:div.m-4
        [:p (:problem p)]
-       (div-answerers e)
+       (answerers e)
        [:div.font-bold "your answer"]
        [:form {:method "post"
                :action "/k/answer"

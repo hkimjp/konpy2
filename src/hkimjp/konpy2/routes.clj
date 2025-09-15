@@ -5,6 +5,8 @@
    [taoensso.telemere :as t]
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
+   [hkimjp.konpy2.answers :as answers]
+   [hkimjp.konpy2.comments :as comments]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
    [hkimjp.konpy2.tasks :as tasks]
@@ -13,7 +15,7 @@
 (defn dummy [request]
   (page [:div (:request-method request) " " (:uri request)]))
 
-(def routes
+(defn routes []
   [["/" {:middleware [[wrap-defaults site-defaults]]}
     ["" {:get login :post login!}]
     ["logout" logout!]]
@@ -23,17 +25,18 @@
     ["problems"   {:get admin/problems}]
     ["new"        {:get admin/new  :post admin/upsert!}]
     ["update/:e"  {:get admin/edit :post admin/upsert!}]
-    ;;["toggle/:e"  {:post admin/post-status!}]
+    ;;["toggle/:e"  {:post admin/toggle-status!}]
     ]
-   ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
-    ["tasks"      {:get tasks/konpy}]
-    ["problem/:e" {:get tasks/problem}]
-    ["answer"     {:post tasks/post-answer}]
-    ["answer/:e"  {:get tasks/show-answer}]
-    ["comment"    {:post tasks/post-comment}]
-    ["comments"   {:get dummy}]
-    ["scores"     {:get dummy}]
-    ["stocks"     {:get dummy}]]
+   ["/k/" {:middleware [[wrap-defaults site-defaults]]} ;m/wrap-users
+    ["tasks"       {:get tasks/konpy}]
+    ["problem/:e"  {:get tasks/problem}]
+    ["answer"      {:post answers/post-answer}]
+    ["answer/:e"   {:get  answers/show-answer}]
+    ["comment"     {:post comments/post-comment}]
+    ["comment/:e"  {:get  comments/comment}]
+    ;;
+    ["scores"      {:get dummy}]
+    ["stocks"      {:get dummy}]]
    ; ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
    ;  ["hello" {:post hx/dummy-post}]]
    ])
@@ -43,7 +46,7 @@
   (t/log! :info (str (:request-method request) " - " (:uri request)))
   (let [handler
         (rr/ring-handler
-         (rr/router routes)
+         (rr/router (routes))
          (rr/routes
           (rr/create-resource-handler {:path "/"})
           (rr/create-default-handler
