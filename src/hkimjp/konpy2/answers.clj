@@ -16,13 +16,13 @@
                              [?e :to ?to]
                              [?e :author ?author]])
 
-(defn show-answer [{{:keys [e]} :path-params :as request}]
+(defn show-answer [{{:keys [e p]} :path-params :as request}]
   (t/log! {:level :info :id "show-answer" :data e})
   (let [e (parse-long e)
         ans (ds/pl e)
         comments (ds/qq comments-to e)]
     (hx [:div
-         [:div "e:" (:db/id ans)]
+         ; [:div "e:" (:db/id ans)]
          [:div [:span.font-bold "author: "] (:author ans)]
          [:div [:span.font-bold "updated: "] (:updated ans)]
          [:pre.border-1.p-2 (:answer ans)]
@@ -39,6 +39,7 @@
           (h/raw (anti-forgery-field))
           [:input {:type "hidden" :name "to" :value e}]
           [:input {:type "hidden" :name "author" :value (user request)}]
+          [:input {:type "hidden" :name "pid" :value p}]
           [:textarea.border-1.p-2 {:name "comment"}]
           [:button {:class btn} "send"]]])))
 

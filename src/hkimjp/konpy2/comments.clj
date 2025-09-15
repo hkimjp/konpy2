@@ -17,8 +17,6 @@
 ; (ds/qq comments-to 26)
 ; (ds/pl 28)
 
-; (defn comments [{params :path-params}])
-
 (defn div-comments
   "returns comments sent to `e`"
   [e]
@@ -33,14 +31,14 @@
 (defn post-comment
   "send comments to `e`.
    returns clickable commenter's list"
-  [{{:keys [to author comment]} :params}]
+  [{{:keys [to author comment pid]} :params}]
   (t/log! {:level :info
            :id    "post-comment"
-           :data  {:to to :author author :comment comment}})
+           :data  {:to to :author author :comment comment :pid pid}})
   (ds/put! {:comment/status "yes"
             :author author
             :to (parse-long to)
             :comment comment
             :updated (now)})
-  (redirect "/k/problem/1"))
+  (redirect (str "/k/problem/" pid)))
 

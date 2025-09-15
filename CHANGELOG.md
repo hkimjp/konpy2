@@ -13,6 +13,7 @@
 
 # 0.2.9 (2025-09-15)
 
+* sometime, author is empty when sending comments.
 - can add comments
 - post /k/comment - create comment
 - get /k/comment/:e - fetch comment comment id `e`

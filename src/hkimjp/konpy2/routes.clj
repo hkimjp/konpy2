@@ -27,11 +27,11 @@
     ["update/:e"  {:get admin/edit :post admin/upsert!}]
     ;;["toggle/:e"  {:post admin/toggle-status!}]
     ]
-   ["/k/" {:middleware [[wrap-defaults site-defaults]]} ;m/wrap-users
+   ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["tasks"       {:get tasks/konpy}]
     ["problem/:e"  {:get tasks/problem}]
     ["answer"      {:post answers/post-answer}]
-    ["answer/:e"   {:get  answers/show-answer}]
+    ["answer/:e/:p"   {:get  answers/show-answer}]
     ["comment"     {:post comments/post-comment}]
     ;;["comment/:e"  {:get  comments/comment}]
     ;;

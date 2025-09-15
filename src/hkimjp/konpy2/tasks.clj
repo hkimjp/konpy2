@@ -49,7 +49,7 @@
    (into [:div.inline.my-4]
          (for [[eid user] (ds/qq fetch-answers pid)]
            [:button.pr-4
-            {:hx-get (str "/k/answer/" eid)
+            {:hx-get (str "/k/answer/" eid "/" pid)
              :hx-target "#answer"
              :hx-swap "innerHTML"}
             [:span.hover:underline user]]))

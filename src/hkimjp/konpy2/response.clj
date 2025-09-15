@@ -57,7 +57,7 @@
 
 ;; htmx requires html response.
 (defn hx [content]
-  (t/log! {:level :debug :id "hx" :data content})
+  (t/log! {:level :debug :id "hx"})
   (-> content
       h/html
       str
