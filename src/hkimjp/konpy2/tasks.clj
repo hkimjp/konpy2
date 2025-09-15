@@ -31,7 +31,7 @@
                                              (sort-by :num))]
             [:div.flex.gap-4 [:a {:href (str "/k/problem/" e)} num]  [:div problem]]))]))
 
-;------------------------------
+;----------------------------------------------
 
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id

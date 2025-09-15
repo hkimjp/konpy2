@@ -15,10 +15,6 @@
                              [?e :to ?to]
                              [?e :author ?author]])
 
-(ds/qq comments-to 20)
-
-(ds/pl 30)
-
 (defn show-answer [{{:keys [e]} :path-params :as request}]
   (t/log! {:level :info :id "show-answer" :data e})
   (let [e (parse-long e)
@@ -31,11 +27,12 @@
          [:pre.border-1.p-2 (:answer ans)]
          [:div.font-bold "comments"]
          (for [[eid author] comments]
-           [:div {:hx-get (str "/k/comments/" eid)
-                  :hx-target "#connent"
-                  :hx-swap "innerHTML"}
+           [:button.pr-4.hover:underline
+            {:hx-get (str "/k/comment/" eid)
+             :hx-target "#comment"
+             :hx-swap "innerHTML"}
             author])
-         [:div#comment]
+         [:div#comment "[comment]"]
          [:div.font-bold "your comment"]
          [:form {:method "post" :action "/k/comment"}
           (h/raw (anti-forgery-field))

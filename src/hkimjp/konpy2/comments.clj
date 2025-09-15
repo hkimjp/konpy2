@@ -5,11 +5,22 @@
    [hkimjp.konpy2.response :refer [page hx]]
    [hkimjp.konpy2.util :refer [now]]))
 
-(defn comments
-  "returns comments sent to `e`"
+(defn comment
+  "return comment eid=e"
   [{{:keys [e]} :path-params}]
-  (t/log! {:level :info :id "get-comment" :data e})
-  (hx [:div "user1 user2 user3"]))
+  (let [e (parse-long e)
+        comm (-> (ds/pl e)
+                 :comment)]
+    (t/log! {:level :info :id "comment" :data comm})
+    (hx [:div comm])))
+
+(comment {:path-params {:e "31"}})
+
+; (defn comments-to
+;   "returns comments sent to `e`"
+;   [{{:keys [e]} :path-params}]
+;   (t/log! {:level :info :id "get-comment" :data e})
+;   (hx [:div "user1 user2 user3"]))
 
 (defn post-comment
   "send comments to `e`.
@@ -25,12 +36,3 @@
     (page [:div "under construction"])
     (catch Exception e
       (t/log! :error e))))
-
-(comment
-  (ds/qq '[:find ?e
-           :where
-           [?e :comments/status "yes"]])
-  (ds/pl 26)
-  (ds/pl 25)
-  (ds/pl 27)
-  :rcf)
