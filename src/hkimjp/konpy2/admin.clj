@@ -42,7 +42,7 @@
     (section "problem/status")
     [:input (merge {:type "radio" :name "status" :value "yes"}
                    (when (= status "yes") {:checked "checked"})) "yes "]
-    [:input (merge {:type "radio" :name "problem/status" :value "no"}
+    [:input (merge {:type "radio" :name "status" :value "no"}
                    (when (= status "no")  {:checked "checked"})) "no "]
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
@@ -54,19 +54,6 @@
     [:div updated]
     [:br]
     [:div [:button {:class btn} "upsert"]]]])
-
-; FIEME: reconsider.
-; (defn upsert! [{params :params}]
-;   (t/log! {:level :info :id "upsert!" :data params})
-;   (let [[id true?] (if (= "-1" (params "db/id"))
-;                      [-1 true]
-;                      [(parse-long (params "db/id")) (= "yes" (params "problem/status"))])]
-;     (ds/put! (-> params
-;                  (dissoc :__anti-forgery-token "problem/status" "db/id")
-;                  (assoc :db/id id :problem/status true? :updated (jt/local-date-time))
-;                  (update :week parse-long)
-;                  (update :num parse-long)))
-;     (resp/redirect "/admin/problems")))
 
 (defn upsert! [{params :params}]
   (let [{:keys [id status week num problem test]} params

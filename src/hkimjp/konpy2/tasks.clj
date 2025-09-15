@@ -14,10 +14,12 @@
                                 :keys e  num  problem
                                 :in $ ?week
                                 :where
-                                [?e :problem/valid true]
+                                [?e :problem/status "yes"]
                                 [?e :week ?week]
                                 [?e :num ?num]
                                 [?e :problem ?problem]])
+
+;;(ds/qq fetch-problems 0)
 
 (defn konpy [request]
   (t/log! {:level :info :id "list" :data (user request)})
@@ -34,9 +36,11 @@
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id
                                :where
-                               [?e :answer/valid true]
+                               [?e :answer/status "yes"]
                                [?e :to ?id]
                                [?e :author ?author]])
+
+; (ds/qq fetch-answers 10)
 
 (defn- div-answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
@@ -65,7 +69,7 @@
   (t/log! {:level :info :id "post-answer"})
   (t/log! {:level :debug :data {:e e :file file}})
   (try
-    (ds/put! {:answer/valid true
+    (ds/put! {:answer/status "yes"
               :to      (parse-long e)
               :author  (user request)
               :answer  (slurp (:tempfile file))
