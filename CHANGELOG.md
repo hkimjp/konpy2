@@ -12,7 +12,7 @@
 * revice answers.clj
 * digest
 
-# 0.2.8-SNAPSHOT (2025-09-15)
+# 0.2.8-SNAPSHOT
 
 * valid=>status
 

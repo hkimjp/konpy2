@@ -7,7 +7,7 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page]]
-   [hkimjp.konpy2.util :refer [btn user]]))
+   [hkimjp.konpy2.util :refer [btn user now]]))
 
 (defn admin [_request]
   (page
@@ -19,7 +19,7 @@
      [:li [:a {:href "/admin/update/0"} "edit"]]
      [:li [:a {:href "/admin/delete/0"} "delete!"]]]]))
 
-(defn- div-textarea [label text]
+(defn- textarea [label text]
   [:textarea.w-full.h-20.p-2.outline.outline-black.shadow-lg
    {:name label} text])
 
@@ -30,55 +30,70 @@
   [:input.text-center.size-6.outline {:name label :value val}])
 
 (defn- problem-form
-  [{:keys [db/id problem/status week num problem test gpt updated] :as params}]
+  [{:keys [db/id problem/status week num problem test updated] :as params}]
   (t/log! {:level :info :id "problem-form"})
   (t/log! {:level :debug :data params})
+  (t/log! {:level :debug :data {:id id :status status}})
   [:div
    [:div.text-2xl.font-bold "Problem"]
    [:form.mx-4 {:method "post"}
     (h/raw (anti-forgery-field))
-    [:input {:type "hidden" :name "db/id" :value id}]
+    [:input {:type "hidden" :name "id" :value id}]
     (section "problem/status")
-    [:input (merge {:type "radio" :name "problem/status" :value "true"}
-                   (when status {:checked "checked"})) "true "]
-    [:input (merge {:type "radio" :name "problem/status" :value "false"}
-                   (when-not status {:checked "checked"})) "false"]
+    [:input (merge {:type "radio" :name "status" :value "yes"}
+                   (when (= status "yes") {:checked "checked"})) "yes "]
+    [:input (merge {:type "radio" :name "problem/status" :value "no"}
+                   (when (= status "no")  {:checked "checked"})) "no "]
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section "problem")
-    (div-textarea "problem" problem)
+    (textarea "problem" problem)
     (section "test")
-    (div-textarea "test" test)
-    (section "gpt")
-    (div-textarea "gpt" gpt)
+    (textarea "test" test)
     (section "updated")
     [:div updated]
     [:br]
     [:div [:button {:class btn} "upsert"]]]])
 
 ; FIEME: reconsider.
+; (defn upsert! [{params :params}]
+;   (t/log! {:level :info :id "upsert!" :data params})
+;   (let [[id true?] (if (= "-1" (params "db/id"))
+;                      [-1 true]
+;                      [(parse-long (params "db/id")) (= "yes" (params "problem/status"))])]
+;     (ds/put! (-> params
+;                  (dissoc :__anti-forgery-token "problem/status" "db/id")
+;                  (assoc :db/id id :problem/status true? :updated (jt/local-date-time))
+;                  (update :week parse-long)
+;                  (update :num parse-long)))
+;     (resp/redirect "/admin/problems")))
+
 (defn upsert! [{params :params}]
-  (t/log! {:level :info :id "upsert!" :data params})
-  (let [[id true?] (if (= "-1" (params "db/id"))
-                     [-1 true]
-                     [(parse-long (params "db/id")) (= "true" (params "problem/status"))])]
-    (ds/put! (-> params
-                 (dissoc :__anti-forgery-token "problem/status" "db/id")
-                 (assoc :db/id id :problem/status true? :updated (jt/local-date-time))
-                 (update :week parse-long)
-                 (update :num parse-long)))
-    (resp/redirect "/admin/problems")))
+  (let [{:keys [id status week num problem test]} params
+        id (if (= -1 id) -1 (parse-long id))
+        data {:db/id id
+              :problem/status status
+              :week (parse-long week)
+              :num  (parse-long num)
+              :problem problem
+              :test test
+              :updated (now)}]
+    (t/log! {:level :debug :data data})
+    (try
+      (ds/put! data)
+      (resp/redirect "/admin/problems")
+      (catch Exception e
+        (t/log! {:level :error :msg e})))))
 
 (def ^:private get-problems
-  '[:find ?e ?status ?week ?num ?problem ?test ?gpt ?updated
-    :keys e  status  week  num  problem  test  gpt  updated
+  '[:find ?e ?status ?week ?num ?problem ?test ?updated
+    :keys e  status  week  num  problem  test  updated
     :where
     [?e :problem/status ?status]
     [?e :week ?week]
     [?e :num ?num]
     [?e :problem ?problem]
     [?e :test ?test]
-    [?e :gpt ?gpt]
     [?e :updated ?updated]])
 
 (defn- div-problems []
@@ -111,7 +126,7 @@
   (t/log! {:lelvel :info :id (user request)})
   (page
    (problem-form {:db/id -1
-                  :problem/status "true"
+                  :problem/status "yes"
                   :week ""
                   :num ""
                   :problem ""
