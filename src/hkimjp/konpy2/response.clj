@@ -52,6 +52,9 @@
       resp/response
       (resp/header "Content-Type" "text/html")))
 
+(defn redirect [uri]
+  (resp/redirect uri))
+
 ;; htmx requires html response.
 (defn hx [content]
   (t/log! {:level :debug :id "hx"})

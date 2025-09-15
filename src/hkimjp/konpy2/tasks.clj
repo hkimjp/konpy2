@@ -42,12 +42,12 @@
 
 ; (ds/qq fetch-answers 10)
 
-(defn- answerers [e]
-  (t/log! {:level :info :id "div-answerers" :data e})
+(defn- answerers [pid]
+  (t/log! {:level :info :id "div-answerers" :data pid})
   [:div
    [:div.font-bold "answers"]
    (into [:div.inline.my-4]
-         (for [[eid user] (ds/qq fetch-answers e)]
+         (for [[eid user] (ds/qq fetch-answers pid)]
            [:button.pr-4
             {:hx-get (str "/k/answer/" eid)
              :hx-target "#answer"

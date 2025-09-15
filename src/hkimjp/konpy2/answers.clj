@@ -5,22 +5,25 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
+   [hkimjp.konpy2.comments :refer [div-comments]]
    [hkimjp.konpy2.response :refer [page hx]]
    [hkimjp.konpy2.util :refer [user now btn]]))
 
 (defn show-answer [{{:keys [e]} :path-params :as request}]
   (t/log! {:level :info :id "show-answer" :data e})
-  (let [ans (ds/pl (parse-long e))]
+  (let [e (parse-long e)
+        ans (ds/pl e)]
     (hx [:div
          [:div [:span.font-bold "author: "] (:author ans)]
          [:div [:span.font-bold "updated: "] (:updated ans)]
          [:pre.border-1.p-2 (:answer ans)]
          [:div.font-bold "comments"]
+         (div-comments e)
          [:div#comments "[comments]"]
          [:div.font-bold "your comment"]
          [:form {:method "post" :action "/k/comment"}
           (h/raw (anti-forgery-field))
-          [:input {:type "hidden" :name "e" :value e}]
+          [:input {:type "hidden" :name "to" :value e}]
           [:input {:type "hidden" :name "author" :value (user request)}]
           [:textarea.border-1.p-2 {:name "comment"}]
           [:button {:class btn} "send"]]])))
