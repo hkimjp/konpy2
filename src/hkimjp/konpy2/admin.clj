@@ -30,7 +30,7 @@
   [:input.text-center.size-6.outline {:name label :value val}])
 
 (defn- problem-form
-  [{:keys [db/id problem/valid week num problem test gpt updated] :as params}]
+  [{:keys [db/id problem/status week num problem test gpt updated] :as params}]
   (t/log! {:level :info :id "problem-form"})
   (t/log! {:level :debug :data params})
   [:div
@@ -38,11 +38,11 @@
    [:form.mx-4 {:method "post"}
     (h/raw (anti-forgery-field))
     [:input {:type "hidden" :name "db/id" :value id}]
-    (section "problem/valid")
-    [:input (merge {:type "radio" :name "problem/valid" :value "true"}
-                   (when valid {:checked "checked"})) "true "]
-    [:input (merge {:type "radio" :name "problem/valid" :value "false"}
-                   (when-not valid {:checked "checked"})) "false"]
+    (section "problem/status")
+    [:input (merge {:type "radio" :name "problem/status" :value "true"}
+                   (when status {:checked "checked"})) "true "]
+    [:input (merge {:type "radio" :name "problem/status" :value "false"}
+                   (when-not status {:checked "checked"})) "false"]
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section "problem")
@@ -61,19 +61,19 @@
   (t/log! {:level :info :id "upsert!" :data params})
   (let [[id true?] (if (= "-1" (params "db/id"))
                      [-1 true]
-                     [(parse-long (params "db/id")) (= "true" (params "problem/valid"))])]
+                     [(parse-long (params "db/id")) (= "true" (params "problem/status"))])]
     (ds/put! (-> params
-                 (dissoc :__anti-forgery-token "problem/valid" "db/id")
-                 (assoc :db/id id :problem/valid true? :updated (jt/local-date-time))
+                 (dissoc :__anti-forgery-token "problem/status" "db/id")
+                 (assoc :db/id id :problem/status true? :updated (jt/local-date-time))
                  (update :week parse-long)
                  (update :num parse-long)))
     (resp/redirect "/admin/problems")))
 
 (def ^:private get-problems
-  '[:find ?e ?valid ?week ?num ?problem ?test ?gpt ?updated
-    :keys e  valid  week  num  problem  test  gpt  updated
+  '[:find ?e ?status ?week ?num ?problem ?test ?gpt ?updated
+    :keys e  status  week  num  problem  test  gpt  updated
     :where
-    [?e :problem/valid ?valid]
+    [?e :problem/status ?status]
     [?e :week ?week]
     [?e :num ?num]
     [?e :problem ?problem]
@@ -96,8 +96,7 @@
               "E"]]
        [:div (:week p) "-" (:num p)]]
       [:div (:problem p)]
-      [:div (:test p)]
-      [:div (:gpt p)]])])
+      [:div (:test p)]])])
 
 (defn problems [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
@@ -112,17 +111,17 @@
   (t/log! {:lelvel :info :id (user request)})
   (page
    (problem-form {:db/id -1
-                  :problem/valid "true"
+                  :problem/status "true"
                   :week ""
                   :num ""
                   :problem ""
-                  :test ""
-                  :gpt ""})))
+                  :test ""})))
 
 (defn edit [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "edit" :data {:e e}})
   (page
    (problem-form (ds/pl (parse-long e)))))
 
-(defn delete! [request]
-  (page [:div "delete!"]))
+(defn toggle! [{params :params}]
+  (t/log! {:level :info :id "toggle!" :data params})
+  (page [:div "toggle!"]))

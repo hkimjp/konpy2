@@ -11,10 +11,12 @@
 * :chatgpt is unnecessary. if found chatgpt's answer, show it.
 * revice answers.clj
 * digest
+
+# 0.2.8-SNAPSHOT (2025-09-15)
+
 * valid=>status
 
-
-# 0.2.7-SNAPSHOT
+# 0.2.7 (2025-09-15)
 
 - updated ring-defaults, ring-jetty-adapter
 
