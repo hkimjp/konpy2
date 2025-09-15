@@ -12,7 +12,7 @@
 * digest namespace
 
 
-# 0.2.8-SNAPSHOT
+# 0.2.8 (2025-09-15)
 
 - changed valid => status (true/false => "yes"/"no")
 - changed admin/upsert!
