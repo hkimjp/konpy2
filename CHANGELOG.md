@@ -11,7 +11,7 @@
 * time restriction
 
 
-# 0.2.9-SNAPSHOT
+# 0.2.9 (2025-09-15)
 
 - can add comments
 - post /k/comment - create comment
@@ -33,7 +33,6 @@
 | deps.edn | ring/ring-defaults      | 0.6.0    | 0.7.0   |
 |          | ring/ring-jetty-adapter | 1.14.2   | 1.15.1  |
 
-
 # 0.2.6 (2025-09-15)
 
 - list answers
@@ -45,7 +44,6 @@
 
 - upload answers
 * tasks/div-answers do not wrap.
-
 
 # 0.2.4 (2025-09-14)
 
@@ -61,7 +59,6 @@
 - added `src/hkimjp/konpy2/comments.clj`
 - added `src/hkimjp/konpy2/hx.clj`
 - added `src/hkimjp/konpy2/tasks.clj`
-
 
 # 0.2.2 (2025-09-12)
 
@@ -83,7 +80,6 @@
 - (System/exit 0) if startup fails
 - cardinarity many? no. answers/comments has an only one parent.
 - `doc/data-structure.md`. should be `schema.md`? renamed.
-
 
 # 0.1.1 (2025-09-10)
 
