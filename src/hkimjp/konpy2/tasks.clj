@@ -29,12 +29,14 @@
                                              (sort-by :num))]
             [:div.flex.gap-4 [:a {:href (str "/k/problem/" e)} num]  [:div problem]]))]))
 
-(def answers '[:find ?e ?user
+;------------------------------
+
+(def answers '[:find ?e ?author
                :in $ ?id
                :where
                [?e :answer/valid true]
-               [?e :to ?div]
-               [?e :user ?user]])
+               [?e :to ?id]
+               [?e :author ?author]])
 
 (defn- div-answerers [e]
   (t/log! {:level :info :id "div-answerers" :data e})
@@ -46,15 +48,36 @@
             {:hx-get (str "/k/answer/" eid)
              :hx-target "#answer"
              :hx-swap "innerHTML"}
-            user]))
-   [:div#answer.border-1.p-2 "show"]])
+            [:span.hover:underline user]]))
+   [:div#answer "[answer]"]])
 
-; FIXME: eid が渡っていない。
 (defn show-answer [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "show-answer" :data e})
-  (hx [:div
-       [:pre (:answer (ds/pl (parse-long e)))]
-       [:div.font-bold "your comment"]]))
+  (let [ans (ds/pl (parse-long e))]
+    (hx [:div
+         [:div [:span.font-bold "author: "] (:author ans)]
+         [:div [:span.font-bold "updated: "] (:updated ans)]
+         [:pre.border-1.p-2 (:answer ans)]
+         [:div.font-bold "your comment"]
+         [:form {:method "post" :action "/k/comment"}]])))
+
+(defn post-answer [{{:keys [file e]} :params :as request}]
+  (t/log! {:level :info :id "post-answer"})
+  (t/log! {:level :debug :data {:e e :file file}})
+  (try
+    (ds/put! {:answer/valid true
+              :to     (parse-long e)
+              :author (user request)
+              :answer (slurp (:tempfile file))
+              :digest 0
+              :updated (now)})
+    (resp/redirect (str "/k/problem/" e))
+    (catch Exception e
+      (t/log! {:level :error :data file})
+      (page
+       [:div
+        [:div.text-2xl.text-red-600 "Error"]
+        [:p (.getMessage e)]]))))
 
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})
@@ -75,20 +98,6 @@
         [:input {:class input-box :type "file" :accept ".py" :name "file"}]
         [:button {:class btn} "upload"]]]])))
 
-(defn post-answer [{{:keys [file e]} :params :as request}]
-  (t/log! {:level :info :id "post-answer"})
-  (t/log! {:level :debug :data {:e e :file file}})
-  (try
-    (ds/put! {:answer/valid true
-              :to (parse-long e)
-              :user (user request)
-              :answer (slurp (:tempfile file))
-              :digest 0
-              :updated (now)})
-    (resp/redirect (str "/k/problem/" e))
-    (catch Exception e
-      (t/log! {:level :error :data file})
-      (page
-       [:div
-        [:div.text-2xl.text-red-600 "Error"]
-        [:p (.getMessage e)]]))))
+;------------------------------------
+(defn post-comment [{params :params}]
+  (page [:div "under construction"]))

@@ -29,9 +29,10 @@
     ["problem/:e" {:get tasks/problem}]
     ["answer"     {:post tasks/post-answer}]
     ["answer/:e"  {:get tasks/show-answer}]
+    ["comment"    {:post tasks/post-comment}]
+    ["comments"   {:get dummy}]
     ["scores"     {:get dummy}]
-    ["stocks"     {:get dummy}]
-    ["comments"   {:get dummy :post dummy}]]
+    ["stocks"     {:get dummy}]]
    ; ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
    ;  ["hello" {:post hx/dummy-post}]]
    ])
