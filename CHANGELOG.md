@@ -1,15 +1,23 @@
 # Unreleased
 
-* tasks
+* tasks/answers - check having uploaded(necessary in chatGPT's world)
+  restrict comments?
+* tasks/comments
 * scores
 * stocks
-* delete toggle :problem/avail true/false, htmx.
-* htmx from problems page
-* list answers
+* delete - toggle :problem/avail true/false, htmx.
 * add comments
+* clj-reload
 
 
-# 0.2.5 (2025-09-14) (2025-09-14)
+# 0.2.6 (2025-09-15)
+
+- list answers
+- show author's answer
+- list answerers with htmx
+- removed `answers.clj` - merged into `tasks.clj`
+
+# 0.2.5 (2025-09-14)
 
 - upload answers
 * tasks/div-answers do not wrap.

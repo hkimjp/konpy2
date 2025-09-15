@@ -9,8 +9,6 @@
    [hkimjp.konpy2.response :refer [page]]
    [hkimjp.konpy2.util :refer [btn user]]))
 
-; (def btn "p-1 rounded text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500")
-
 (defn admin [_request]
   (page
    [:div
@@ -31,7 +29,6 @@
 (defn- input-box [label val]
   [:input.text-center.size-6.outline {:name label :value val}])
 
-;; FIXME: 削るより足したら？
 (defn- problem-form
   [{:keys [db/id problem/valid week num problem test gpt updated] :as params}]
   (t/log! {:level :info :id "problem-form"})

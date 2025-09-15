@@ -4,19 +4,19 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.2.5")
+(def version "0.2.6")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
 (defn navbar []
   [:div.flex.bg-red-600.items-baseline.gap-x-4
    [:div.text-2xl.font-medium.text-white "KONPY2"]
-   [:div {:class menu} [:a {:href "/k/tasks"} "tasks"]]
+   [:div {:class menu} [:a {:href "/k/tasks"}  "tasks"]]
    [:div {:class menu} [:a {:href "/k/scores"} "scores"]]
    [:div {:class menu} [:a {:href "/k/stocks"} "stocks"]]
-   [:div {:class menu} [:a {:href "/logout"} "logout"]]
-   [:div {:class menu} [:a {:href "/help"} "HELP"]]
-   [:div {:class menu} [:a {:href "/admin/"} "(admin)"]]])
+   [:div {:class menu} [:a {:href "/logout"}   "logout"]]
+   [:div {:class menu} [:a {:href "/help"}     "HELP"]]
+   [:div {:class menu} [:a {:href "/admin/"}   "(admin)"]]])
 
 (def footer
   [:div.text-base
@@ -53,8 +53,8 @@
       (resp/header "Content-Type" "text/html")))
 
 ;; htmx requires html response.
-;; appropriate in this namespace?
 (defn hx [content]
+  (t/log! {:level :debug :id "hx"})
   (-> content
       h/html
       str
