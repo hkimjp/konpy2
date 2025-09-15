@@ -6,7 +6,6 @@
 :num n
 :problem s
 :test s
-:gpt s
 :updated jt
 
 

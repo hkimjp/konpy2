@@ -68,7 +68,7 @@
                  (update :num parse-long)))
     (resp/redirect "/admin/problems")))
 
-(def get-problems
+(def ^:private get-problems
   '[:find ?e ?valid ?week ?num ?problem ?test ?gpt ?updated
     :keys e  valid  week  num  problem  test  gpt  updated
     :where
