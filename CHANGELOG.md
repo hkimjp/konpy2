@@ -12,7 +12,7 @@
 * sometime, author is empty when sending comments.
 
 
-# 0.2.12-SNAPSHOT
+# 0.2.12 (2025-09-16)
 
 - bugfix: typo in `tasks.clj`. fixed.
 
