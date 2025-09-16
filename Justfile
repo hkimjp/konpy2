@@ -18,7 +18,7 @@ nrepl:
   clj -M:dev:nrepl
 
 dev:
-  just watch &
+  just watch >/dev/null 2>&1 &
   just nrepl
 
 test:

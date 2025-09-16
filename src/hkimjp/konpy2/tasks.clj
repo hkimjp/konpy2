@@ -2,7 +2,7 @@
   (:require
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
-   [ring.util.response :as resp]
+   ; [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx]]
@@ -29,7 +29,10 @@
     (into [:div.m-4]
           (for [{:keys [e num problem]} (->> (ds/qq fetch-problems (wk))
                                              (sort-by :num))]
-            [:div.flex.gap-4 [:a {:href (str "/k/problem/" e)} num]  [:div problem]]))]))
+            [:div
+             [:a.hover:underline
+              {:href (str "/k/problem/" e)}
+              [:span.mr-4 num] [:span problem]]]))]))
 
 ;----------------------------------------------
 
@@ -42,14 +45,14 @@
 
 ; (ds/qq fetch-answers 10)
 
-(defn- answerers [e]
-  (t/log! {:level :info :id "div-answerers" :data e})
+(defn- answerers [pid]
+  (t/log! {:level :info :id "answerers" :data pid})
   [:div
    [:div.font-bold "answers"]
    (into [:div.inline.my-4]
-         (for [[eid user] (ds/qq fetch-answers e)]
+         (for [[eid user] (ds/qq fetch-answers pid)]
            [:button.pr-4
-            {:hx-get (str "/k/answer/" eid)
+            {:hx-get (str "/k/answer/" eid "/" pid)
              :hx-target "#answer"
              :hx-swap "innerHTML"}
             [:span.hover:underline user]]))
@@ -57,20 +60,32 @@
 
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})
-  (let [e (parse-long e)
-        p (ds/pl e)]
+  (let [eid (parse-long e)
+        p (ds/pl eid)]
     (page
      [:div
       [:div.text-2xl (str "Problem " (:week p) "-" (:num p))]
       [:div.m-4
        [:p (:problem p)]
-       (answerers e)
+       ;;
+       (answerers eid)
+       ;;
+       ; [:div.font-bold "answers"]
+       ; (into [:div.inline.my-4]
+       ;       (for [[eid user] (ds/qq fetch-answers pid)]
+       ;         [:button.pr-4
+       ;          {:hx-get (str "/k/answer/" eid "/" pid)
+       ;           :hx-target "#answer"
+       ;           :hx-swap "innerHTML"}
+       ;          [:span.hover:underline user]]))
+       ; [:div#answer "[answer]"]
+       ;;
        [:div.font-bold "your answer"]
        [:form {:method "post"
                :action "/k/answer"
                :enctype "multipart/form-data"}
         (h/raw (anti-forgery-field))
-        [:input {:type "hidden" :name "e" :value e}]
+        [:input {:type "hidden" :name "e" :value eid}]
         [:input {:class input-box :type "file" :accept ".py" :name "file"}]
         [:button {:class btn} "upload"]]]])))
 

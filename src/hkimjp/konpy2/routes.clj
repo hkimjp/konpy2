@@ -20,23 +20,23 @@
     ["" {:get login :post login!}]
     ["logout" logout!]]
    ["/help"   {:get help}]
-   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]};; m/wrap-admin
     [""           {:get admin/problems}]
     ["problems"   {:get admin/problems}]
     ["new"        {:get admin/new  :post admin/upsert!}]
     ["update/:e"  {:get admin/edit :post admin/upsert!}]
     ;;["toggle/:e"  {:post admin/toggle-status!}]
     ]
-   ["/k/" {:middleware [[wrap-defaults site-defaults]]} ;m/wrap-users
-    ["tasks"       {:get tasks/konpy}]
-    ["problem/:e"  {:get tasks/problem}]
-    ["answer"      {:post answers/post-answer}]
-    ["answer/:e"   {:get  answers/show-answer}]
-    ["comment"     {:post comments/post-comment}]
-    ["comment/:e"  {:get  comments/comment}]
+   ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+    ["tasks"        {:get tasks/konpy}]
+    ["problem/:e"   {:get tasks/problem}]
+    ["answer"       {:post answers/post-answer}]
+    ["answer/:e/:p" {:get  answers/show-answer}]
+    ["comment"      {:post comments/post-comment}]
+    ["comment/:e"   {:get  comments/show-comment}]
     ;;
-    ["scores"      {:get dummy}]
-    ["stocks"      {:get dummy}]]
+    ["scores"       {:get dummy}]
+    ["stocks"       {:get dummy}]]
    ; ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
    ;  ["hello" {:post hx/dummy-post}]]
    ])

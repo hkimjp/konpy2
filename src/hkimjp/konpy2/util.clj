@@ -20,7 +20,7 @@
 
 (defn week
   "Returns how many weeks have passed since the argument `date`.
-   If no argument given, use the `start`day` defnied above."
+   If no argument given, the `start`day` defnied above is used."
   ([] (week (jt/local-date)))
   ([date]
    (quot (jt/time-between start-day date :days) 7)))

@@ -1,12 +1,10 @@
 (ns hkimjp.konpy2.admin
   (:require
-   [java-time.api :as jt]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
-   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page]]
+   [hkimjp.konpy2.response :refer [page redirect]]
    [hkimjp.konpy2.util :refer [btn user now]]))
 
 (defn admin [_request]
@@ -46,14 +44,15 @@
                    (when (= status "no")  {:checked "checked"})) "no "]
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
-    (section "problem")
+    (section  "problem")
     (textarea "problem" problem)
-    (section "test")
+    (section  "test")
     (textarea "test" test)
-    (section "updated")
+    (section  "updated")
     [:div updated]
     [:br]
-    [:div [:button {:class btn} "upsert"]]]])
+    [:div [:button {:class btn} "upsert"]]
+    [:br]]])
 
 (defn upsert! [{params :params}]
   (let [{:keys [id status week num problem test]} params
@@ -68,7 +67,7 @@
     (t/log! {:level :debug :data data})
     (try
       (ds/put! data)
-      (resp/redirect "/admin/problems")
+      (redirect "/admin/problems")
       (catch Exception e
         (t/log! {:level :error :msg e})))))
 
