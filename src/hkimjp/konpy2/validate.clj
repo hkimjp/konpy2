@@ -18,13 +18,17 @@
 
 ; (ffirst (ds/qq fetch-answer "hkimura" 0 0))
 
-(defn get-answer [author week num]
+(defn- get-answer [author week num]
+  (t/log! {:level :debug
+           :id "get-answer"
+           :data {:author author :week week :num num}})
   (-> (ds/qq fetch-answer author week num)
       ffirst))
 
-(defn expand-includes
+(defn- expand-includes
   "expand `#include` recursively."
   [author answer]
+  (t/log! :debug "expand-inludes")
   (try
     (str/join
      "\n"
@@ -41,15 +45,15 @@
 ; (expand-includes "hkimura" "#include 0-0
 ; hello world")
 
-(defn ruff [answer])
+(defn- ruff [answer])
 
-(defn doctest [answer])
+(defn- doctest [answer])
 
-(defn pytest [answer])
+(defn- pytest [answer])
 
 (defn validate [author answer]
   (let [answer (expand-includes author answer)]
-    ; (t/log! :debug answer)
+    (t/log! :info "validate")
     (try
       (ruff answer)
       (doctest answer)

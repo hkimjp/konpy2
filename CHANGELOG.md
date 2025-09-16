@@ -1,21 +1,24 @@
 # Unreleased
-/.2
+
 * clj-reload
-* problems/test-codes for production
 * scores.clj
 * stocks.clj
 * admin/toggle-status
 * time restrictions
-* validation - ruff, doctest, pytest
 * digest namespace. used only from answers
-* `include` function
+* validation - ruff, doctest, pytest
+* check #include itself
 
+
+# 0.2.15-SNAPSHOT
+
+- refactored
 
 # 0.2.14 (2025-09-16)
 
 - added `src/hkimjp/konpy2/validate.clj`
 - added `validate/expand-include` recursively expand `#include w-n`
-- made comment area wider, w-2/5
+- wider comment area, w-2/5
 - renamed comments/post-comment -> comments/comment!
 - renamed comments/show-comment -> comments/hx-comment
 - renamed answers/post-answer -> answers/answer!
