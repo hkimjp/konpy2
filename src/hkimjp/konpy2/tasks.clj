@@ -61,7 +61,7 @@
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})
   (let [eid (parse-long e)
-        p (ds/pl e)]
+        p (ds/pl eid)]
     (page
      [:div
       [:div.text-2xl (str "Problem " (:week p) "-" (:num p))]
