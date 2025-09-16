@@ -1,21 +1,36 @@
 # Unreleased
-
-* tasks/answers - check having uploaded(necessary in chatGPT's world)
-  restrict comments?
+/.2
+* clj-reload
+* problems/test-codes for production
 * scores.clj
 * stocks.clj
-* clj-reload
 * admin/toggle-status
-* digest namespace. used only from answers.
-* time restriction
-* sometime, author is empty when sending comments.
+* time restrictions
+* validation - ruff, doctest, pytest
+* digest namespace. used only from answers
+* `include` function
 
+
+# 0.2.14 (2025-09-16)
+
+- added `src/hkimjp/konpy2/validate.clj`
+- added `validate/expand-include` recursively expand `#include w-n`
+- made comment area wider, w-2/5
+- renamed comments/post-comment -> comments/comment!
+- renamed comments/show-comment -> comments/hx-comment
+- renamed answers/post-answer -> answers/answer!
+- renamed answers/show-answer -> answers/hx-answer
+- updated ring-jetty-adpapter
+
+| :file    | :name                   | :current | :latest |
+|----------|-------------------------|----------|---------|
+| deps.edn | ring/ring-jetty-adapter | 1.15.1   | 1.15.2  |
 
 # 0.2.13 (2025-09-16)
 
-- learningtailwind gradually.
-- if found chatgpt's answer, show it next to the author's answer.
-- removed charred, fast-edn, markdown from dependencies
+- learning tailwind
+- if found chatgpt's answer, show it next to the author's answer
+- removed `charred`, `fast-edn`, `markdown` from dependencies
 
 # 0.2.12 (2025-09-16)
 

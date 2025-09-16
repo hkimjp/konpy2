@@ -30,10 +30,10 @@
    ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["tasks"        {:get tasks/konpy}]
     ["problem/:e"   {:get tasks/problem}]
-    ["answer"       {:post answers/post-answer}]
-    ["answer/:e/:p" {:get  answers/show-answer}]
-    ["comment"      {:post comments/post-comment}]
-    ["comment/:e"   {:get  comments/show-comment}]
+    ["answer"       {:post answers/answer!}]
+    ["answer/:e/:p" {:get  answers/hx-answer}]
+    ["comment"      {:post comments/comment!}]
+    ["comment/:e"   {:get  comments/hx-comment}]
     ;;
     ["scores"       {:get dummy}]
     ["stocks"       {:get dummy}]]
