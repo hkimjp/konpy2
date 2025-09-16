@@ -17,7 +17,9 @@
 - added user/problem! and user/problems!
 - refactord
 - app.melt
-
+- deploy test to app.melt
+    - copy konpy.env to `/etc/defaults/konpy.env`
+    - **bug** can not flow `/k/problem/1` etc.
 
 # 0.2.10 (2025-09-16)
 
