@@ -13,11 +13,12 @@
 
 (c/ping)
 
-; (defn restart-system
-;   []
-;   (stop-system)
-;   (start-system))
-; ;; (restart-system)
+(defn restart-system
+  []
+  (stop-system)
+  (start-system))
+
+;; (restart-system)
 
 (defn before-unload []
   (stop-system))

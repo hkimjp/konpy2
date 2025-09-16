@@ -5,12 +5,17 @@
 * scores.clj
 * stocks.clj
 * clj-reload
-* attribute :chatgpt is unnecessary. if found chatgpt's answer, show it.
 * admin/toggle-status
 * digest namespace. used only from answers.
 * time restriction
 * sometime, author is empty when sending comments.
 
+
+# 0.2.13 (2025-09-16)
+
+- learningtailwind gradually.
+- if found chatgpt's answer, show it next to the author's answer.
+- removed charred, fast-edn, markdown from dependencies
 
 # 0.2.12 (2025-09-16)
 
@@ -24,7 +29,6 @@
 - deploy test to app.melt
     - copy konpy.env to `/etc/defaults/konpy.env`
     - **bug** can not flow `/k/problem/1` etc.
-
 
 # 0.2.10 (2025-09-16)
 

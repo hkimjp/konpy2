@@ -14,23 +14,39 @@
                              [?e :to ?to]
                              [?e :author ?author]])
 
+(def ^:private gpt '[:find ?answer
+                     :in $ ?to
+                     :where
+                     [?e :answer/status "yes"]
+                     [?e :author "chatgpt"]
+                     [?e :answer ?answer]
+                     [?e :to ?to]])
+
+(-> (ds/qq gpt 1) ffirst)
+
 (defn show-answer [{{:keys [e p]} :path-params :as request}]
   (t/log! {:level :info :id "show-answer" :data e})
   (let [e (parse-long e)
         ans (ds/pl e)
+        gpt-ans (-> (ds/qq gpt (parse-long p)) ffirst)
         comments (ds/qq comments-to e)]
     (hx [:div
-         ; [:div "e:" (:db/id ans)]
-         [:div [:span.font-bold "author: "] (:author ans)]
-         [:div [:span.font-bold "updated: "] (:updated ans)]
-         [:pre.border-1.p-2 (:answer ans)]
-         [:div.font-bold "comments"]
-         (for [[eid author] comments]
-           [:button.pr-4.hover:underline
-            {:hx-get (str "/k/comment/" eid)
-             :hx-target "#comment"
-             :hx-swap "innerHTML"}
-            author])
+         [:div.flex.gap-4
+          [:div {:class "w-1/2"}
+           [:div [:span.font-bold "author: "] (:author ans)]
+           [:div [:span.font-bold "updated: "] (:updated ans)]
+           [:pre.border-1.p-2 (:answer ans)]
+           [:div.font-bold "comments"]
+           (for [[eid author] comments]
+             [:button.pr-4.hover:underline
+              {:hx-get (str "/k/comment/" eid)
+               :hx-target "#comment"
+               :hx-swap "innerHTML"}
+              author])]
+          [:div {:class "w-1/2"}
+           [:div [:span.font-bold "author: "] "chatgpt"]
+           [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
+           [:pre.border-1.p-2 gpt-ans]]]
          [:div#comment "[comment]"]
          [:div.font-bold "your comment"]
          [:form {:method "post" :action "/k/comment"}
