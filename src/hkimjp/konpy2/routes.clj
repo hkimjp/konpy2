@@ -20,7 +20,7 @@
     ["" {:get login :post login!}]
     ["logout" logout!]]
    ["/help"   {:get help}]
-   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]};; m/wrap-admin
     [""           {:get admin/problems}]
     ["problems"   {:get admin/problems}]
     ["new"        {:get admin/new  :post admin/upsert!}]
