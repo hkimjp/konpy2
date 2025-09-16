@@ -5,12 +5,15 @@
 * scores.clj
 * stocks.clj
 * clj-reload
-* attribute :chatgpt is unnecessary. if found chatgpt's answer, show it.
 * admin/toggle-status
 * digest namespace. used only from answers.
 * time restriction
 * sometime, author is empty when sending comments.
 
+# 0.2.13-SNAPSHOT
+
+- learningtailwind gradually.
+- if found chatgpt's answer, show it next to the author's answer.
 
 # 0.2.12 (2025-09-16)
 
