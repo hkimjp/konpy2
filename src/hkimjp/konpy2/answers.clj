@@ -5,7 +5,8 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx redirect]]
-   [hkimjp.konpy2.util :refer [user now btn]]))
+   [hkimjp.konpy2.util :refer [user now btn]]
+   [hkimjp.konpy2.validate :refer [validate]]))
 
 (def ^:private comments-to '[:find ?e ?author
                              :in $ ?to
@@ -58,17 +59,20 @@
 (defn answer! [{{:keys [file e]} :params :as request}]
   (t/log! {:level :info :id "answer!"})
   (t/log! {:level :debug :data {:e e :file file}})
-  (try
-    (ds/put! {:answer/status "yes"
-              :to      (parse-long e)
-              :author  (user request)
-              :answer  (slurp (:tempfile file))
-              :digest  0
-              :updated (now)})
-    (redirect (str "/k/problem/" e))
-    (catch Exception ex
-      (t/log! {:level :error :data file})
-      (page
-       [:div
-        [:div.text-2xl.text-red-600 "Error"]
-        [:p (.getMessage ex)]]))))
+  (let [author (user request)
+        answer (slurp (:tempfile file))]
+    (try
+      (validate author answer)
+      (ds/put! {:answer/status "yes"
+                :to      (parse-long e)
+                :author  author
+                :answer  answer
+                :digest  0
+                :updated (now)})
+      (redirect (str "/k/problem/" e))
+      (catch Exception ex
+        (t/log! {:level :error :data file})
+        (page
+         [:div
+          [:div.text-2xl.text-red-600 "Error"]
+          [:p (.getMessage ex)]])))))

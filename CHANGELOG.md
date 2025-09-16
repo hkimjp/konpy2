@@ -13,7 +13,9 @@
 
 # 0.2.14-SNAPSHOT
 
-- made comment area wider w-2/5
+- added `src/hkimjp/konpy2/validate.clj`
+- added `validate/expand-include` recursively expand `#include w-n`
+- made comment area wider, w-2/5
 - renamed comments/post-comment -> comments/comment!
 - renamed comments/show-comment -> comments/hx-comment
 - renamed answers/post-answer -> answers/answer!
