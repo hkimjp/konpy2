@@ -4,10 +4,13 @@
 * scores.clj
 * stocks.clj
 * admin/toggle-status
-* time restrictions
-* digest namespace. used only from answers
+* restrictions
+    * sending his answer?
+      before sending his answer, he can see other student's answers.
+    * time passed since the last submission
+* craete digest namespace which are used only from answers
 * validation - ruff, doctest, pytest
-* check #include itself
+* check #include itself. infinite loops.
 
 
 # 0.2.15-SNAPSHOT
