@@ -11,7 +11,7 @@
 * `include` function
 
 
-# 0.2.14-SNAPSHOT
+# 0.2.14 (2025-09-16)
 
 - added `src/hkimjp/konpy2/validate.clj`
 - added `validate/expand-include` recursively expand `#include w-n`
