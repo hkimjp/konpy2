@@ -22,8 +22,8 @@
                      [?e :answer ?answer]
                      [?e :to ?to]])
 
-(defn show-answer [{{:keys [e p]} :path-params :as request}]
-  (t/log! {:level :info :id "show-answer" :data e})
+(defn hx-answer [{{:keys [e p]} :path-params :as request}]
+  (t/log! {:level :info :id "hx-answer" :data e})
   (let [e (parse-long e)
         ans (ds/pl e)
         gpt-ans (-> (ds/qq gpt (parse-long p)) ffirst)
@@ -52,11 +52,11 @@
           [:input {:type "hidden" :name "to" :value e}]
           [:input {:type "hidden" :name "author" :value (user request)}]
           [:input {:type "hidden" :name "pid" :value p}]
-          [:textarea.border-1.p-2 {:name "comment"}]
+          [:textarea.border-1.p-2 {:class "w-2/5" :name "comment"}]
           [:button {:class btn} "send"]]])))
 
-(defn post-answer [{{:keys [file e]} :params :as request}]
-  (t/log! {:level :info :id "post-answer"})
+(defn answer! [{{:keys [file e]} :params :as request}]
+  (t/log! {:level :info :id "answer!"})
   (t/log! {:level :debug :data {:e e :file file}})
   (try
     (ds/put! {:answer/status "yes"
