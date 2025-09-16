@@ -1,12 +1,10 @@
 (ns hkimjp.konpy2.admin
   (:require
-   [java-time.api :as jt]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
-   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page]]
+   [hkimjp.konpy2.response :refer [page redirect]]
    [hkimjp.konpy2.util :refer [btn user now]]))
 
 (defn admin [_request]
@@ -69,7 +67,7 @@
     (t/log! {:level :debug :data data})
     (try
       (ds/put! data)
-      (resp/redirect "/admin/problems")
+      (redirect "/admin/problems")
       (catch Exception e
         (t/log! {:level :error :msg e})))))
 

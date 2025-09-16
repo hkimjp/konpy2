@@ -2,11 +2,9 @@
   (:require
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
-   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.comments :refer [div-comments]]
-   [hkimjp.konpy2.response :refer [page hx]]
+   [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.util :refer [user now btn]]))
 
 (def ^:private comments-to '[:find ?e ?author
@@ -53,7 +51,7 @@
               :answer  (slurp (:tempfile file))
               :digest  0
               :updated (now)})
-    (resp/redirect (str "/k/problem/" e))
+    (redirect (str "/k/problem/" e))
     (catch Exception ex
       (t/log! {:level :error :data file})
       (page

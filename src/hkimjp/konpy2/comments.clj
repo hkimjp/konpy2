@@ -1,6 +1,5 @@
 (ns hkimjp.konpy2.comments
   (:require
-   [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx redirect]]
@@ -14,18 +13,13 @@
     [?e :author ?author]
     [?e :to ?to]])
 
-; (ds/qq comments-to 26)
-; (ds/pl 28)
-
-(defn div-comments
-  "returns comments sent to `e`"
-  [e]
-  (t/log! {:level :info :id "comments-div" :data e})
-  [:div
-   (for [[e author] (ds/qq comments-to e)]
-     [:button.pr-4 author])])
-
-; (div-comments 26)
+; (defn div-comments
+;   "returns comments sent to `e`"
+;   [e]
+;   (t/log! {:level :info :id "comments-div" :data e})
+;   [:div
+;    (for [[e author] (ds/qq comments-to e)]
+;      [:button.pr-4 author])])
 
 ; pid をもらってこないと戻るページがない
 (defn post-comment
@@ -43,7 +37,6 @@
   (redirect (str "/k/problem/" pid)))
 
 (defn show-comment [{{:keys [e]} :path-params}]
-  (let [c (ds/pl (parse-long e))]
-    (hx [:div (:comment c)])))
+  (hx [:div (:comment  (ds/pl (parse-long e)))]))
 
 ; (show-comment {:path-params {:e "47"}})
