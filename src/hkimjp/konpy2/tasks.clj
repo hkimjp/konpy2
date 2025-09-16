@@ -2,7 +2,7 @@
   (:require
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
-   [ring.util.response :as resp]
+   ; [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx]]
@@ -46,7 +46,7 @@
 ; (ds/qq fetch-answers 10)
 
 (defn- answerers [pid]
-  (t/log! {:level :info :id "div-answerers" :data pid})
+  (t/log! {:level :info :id "answerers" :data pid})
   [:div
    [:div.font-bold "answers"]
    (into [:div.inline.my-4]
@@ -60,20 +60,32 @@
 
 (defn problem [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "problem" :data e})
-  (let [e (parse-long e)
+  (let [eid (parse-long e)
         p (ds/pl e)]
     (page
      [:div
       [:div.text-2xl (str "Problem " (:week p) "-" (:num p))]
       [:div.m-4
        [:p (:problem p)]
-       (answerers e)
+       ;;
+       (answerers eid)
+       ;;
+       ; [:div.font-bold "answers"]
+       ; (into [:div.inline.my-4]
+       ;       (for [[eid user] (ds/qq fetch-answers pid)]
+       ;         [:button.pr-4
+       ;          {:hx-get (str "/k/answer/" eid "/" pid)
+       ;           :hx-target "#answer"
+       ;           :hx-swap "innerHTML"}
+       ;          [:span.hover:underline user]]))
+       ; [:div#answer "[answer]"]
+       ;;
        [:div.font-bold "your answer"]
        [:form {:method "post"
                :action "/k/answer"
                :enctype "multipart/form-data"}
         (h/raw (anti-forgery-field))
-        [:input {:type "hidden" :name "e" :value e}]
+        [:input {:type "hidden" :name "e" :value eid}]
         [:input {:class input-box :type "file" :accept ".py" :name "file"}]
         [:button {:class btn} "upload"]]]])))
 

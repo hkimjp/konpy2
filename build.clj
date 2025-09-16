@@ -2,7 +2,7 @@
   (:refer-clojure :exclude [test])
   (:require [clojure.tools.build.api :as b]))
 
-(def lib 'io.github.com/konpy2)
+(def lib 'io.github.hkimjp/konpy2)
 (def version "0.2.10")
 (def main 'hkimjp.konpy2.main)
 (def class-dir "target/classes")

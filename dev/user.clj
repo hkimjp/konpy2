@@ -1,23 +1,23 @@
 (ns user
   (:require
    [clj-reload.core :as reload]
-   [environ.core :refer [env]]
-   [java-time.api :as jt]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.util :refer [today]]
+   [hkimjp.konpy2.util :refer [now]]
    [hkimjp.konpy2.system :refer [start-system stop-system]]))
 
 (t/set-min-level! :debug)
 
-(defn restart-system
-  []
-  (stop-system)
-  (start-system))
-
 (start-system)
-;; (restart-system)
+
+(c/ping)
+
+; (defn restart-system
+;   []
+;   (stop-system)
+;   (start-system))
+; ;; (restart-system)
 
 (defn before-unload []
   (stop-system))
@@ -33,29 +33,26 @@
 
 ;; (reload/reload)
 
-(defn put [w n yn]
+(defn problem! [w n txt]
   (ds/puts! [{:db/id -1
-              :problem/status yn
+              :problem/status "yes"
               :week w
               :num n
-              :problem "python"
+              :problem txt
               :test "test code"
-              :updated jt/local-date-time}]))
+              :updated (now)}]))
+
+(defn problems! [m txts]
+  (doseq [[n txt] (map-indexed vector txts)]
+    (problem! m n txt)))
 
 (comment
-  (:user (ds/pl (parse-long "24")))
-
-  (ds/qq '[:find ?e ?valid
-           :where
-           [?e :problem/valid ?valid]])
-  (put 0 2 false)
-  (def m (ds/pl 2))
-  (keys m)
-
-  (def data {:__anti-forgery-token "NWBjeO+Hg6pHpdtpdB8f6Uf1BSm3L46VUeZom/kAiGmP14hXRYTzAoBB1n3BytLqh5ytXXCcaUwj/pOP", "db/id" "2", "problem/valid" "true", :week "0", :num "1", :problem "10", :test "10", :gpt "10"})
-
-  (:apple data)
-  (data "apple")
-  (-> data
-      (dissoc :__anti-forgery-token "problem/valid"))
+  (problems!
+   1
+   ["タイピング練習を50回こなす。"
+    "タイピング練習で最高点10点以上とる。"
+    "Python で 1/1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10をプリントしなさい。"
+    "Python で apple, orange, banana, grape, melon, peach, pine を 一行に一つずつプリントしなさい。"
+    "Python で |, /, -, \\, |, /, -, \\ をプリントしなさい。"
+    "print( ) で九九の表をプリントしなさい。"])
   :rcf)

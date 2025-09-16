@@ -7,10 +7,19 @@
 * clj-reload
 * attribute :chatgpt is unnecessary. if found chatgpt's answer, show it.
 * admin/toggle-status
-* digest namespace
+* digest namespace. used only from answers.
 * time restriction
 * sometime, author is empty when sending comments.
 
+
+# 0.2.11-SNAPSHOT
+
+- added user/problem! and user/problems!
+- refactord
+- app.melt
+- deploy test to app.melt
+    - copy konpy.env to `/etc/defaults/konpy.env`
+    - **bug** can not flow `/k/problem/1` etc.
 
 # 0.2.10 (2025-09-16)
 
