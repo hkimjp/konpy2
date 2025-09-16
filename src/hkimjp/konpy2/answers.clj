@@ -22,8 +22,6 @@
                      [?e :answer ?answer]
                      [?e :to ?to]])
 
-(-> (ds/qq gpt 1) ffirst)
-
 (defn show-answer [{{:keys [e p]} :path-params :as request}]
   (t/log! {:level :info :id "show-answer" :data e})
   (let [e (parse-long e)
