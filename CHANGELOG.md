@@ -18,6 +18,11 @@
 - renamed comments/show-comment -> comments/hx-comment
 - renamed answers/post-answer -> answers/answer!
 - renamed answers/show-answer -> answers/hx-answer
+- updated ring-jetty-adpapter
+
+| :file    | :name                   | :current | :latest |
+|----------|-------------------------|----------|---------|
+| deps.edn | ring/ring-jetty-adapter | 1.15.1   | 1.15.2  |
 
 # 0.2.13 (2025-09-16)
 
