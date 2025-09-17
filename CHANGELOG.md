@@ -1,36 +1,27 @@
 # Unreleased
-
+/.2
 * clj-reload
+* problems/test-codes for production
 * scores.clj
 * stocks.clj
 * admin/toggle-status
-* restrictions
-    * sending his answer?
-      before sending his answer, he can see other student's answers.
-    * time passed since the last submission
-* craete digest namespace which are used only from answers
+* time restrictions
 * validation - ruff, doctest, pytest
-* check #include itself. infinite loops.
+* digest namespace. used only from answers
+* `include` function
+* effective upsert
+* emulate flash
+* test-codes as answers
+* show chatgtp user's answers
 
 
-# 0.2.15-SNAPSHOT
+# 0.2.14-SNAPSHOT
 
-- refactored
-
-# 0.2.14 (2025-09-16)
-
-- added `src/hkimjp/konpy2/validate.clj`
-- added `validate/expand-include` recursively expand `#include w-n`
-- wider comment area, w-2/5
+- made comment area wider w-2/5
 - renamed comments/post-comment -> comments/comment!
 - renamed comments/show-comment -> comments/hx-comment
 - renamed answers/post-answer -> answers/answer!
 - renamed answers/show-answer -> answers/hx-answer
-- updated ring-jetty-adpapter
-
-| :file    | :name                   | :current | :latest |
-|----------|-------------------------|----------|---------|
-| deps.edn | ring/ring-jetty-adapter | 1.15.1   | 1.15.2  |
 
 # 0.2.13 (2025-09-16)
 
