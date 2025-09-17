@@ -24,8 +24,11 @@
     (t/log! :info "server stopped.")))
 
 (defn start-system []
-  (t/log! :info (str "start-system develop: " (env :develop)))
-  (t/log! :info (str "redis " (env :redis) " ds " (env :datascript)))
+  (t/log! {:level :info
+           :id "start-system"
+           :msg (some? (env :develop))
+           :data {:redis (env :redis)
+                  :datascript (env :datascript)}})
   (try
     (c/redis-server (env :redis))
     (ds/start-or-restore {:url (env :datascript)})

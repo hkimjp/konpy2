@@ -16,7 +16,7 @@
   hato/hato                      {:mvn/version "1.0.0"}
   hiccup/hiccup                  {:mvn/version "2.0.0"}
   ;;
-  io.github.hkimjp/carmine-farm {:git/tag "0.2.4" :git/sha "663693a"}
+  io.github.hkimjp/carmine-farm {:git/tag "0.2.6" :git/sha "3b62f6b"}
   io.github.hkimjp/datascript-storage-javatime
   {:git/tag "0.7.4" :git/sha "f5c3196"}}
 
