@@ -7,23 +7,33 @@
 * admin/toggle-status
 * time restrictions
 * digest namespace. used only from answers
-* `include` function
 * effective upsert
 * emulate flash
 * test-codes as answers
 * show chatgtp user's answers
+* validation - pytest
+
 
 # 0.2.15-SNAPSHOT
 
-- ring/ring-jetty-adapter {:mvn/version "1.15.2"}
+- added doctest
+- added ruff - ruff requires '\n' at the end of a code.
+- added timeout-shell/timeout-shell {:mvn/version "1.0.0"}
+- added babashka/fs {:mvn/version "0.5.27"}
+- ruff versions
+    - ubuntu/snap 0.12.12
+    - macos/brew 0.13.0
+    - VScode 0.13.0
+- added `validate/get-last-answer`
+- added `validate/expand-includes`
+- two or more anwers from a student to some problems - must take the last answer.
 - log logout! user - OK. logout! can be called without login.
-* validation - ruff, doctest, pytest
 - updated carmine-farm
 
 | :file    | :name                         | :current | :latest |
 |----------|-------------------------------|----------|---------|
 | deps.edn | io.github.hkimjp/carmine-farm | 0.2.4    | 0.2.6   |
-
+|          | ring/ring-jetty-adapter       | 1.15.1   | 1.15.2  |
 
 # 0.2.14 (2025-09-17)
 
