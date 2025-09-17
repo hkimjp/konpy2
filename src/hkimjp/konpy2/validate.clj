@@ -51,6 +51,8 @@
   "returns fs/file f#object[sun.nio.fs.UnixPath object]"
   [answer]
   (let [f (fs/create-temp-file {:suffix ".py"})]
+    (t/log! {:level :debug :id "create-tempfile-with"
+             :data {:tempfile (str (fs/file f))}})
     (spit (fs/file f) answer)
     f))
 
