@@ -12,7 +12,7 @@
 * testcodes as answers
 * show or doesn't show chatgtp user's answers
 
-# 0.3.0-SNAPSHOT
+# 0.3.0-SNAPSHOT (2025-09-17)
 
 restrctions.
 
