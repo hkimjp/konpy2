@@ -15,7 +15,6 @@
 
 # 0.2.15-SNAPSHOT
 
-
 - ring/ring-jetty-adapter {:mvn/version "1.15.2"}
 - log logout! user - OK. logout! can be called without login.
 * validation - ruff, doctest, pytest
