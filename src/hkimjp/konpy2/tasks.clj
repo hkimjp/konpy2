@@ -2,11 +2,10 @@
   (:require
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
-   ; [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page hx]]
-   [hkimjp.konpy2.util :refer [btn input-box user week now]]))
+   [hkimjp.konpy2.response :refer [page]]
+   [hkimjp.konpy2.util :refer [btn input-box user week]]))
 
 (defn- wk [] (max 0 (week)))
 
@@ -67,19 +66,7 @@
       [:div.text-2xl (str "Problem " (:week p) "-" (:num p))]
       [:div.m-4
        [:p (:problem p)]
-       ;;
        (answerers eid)
-       ;;
-       ; [:div.font-bold "answers"]
-       ; (into [:div.inline.my-4]
-       ;       (for [[eid user] (ds/qq fetch-answers pid)]
-       ;         [:button.pr-4
-       ;          {:hx-get (str "/k/answer/" eid "/" pid)
-       ;           :hx-target "#answer"
-       ;           :hx-swap "innerHTML"}
-       ;          [:span.hover:underline user]]))
-       ; [:div#answer "[answer]"]
-       ;;
        [:div.font-bold "your answer"]
        [:form {:method "post"
                :action "/k/answer"

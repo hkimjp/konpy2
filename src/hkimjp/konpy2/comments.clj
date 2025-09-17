@@ -2,16 +2,16 @@
   (:require
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page hx redirect]]
+   [hkimjp.konpy2.response :refer [hx redirect]]
    [hkimjp.konpy2.util :refer [now]]))
 
-(def ^:private comments-to
-  '[:find ?e ?author
-    :in $ ?to
-    :where
-    [?e :comment/status "yes"]
-    [?e :author ?author]
-    [?e :to ?to]])
+; (def ^:private comments-to
+;   '[:find ?e ?author
+;     :in $ ?to
+;     :where
+;     [?e :comment/status "yes"]
+;     [?e :author ?author]
+;     [?e :to ?to]])
 
 (defn comment!
   "send comments to `e`.

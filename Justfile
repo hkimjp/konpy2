@@ -21,7 +21,7 @@ dev:
   just watch >/dev/null 2>&1 &
   just nrepl
 
-test:
+kaocha:
   clojure -M:dev -m kaocha.runner
 
 run:
