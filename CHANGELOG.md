@@ -1,5 +1,5 @@
 # Unreleased
-/.2
+
 * clj-reload
 * problems/test-codes for production
 * scores.clj
@@ -14,9 +14,11 @@
 * test-codes as answers
 * show chatgtp user's answers
 
+# 0.2.14 (2025-09-17)
 
-# 0.2.14-SNAPSHOT
+# 0.2.14 (2025-09-17)
 
+- app.melt:konpy-service - stop using /etc/default, instead /home/ubuntu/konpy
 - made comment area wider w-2/5
 - renamed comments/post-comment -> comments/comment!
 - renamed comments/show-comment -> comments/hx-comment
