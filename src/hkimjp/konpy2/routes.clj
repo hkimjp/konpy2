@@ -20,13 +20,11 @@
     ["" {:get login :post login!}]
     ["logout" logout!]]
    ["/help"   {:get help}]
-   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]};; m/wrap-admin
+   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
     [""           {:get admin/problems}]
     ["problems"   {:get admin/problems}]
     ["new"        {:get admin/new  :post admin/upsert!}]
-    ["update/:e"  {:get admin/edit :post admin/upsert!}]
-    ;;["toggle/:e"  {:post admin/toggle-status!}]
-    ]
+    ["update/:e"  {:get admin/edit :post admin/upsert!}]]
    ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["tasks"        {:get tasks/konpy}]
     ["problem/:e"   {:get tasks/problem}]
@@ -36,10 +34,7 @@
     ["comment/:e"   {:get  comments/hx-comment}]
     ;;
     ["scores"       {:get dummy}]
-    ["stocks"       {:get dummy}]]
-   ; ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
-   ;  ["hello" {:post hx/dummy-post}]]
-   ])
+    ["stocks"       {:get dummy}]]])
 
 (defn root-handler
   [request]

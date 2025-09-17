@@ -12,12 +12,16 @@
 * testcodes as answers
 * show or doesn't show chatgtp user's answers
 
+# 0.3.0-SNAPSHOT
 
-# 0.2.16 (2025-09-17) (2025-09-17)
+restrctions.
+
+# 0.2.16 (2025-09-17)
 
 - **BREAKING** attr :test -> :testcode
 - fixed bug - validate/get-last-answer
 - validate/pytest
+- /usr/bin/pytest (/opt/homebrew/bin/pytest)
 
 # 0.2.15 (2025-09-17)
 

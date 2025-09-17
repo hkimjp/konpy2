@@ -33,8 +33,6 @@
               {:href (str "/k/problem/" e)}
               [:span.mr-4 num] [:span problem]]]))]))
 
-;----------------------------------------------
-
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id
                                :where
@@ -75,8 +73,6 @@
         [:input {:type "hidden" :name "e" :value eid}]
         [:input {:class input-box :type "file" :accept ".py" :name "file"}]
         [:button {:class btn} "upload"]]]])))
-
-;------------------------------------
 
 (defn post-comment [{params :params}]
   (t/log! {:level :info :id "post-comment" :data params})

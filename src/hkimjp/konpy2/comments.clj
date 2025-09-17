@@ -5,17 +5,9 @@
    [hkimjp.konpy2.response :refer [hx redirect]]
    [hkimjp.konpy2.util :refer [now]]))
 
-; (def ^:private comments-to
-;   '[:find ?e ?author
-;     :in $ ?to
-;     :where
-;     [?e :comment/status "yes"]
-;     [?e :author ?author]
-;     [?e :to ?to]])
-
 (defn comment!
   "send comments to `e`.
-   returns clickable commenter's list"
+   returns clickable commenters list"
   [{{:keys [to author comment pid]} :params}]
   (t/log! {:level :info
            :id    "comment!"

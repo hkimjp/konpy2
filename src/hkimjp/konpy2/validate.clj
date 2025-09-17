@@ -106,7 +106,6 @@
   (some #(when (fs/exists? %) %)
         ["/opt/homebrew/bin/pytest"
          "/usr/bin/pytest"]))
-;---------------------
 
 (defn- pytest [answer testcode]
   (t/log! {:level :info :id "pytest"})
@@ -120,7 +119,6 @@
       (fs/delete f)
       (throw (Exception. "pytest failed")))))
 
-;-----------------------------
 (defn validate [author answer testcode]
   (let [answer (expand-includes author answer)]
     (t/log! :info "validate")
