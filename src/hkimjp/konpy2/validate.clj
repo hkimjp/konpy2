@@ -24,11 +24,17 @@
   (t/log! {:level :debug
            :id "get-last-answer"
            :data {:author author :week week :num num}})
-  (->> (ds/qq fetch-answer author week num)
-       (sort-by first)
-       last))
+  (try
+    (->> (ds/qq fetch-answer author week num)
+         (sort-by first)
+         last
+         second)
+    (catch Exception e
+      (t/log! {:level :error
+               :id "get-last-answer"
+               :msg (.getMessage e)}))))
 
-;(get-last-answer "hkimura" 0 1)
+; (get-last-answer "hkimura" 0 0)
 
 (defn- expand-includes
   "expand `#include` recursively."
@@ -51,14 +57,17 @@
   "returns fs/file f#object[sun.nio.fs.UnixPath object]"
   [answer]
   (let [f (fs/create-temp-file {:suffix ".py"})]
+    (t/log! {:level :debug
+             :id "create-tempfile-with"
+             :data {:tempfile (str (fs/file f))}})
     (spit (fs/file f) answer)
     f))
 
 (defn- ruff-path []
   (some #(when (fs/exists? %) %)
-        ["/home/ubuntu/.local/bin/ruff"
-         "/snap/bin/ruff"
-         "/opt/homebrew/bin/ruff"]))
+        ["/opt/homebrew/bin/ruff"
+         "/home/ubuntu/.local/bin/ruff"
+         "/snap/bin/ruff"]))
 
 (defn- ruff
   "ruff requires '\n' at the end of the code"
@@ -69,29 +78,20 @@
              timeout
              (ruff-path) "format" "--diff" (str (fs/file f)))]
     (if (zero? (:exit ret))
-      (fs/delete-if-exists f)
-      (throw (Exception. (:err ret))))))
-
-(comment
-  (def f (create-tempfile-with "hello(\"world\")\n"))
-  (slurp (fs/file f))
-  (str (fs/file f))
-  (timeout-sh 10 (ruff-path) "format" "--diff" (str (fs/file f)))
-  :rcf)
+      (fs/delete f)
+      (throw (Exception. "using VScode/Ruff?")))))
 
 (defn- python-path []
   (some #(when (fs/exists? %) %)
-        ["/usr/local/bin/python3"
-         "/opt/homebrew/bin/python3"
+        ["/opt/homebrew/bin/python3"
+         "/usr/local/bin/python3"
          "/usr/bin/python3"]))
 
 (defn- has-doctest? [answer]
   (re-find #">>> " (-> answer str/split-lines str/join)))
 
-;;(has-doctest? "abc\n>>>\ndef")
-
 (defn- doctest [answer]
-  (t/log! {:level :debug :id "doctest"})
+  (t/log! {:level :info :id "doctest"})
   (when-not (has-doctest? answer)
     (throw (Exception. "did not find a doctest.")))
   (let [f (create-tempfile-with answer)
@@ -99,22 +99,40 @@
              timeout
              (python-path) "-m" "doctest" (str (fs/file f)))]
     (if (zero? (:exit ret))
-      (fs/delete-if-exists f)
+      (fs/delete f)
       (throw (Exception. "doctest failed")))))
 
+(defn- pytest-path []
+  (some #(when (fs/exists? %) %)
+        ["/opt/homebrew/bin/pytest"
+         "/usr/bin/pytest"]))
 ;---------------------
-(defn- pytest [answer]
-  (t/log! {:level :debug :id "pytest"}))
+
+(defn- pytest [answer testcode]
+  (t/log! {:level :info :id "pytest"})
+  (t/log! {:level :debug
+           :data {:answer answer :testcode testcode}})
+  (let [f (create-tempfile-with (str/join [answer "\n" testcode]))
+        ret (timeout-sh
+             timeout
+             (pytest-path) (str (fs/file f)))]
+    (if (zero? (:exit ret))
+      (fs/delete f)
+      (throw (Exception. "pytest failed")))))
 
 ;-----------------------------
-(defn validate [author answer]
+(defn validate [author answer testcode]
   (let [answer (expand-includes author answer)]
     (t/log! :info "validate")
-    (t/log! {:level :debug :msg answer})
+    (t/log! {:level :info :data {:answer answer}})
     (try
       (ruff answer)
       (doctest answer)
-      (pytest answer)
-      true
+      (when (some? testcode)
+        (pytest answer testcode))
       (catch Exception e
+        (t/log! {:level :warn
+                 :msg "validate error"
+                 :data {:author author
+                        :error (.getMessage e)}})
         (throw (Exception. e))))))

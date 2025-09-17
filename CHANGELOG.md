@@ -1,7 +1,7 @@
 # Unreleased
 
 * clj-reload
-* problems/test-codes for production
+* problems/test-codes for production <- use py99
 * scores.clj
 * stocks.clj
 * admin/toggle-status
@@ -9,10 +9,15 @@
 * digest namespace. used only from answers
 * effective upsert
 * emulate flash
-* test-codes as answers
-* show chatgtp user's answers
-* validation - pytest
+* testcodes as answers
+* show or doesn't show chatgtp user's answers
 
+
+# 0.2.16 (2025-09-17) (2025-09-17)
+
+- **BREAKING** attr :test -> :testcode
+- fixed bug - validate/get-last-answer
+- validate/pytest
 
 # 0.2.15 (2025-09-17)
 
