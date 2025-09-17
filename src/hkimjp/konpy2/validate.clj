@@ -24,11 +24,17 @@
   (t/log! {:level :debug
            :id "get-last-answer"
            :data {:author author :week week :num num}})
-  (->> (ds/qq fetch-answer author week num)
-       (sort-by first)
-       last))
+  (try
+    (->> (ds/qq fetch-answer author week num)
+         (sort-by first)
+         last
+         second)
+    (catch Exception e
+      (t/log! {:level :error
+               :id "get-last-answer"
+               :msg (.getMessage e)}))))
 
-;(get-last-answer "hkimura" 0 1)
+; (get-last-answer "hkimura" 0 0)
 
 (defn- expand-includes
   "expand `#include` recursively."
@@ -59,9 +65,9 @@
 
 (defn- ruff-path []
   (some #(when (fs/exists? %) %)
-        ["/home/ubuntu/.local/bin/ruff"
-         "/snap/bin/ruff"
-         "/opt/homebrew/bin/ruff"]))
+        ["/opt/homebrew/bin/ruff"
+         "/home/ubuntu/.local/bin/ruff"
+         "/snap/bin/ruff"]))
 
 (defn- ruff
   "ruff requires '\n' at the end of the code"
@@ -77,8 +83,8 @@
 
 (defn- python-path []
   (some #(when (fs/exists? %) %)
-        ["/usr/local/bin/python3"
-         "/opt/homebrew/bin/python3"
+        ["/opt/homebrew/bin/python3"
+         "/usr/local/bin/python3"
          "/usr/bin/python3"]))
 
 (defn- has-doctest? [answer]
@@ -96,9 +102,23 @@
       (fs/delete f)
       (throw (Exception. "doctest failed")))))
 
+(defn- pytest-path []
+  (some #(when (fs/exists? %) %)
+        ["/opt/homebrew/bin/pytest"
+         "/usr/bin/pytest"]))
 ;---------------------
-(defn- pytest [answer test-code]
-  (t/log! {:level :info :id "pytest"}))
+
+(defn- pytest [answer testcode]
+  (t/log! {:level :info :id "pytest"})
+  (t/log! {:level :debug
+           :data {:answer answer :testcode testcode}})
+  (let [f (create-tempfile-with (str/join [answer "\n" testcode]))
+        ret (timeout-sh
+             timeout
+             (pytest-path) (str (fs/file f)))]
+    (if (zero? (:exit ret))
+      (fs/delete f)
+      (throw (Exception. "pytest failed")))))
 
 ;-----------------------------
 (defn validate [author answer testcode]

@@ -11,12 +11,13 @@
 * emulate flash
 * test-codes as answers
 * show chatgtp user's answers
-* validation - pytest
+
 
 # 0.2.16-SNAPSHOT (2025-09-17)
 
 - **BREAKING** attr :test -> :testcode
-
+- fixed bug - validate/get-last-answer
+- validate/pytest
 
 # 0.2.15 (2025-09-17)
 
