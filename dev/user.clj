@@ -1,5 +1,7 @@
 (ns user
   (:require
+   [babashka.fs :as fs]
+   [clojure.java.io :as io]
    [clj-reload.core :as reload]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
@@ -10,8 +12,6 @@
 (t/set-min-level! :debug)
 
 (start-system)
-
-(c/ping)
 
 (defn restart-system
   []
@@ -56,4 +56,22 @@
     "Python で apple, orange, banana, grape, melon, peach, pine を 一行に一つずつプリントしなさい。"
     "Python で |, /, -, \\, |, /, -, \\ をプリントしなさい。"
     "print( ) で九九の表をプリントしなさい。"])
+
+  (c/ping)
   :rcf)
+
+(comment
+  (let [file (fs/create-temp-file {:suffix ".py"})]
+    (spit (fs/file file) "print('use bb?\nhow is it?\n')")
+    (println (slurp (fs/file file)))
+    (fs/delete-if-exists (fs/file file))
+    (fs/exists? (fs/file file)))
+  :rcf)
+
+(max 1 2 3)
+(max [1 2 3])
+
+(defn f [g & args]
+  (apply even? g args))
+
+(f max 1 2 3)

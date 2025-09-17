@@ -12,7 +12,7 @@
 (defn start-jetty
   []
   (let [port (parse-long (or (env :port) "3000"))
-        handler (if (env :develop)
+        handler (if (some? (env :develop))
                   #'routes/root-handler
                   routes/root-handler)]
     (reset! server (jetty/run-jetty handler {:port port :join? false}))
@@ -24,8 +24,11 @@
     (t/log! :info "server stopped.")))
 
 (defn start-system []
-  (t/log! :info (str "start-system develop: " (env :develop)))
-  (t/log! :info (str "redis " (env :redis) " ds " (env :datascript)))
+  (t/log! {:level :info
+           :id "start-system"
+           :msg (env :develop)
+           :data {:redis (env :redis)
+                  :datascript (env :datascript)}})
   (try
     (c/redis-server (env :redis))
     (ds/start-or-restore {:url (env :datascript)})
