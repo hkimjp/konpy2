@@ -1,21 +1,54 @@
 # Unreleased
 
-* tasks/answers - check having uploaded(necessary in chatGPT's world)
-  restrict comments?
+* clj-reload
+* problems/test-codes for production
 * scores.clj
 * stocks.clj
-* clj-reload
 * admin/toggle-status
-* digest namespace. used only from answers.
-* time restriction
-* sometime, author is empty when sending comments.
+* time restrictions
+* digest namespace. used only from answers
+* effective upsert
+* emulate flash
+* test-codes as answers
+* show chatgtp user's answers
+* validation - pytest
 
+
+# 0.2.15 (2025-09-17)
+
+- added doctest
+- added ruff - ruff requires '\n' at the end of a code.
+- added timeout-shell/timeout-shell {:mvn/version "1.0.0"}
+- added babashka/fs {:mvn/version "0.5.27"}
+- ruff versions
+    - ubuntu/snap 0.12.12
+    - macos/brew 0.13.0
+    - VScode 0.13.0
+- added `validate/get-last-answer`
+- added `validate/expand-includes`
+- two or more anwers from a student to some problems - must take the last answer.
+- log logout! user - OK. logout! can be called without login.
+- updated carmine-farm
+
+| :file    | :name                         | :current | :latest |
+|----------|-------------------------------|----------|---------|
+| deps.edn | io.github.hkimjp/carmine-farm | 0.2.4    | 0.2.6   |
+|          | ring/ring-jetty-adapter       | 1.15.1   | 1.15.2  |
+
+# 0.2.14 (2025-09-17)
+
+- app.melt:konpy-service - stop using /etc/default, instead /home/ubuntu/konpy
+- made comment area wider w-2/5
+- renamed comments/post-comment -> comments/comment!
+- renamed comments/show-comment -> comments/hx-comment
+- renamed answers/post-answer -> answers/answer!
+- renamed answers/show-answer -> answers/hx-answer
 
 # 0.2.13 (2025-09-16)
 
-- learningtailwind gradually.
-- if found chatgpt's answer, show it next to the author's answer.
-- removed charred, fast-edn, markdown from dependencies
+- learning tailwind
+- if found chatgpt's answer, show it next to the author's answer
+- removed `charred`, `fast-edn`, `markdown` from dependencies
 
 # 0.2.12 (2025-09-16)
 

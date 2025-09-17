@@ -54,8 +54,9 @@
         (-> (resp/redirect "/")
             (assoc :session {} :flash "enter login/password"))))))
 
-(defn logout!
-  [request]
-  (t/log! :info (str "logout! " (user request)))
+(defn logout! [request]
+  (t/log! {:level :info
+           :id "logout!"
+           :msg (user request)})
   (-> (resp/redirect "/")
       (assoc :session {})))
