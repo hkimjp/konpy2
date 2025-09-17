@@ -13,7 +13,7 @@
 * show chatgtp user's answers
 * validation - pytest
 
-# 0.2.16-SNAPSHOT
+# 0.2.16-SNAPSHOT (2025-09-17)
 
 
 # 0.2.15 (2025-09-17)
