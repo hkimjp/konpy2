@@ -67,11 +67,3 @@
     (fs/delete-if-exists (fs/file file))
     (fs/exists? (fs/file file)))
   :rcf)
-
-(max 1 2 3)
-(max [1 2 3])
-
-(defn f [g & args]
-  (apply even? g args))
-
-(f max 1 2 3)

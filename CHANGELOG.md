@@ -15,10 +15,6 @@
 
 # 0.2.16-SNAPSHOT
 
-- error.log
-
-    SLF4J(W): No SLF4J providers were found.
-
 
 # 0.2.15 (2025-09-17)
 

@@ -51,7 +51,8 @@
   "returns fs/file f#object[sun.nio.fs.UnixPath object]"
   [answer]
   (let [f (fs/create-temp-file {:suffix ".py"})]
-    (t/log! {:level :debug :id "create-tempfile-with"
+    (t/log! {:level :debug
+             :id "create-tempfile-with"
              :data {:tempfile (str (fs/file f))}})
     (spit (fs/file f) answer)
     f))
@@ -71,15 +72,8 @@
              timeout
              (ruff-path) "format" "--diff" (str (fs/file f)))]
     (if (zero? (:exit ret))
-      (fs/delete-if-exists f)
-      (throw (Exception. (:err ret))))))
-
-(comment
-  (def f (create-tempfile-with "hello(\"world\")\n"))
-  (slurp (fs/file f))
-  (str (fs/file f))
-  (timeout-sh 10 (ruff-path) "format" "--diff" (str (fs/file f)))
-  :rcf)
+      (fs/delete f)
+      (throw (Exception. "using VScode/Ruff?")))))
 
 (defn- python-path []
   (some #(when (fs/exists? %) %)
@@ -90,10 +84,8 @@
 (defn- has-doctest? [answer]
   (re-find #">>> " (-> answer str/split-lines str/join)))
 
-;;(has-doctest? "abc\n>>>\ndef")
-
 (defn- doctest [answer]
-  (t/log! {:level :debug :id "doctest"})
+  (t/log! {:level :info :id "doctest"})
   (when-not (has-doctest? answer)
     (throw (Exception. "did not find a doctest.")))
   (let [f (create-tempfile-with answer)
@@ -101,22 +93,25 @@
              timeout
              (python-path) "-m" "doctest" (str (fs/file f)))]
     (if (zero? (:exit ret))
-      (fs/delete-if-exists f)
+      (fs/delete f)
       (throw (Exception. "doctest failed")))))
 
 ;---------------------
 (defn- pytest [answer]
-  (t/log! {:level :debug :id "pytest"}))
+  (t/log! {:level :info :id "pytest"}))
 
 ;-----------------------------
 (defn validate [author answer]
   (let [answer (expand-includes author answer)]
     (t/log! :info "validate")
-    (t/log! {:level :debug :msg answer})
+    (t/log! {:level :info :data {:answer answer}})
     (try
       (ruff answer)
       (doctest answer)
       (pytest answer)
-      true
       (catch Exception e
+        (t/log! {:level :warn
+                 :msg "validate error"
+                 :data {:author author
+                        :error (.getMessage e)}})
         (throw (Exception. e))))))
