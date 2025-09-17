@@ -40,7 +40,7 @@
               :week w
               :num n
               :problem txt
-              :test "test code"
+              :testcode ""
               :updated (now)}]))
 
 (defn problems! [m txts]

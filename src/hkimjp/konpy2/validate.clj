@@ -97,18 +97,19 @@
       (throw (Exception. "doctest failed")))))
 
 ;---------------------
-(defn- pytest [answer]
+(defn- pytest [answer test-code]
   (t/log! {:level :info :id "pytest"}))
 
 ;-----------------------------
-(defn validate [author answer]
+(defn validate [author answer testcode]
   (let [answer (expand-includes author answer)]
     (t/log! :info "validate")
     (t/log! {:level :info :data {:answer answer}})
     (try
       (ruff answer)
       (doctest answer)
-      (pytest answer)
+      (when (some? testcode)
+        (pytest answer testcode))
       (catch Exception e
         (t/log! {:level :warn
                  :msg "validate error"

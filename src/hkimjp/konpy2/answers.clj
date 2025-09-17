@@ -60,11 +60,13 @@
   (t/log! {:level :info :id "answer!"})
   (t/log! {:level :debug :data {:e e :file file}})
   (let [author (user request)
-        answer (slurp (:tempfile file))]
+        answer (slurp (:tempfile file))
+        e (parse-long e)
+        test-code (:test (ds/pl e))]
     (try
-      (validate author answer)
+      (validate author answer test-code)
       (ds/put! {:answer/status "yes"
-                :to      (parse-long e)
+                :to      e
                 :author  author
                 :answer  answer
                 :digest  0

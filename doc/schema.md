@@ -5,7 +5,7 @@
 :week n
 :num n
 :problem s
-:test s
+:testcode s
 :updated jt
 
 
