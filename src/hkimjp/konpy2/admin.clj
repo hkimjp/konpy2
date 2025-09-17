@@ -28,7 +28,7 @@
   [:input.text-center.size-6.outline {:name label :value val}])
 
 (defn- problem-form
-  [{:keys [db/id problem/status week num problem test updated] :as params}]
+  [{:keys [db/id problem/status week num problem testcode updated] :as params}]
   (t/log! {:level :info :id "problem-form"})
   (t/log! {:level :debug :data params})
   (t/log! {:level :debug :data {:id id :status status}})
@@ -46,8 +46,8 @@
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section  "problem")
     (textarea "problem" problem)
-    (section  "test")
-    (textarea "test" test)
+    (section  "testcode")
+    (textarea "testcode" testcode)
     (section  "updated")
     [:div updated]
     [:br]
@@ -55,14 +55,14 @@
     [:br]]])
 
 (defn upsert! [{params :params}]
-  (let [{:keys [id status week num problem test]} params
+  (let [{:keys [id status week num problem testcode]} params
         id (if (= -1 id) -1 (parse-long id))
         data {:db/id id
               :problem/status status
               :week (parse-long week)
               :num  (parse-long num)
               :problem problem
-              :test test
+              :testcode testcode
               :updated (now)}]
     (t/log! {:level :debug :data data})
     (try
@@ -72,14 +72,14 @@
         (t/log! {:level :error :msg e})))))
 
 (def ^:private get-problems
-  '[:find ?e ?status ?week ?num ?problem ?test ?updated
-    :keys e  status  week  num  problem  test  updated
+  '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
+    :keys e  status  week  num  problem  testcode  updated
     :where
     [?e :problem/status ?status]
     [?e :week ?week]
     [?e :num ?num]
     [?e :problem ?problem]
-    [?e :test ?test]
+    [?e :testcode ?testcode]
     [?e :updated ?updated]])
 
 (defn- div-problems []
@@ -97,7 +97,7 @@
               "E"]]
        [:div (:week p) "-" (:num p)]]
       [:div (:problem p)]
-      [:div (:test p)]])])
+      [:div (:testcode p)]])])
 
 (defn problems [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
@@ -116,7 +116,7 @@
                   :week ""
                   :num ""
                   :problem ""
-                  :test ""})))
+                  :testcode ""})))
 
 (defn edit [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "edit" :data {:e e}})

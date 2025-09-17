@@ -34,30 +34,51 @@
 
 ;; (reload/reload)
 
-(defn problem! [w n txt]
+(defn problem! [w n problem testcode]
   (ds/puts! [{:db/id -1
               :problem/status "yes"
               :week w
               :num n
-              :problem txt
-              :testcode ""
+              :problem problem
+              :testcode testcode
               :updated (now)}]))
 
-(defn problems! [m txts]
-  (doseq [[n txt] (map-indexed vector txts)]
-    (problem! m n txt)))
+(defn problems! [m p-t]
+  (doseq [[n [p t]] (map-indexed vector p-t)]
+    (problem! m n p t)))
 
 (comment
   (problems!
    0
-   ["タイピング練習を50回こなす。"
-    "タイピング練習で最高点10点以上とる。"
-    "Python で 1/1, 1/2, 1/3, 1/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10をプリントしなさい。"
-    "Python で apple, orange, banana, grape, melon, peach, pine を 一行に一つずつプリントしなさい。"
-    "Python で |, /, -, \\, |, /, -, \\ をプリントしなさい。"
-    "print( ) で九九の表をプリントしなさい。"])
+   [["関数 hello(s) を定義しなさい。 引数の s は文字列。hello('Japan') は文字列 'Hello, Japan!' を返す。スペース文字、びっくりマークに注意。"
+     "def test_hello( ):
+    assert hello('Japan') == 'Hello, Japan!'
+    assert hello('Good bye') == 'Hello, Good bye!'"]
 
-  (c/ping)
+    ["数 x, y を引数にとり、 それらを足した数を戻り値とする関数 add2(x, y)."
+     "def test_add2( ):
+    assert add2(1,2) == 3
+    assert add2(-10,-10) == -20
+    assert add2(123, 234) == 357
+    assert add2(0.0, 0) == 0
+    assert -0.0001 < add2(3.14, 2.58) - 5.72 < 0.0001
+    assert -0.0001 < add2(1.1, 2.2) - 3.3 < 0.0001"]
+
+    ["数 x, y を引数にとり、 それらを足した数をプリントする関数 add2_(x, y)." ""]
+
+    ["円の半径を引数にとり、その円の面積を戻り値とする関数en(r)."
+     "def test_en( ):
+    assert -0.01 < en(1) - 3.14 < 0.01
+    assert -1.0 < en(10) - 314 < 1.0"]
+
+    ["二次方程式 ax^2 + bx +c = 0 の a,b,c を引数に取り、 方程式の解をリストで返す関数 eqn2(a, b, c). 重解や虚数解にも対応すること。ひとまず a, b, c は実数としよう。"
+     "def test_eqn2():
+    assert set(eqn2(1,-3,2)) == {1,2}
+    assert set(eqn2(1,-2,1)) == {1}
+    assert set(eqn2(1,-1,-6)) == {-2, 3}
+    assert set(eqn2(1, -6, 13)) == {(3 + 2j), (3 - 2j)}
+    assert set(eqn2(3, -6, 6)) == {(1 + 1j), (1 - 1j)}"]])
+
   :rcf)
 
 (comment
