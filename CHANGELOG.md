@@ -14,7 +14,7 @@
 * validation - pytest
 
 
-# 0.2.15-SNAPSHOT
+# 0.2.15 (2025-09-17)
 
 - added doctest
 - added ruff - ruff requires '\n' at the end of a code.
