@@ -12,9 +12,14 @@
 * testcodes as answers
 * show or doesn't show chatgtp user's answers
 
-# 0.3.0-SNAPSHOT (2025-09-17)
 
-restrctions.
+# 0.3.0-SNAPSHOT (2025-09-18) (2025-09-17)
+
+* restrictions
+- java25 on macos
+* improve admin page
+* padding y in tasks page
+
 
 # 0.2.16 (2025-09-17)
 
