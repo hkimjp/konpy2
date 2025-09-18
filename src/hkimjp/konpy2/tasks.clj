@@ -21,7 +21,7 @@
 ;;(ds/qq fetch-problems 0)
 
 (defn konpy [request]
-  (t/log! {:level :info :id "list" :data (user request)})
+  (t/log! {:level :info :msg (str "tasks/konpy " (user request))})
   (page
    [:div
     [:div.text-2xl "今週の Python"]

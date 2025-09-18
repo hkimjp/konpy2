@@ -16,6 +16,12 @@
 
 # 0.3.2-SNAPSHOT
 
+* route-handler does not know who is the user.
+- changed
+    how many comments/uploads can be done in 24hours?
+    - MAX_COMMENTS = 2
+    - MAX_UPLOADS  = 2
+
 - order comments chronologically
 
 # 0.3.1 (2025-09-18)
