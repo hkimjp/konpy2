@@ -10,8 +10,8 @@
 (def max-comments (-> (or (env :max-comments) "6") parse-long))
 (def max-uploads  (-> (or (env :max-uploads)  "6") parse-long))
 
-(defn- flash [user msg]
-  (c/setex (format "kp2:%s:flash"  user) kp2-flash msg))
+; (defn- flash [user msg]
+;   (c/setex (format "kp2:%s:flash"  user) kp2-flash msg))
 
 (defn- key- [what user]
   (format "kp2:%s:%s" what user))
@@ -22,15 +22,31 @@
 (defn- key-upload [user]
   (key- "upload" user))
 
+(defn- key-comment-max [user]
+  (key- "comment-max" user))
+
+(defn- key-upload-max [user]
+  (key- "upload-max" user))
+
+(defn- uniq-name [s]
+  (format "%s-%s" s (-> (random-uuid) str (subs 0 8))))
+
+;;(uniq-name "hkimura")
+
 (defn before-upload [user]
   (when-let [last-submission (c/get (key-upload user))]
     (throw (Exception.
             (format "アップロードは %s 秒以内にはできない。一題ずつ自力で。最終アップロード %s"
                     min-interval-uploads
-                    last-submission)))))
+                    last-submission))))
+  (when (< max-uploads (count (c/keys (str (key-upload user) "-*"))))
+    (throw (Exception.
+            (format "一日の最大アップロード数 %d を超えました。" max-uploads)))))
 
 (defn after-upload [user]
-  (c/setex (key-upload user) min-interval-uploads (local-time)))
+  (let [lt (local-time)]
+    (c/setex (key-upload user) min-interval-uploads lt)
+    (c/setex (uniq-name (key-upload user)) (* 24 60 60)) lt))
 
 (defn before-comment [user]
   (when-let [last-submission (c/get (key-comment user))]
