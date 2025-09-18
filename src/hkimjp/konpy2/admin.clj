@@ -1,28 +1,15 @@
 (ns hkimjp.konpy2.admin
   (:require
+   [clojure.string :as str]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page redirect]]
-   [hkimjp.konpy2.util :refer [btn user now]]))
-
-(defn admin [_request]
-  (page
-   [:div
-    [:div.text-2xl.font-bold "admin only"]
-    [:ul
-     [:li [:a {:href "/admin/problems"} "problems"]]
-     [:li [:a {:href "/admin/new"} "new"]]
-     [:li [:a {:href "/admin/update/0"} "edit"]]
-     [:li [:a {:href "/admin/delete/0"} "delete!"]]]]))
-
-(defn- textarea [label text]
-  [:textarea.w-full.h-20.p-2.outline.outline-black.shadow-lg
-   {:name label} text])
+   [hkimjp.konpy2.util :refer [btn user now abbrev]]))
 
 (defn- section [title]
-  [:div.font-bold.pu-4 title])
+  [:div.font-bold title])
 
 (defn- input-box [label val]
   [:input.text-center.size-6.outline {:name label :value val}])
@@ -45,9 +32,11 @@
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section  "problem")
-    (textarea "problem" problem)
+    [:textarea.w-full.h-20.p-2.outline.outline-black.shadow-lg
+     {:name "problem"} problem]
     (section  "testcode")
-    (textarea "testcode" testcode)
+    [:textarea.w-full.h-40.p-2.outline.outline-black.shadow-lg
+     {:name "testcode"} testcode]
     (section  "updated")
     [:div updated]
     [:br]
@@ -82,24 +71,22 @@
     [?e :testcode ?testcode]
     [?e :updated ?updated]])
 
-;; FIXME:
-;; prefer `tasks` style. rewrite.
-(defn- div-problems []
-  (t/log! :debug "div-problems")
-  [:div
-   (for [p (->> (ds/qq get-problems)
-                (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
-     [:div.flex.gap-4
-      [:div.flex.gap-2
-       [:div [:button.text-bold.text-red-600.hover:bg-red-600.hover:text-white
-              {:hx-delete (str "/admin/delete/" (:e p))}
-              "D"]]
-       [:div [:a.text-bold.text-sky-600.hover:bg-sky-600.hover:text-white
-              {:href (str "/admin/update/" (:e p))}
-              "E"]]
-       [:div (:week p) "-" (:num p)]]
-      [:div (:problem p)]
-      [:div (:testcode p)]])])
+(defn- first-n [s n]
+  (-> (str/split-lines s)
+      first
+      (abbrev n)))
+
+; (defn- div-problems []
+;   (t/log! :debug "div-problems")
+;   [:div
+;    (for [p (->> (ds/qq get-problems)
+;                 (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
+;      [:div
+;       [:a.hover:underline {:href (str "/admin/update/" (:e p))}
+;        [:div.flex.gap-4
+;         [:div (:week p) "-" (:num p)]
+;         [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
+;         [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])])
 
 (defn problems [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
@@ -107,8 +94,16 @@
    [:div
     [:div.text-2xl.font-bold "Problems"]
     [:div.m-4
-     [:a {:class btn :href "/admin/new"} "new"]
-     (div-problems)]]))
+     [:div [:a {:class btn :href "/admin/new"} "new"]]
+     [:div
+      (for [p (->> (ds/qq get-problems)
+                   (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
+        [:div
+         [:a.hover:underline {:href (str "/admin/update/" (:e p))}
+          [:div.flex.gap-4
+           [:div (:week p) "-" (:num p)]
+           [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
+           [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]]))
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})
@@ -125,6 +120,6 @@
   (page
    (problem-form (ds/pl (parse-long e)))))
 
-(defn toggle! [{params :params}]
-  (t/log! {:level :info :id "toggle!" :data params})
-  (page [:div "toggle!"]))
+; (defn toggle! [{params :params}]
+;   (t/log! {:level :info :id "toggle!" :data params})
+;   (page [:div "toggle!"]))

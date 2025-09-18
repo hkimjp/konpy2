@@ -1,17 +1,20 @@
 # Unreleased
 
 * clj-reload
-* problems/test-codes for production <- use py99
+* problems/test-codes for production from `py99`
 * scores.clj
 * stocks.clj
 * admin/toggle-status
 * digest namespace. used only from answers
 * effective upsert
-* emulate flash
 * testcodes as answers
 * show or doesn't show chatgtp user's answers
-* improve admin page
-* padding y in tasks page
+* padding p-y (space for each line) in tasks page
+
+
+# 0.3.1-SNAPSHOT
+
+* improved/clean-upped the admin page
 
 
 # 0.3.0 (2025-09-18)
