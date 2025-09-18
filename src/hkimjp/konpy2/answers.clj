@@ -7,7 +7,7 @@
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [user now btn]]
+   [hkimjp.konpy2.util :refer [user now btn iso]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
 (def ^:private comments-to '[:find ?e ?author
@@ -35,10 +35,10 @@
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "] (:author ans)]
-           [:div [:span.font-bold "updated: "] (:updated ans)]
+           [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]
            [:div.font-bold "comments"]
-           (for [[eid author] comments]
+           (for [[eid author] (sort-by first comments)]
              [:button.pr-4.hover:underline
               {:hx-get (str "/k/comment/" eid)
                :hx-target "#comment"
@@ -48,7 +48,7 @@
            [:div [:span.font-bold "author: "] "chatgpt"]
            [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
            [:pre.border-1.p-2 gpt-ans]]]
-         [:div#comment "[comment]"]
+         [:div#comment.mx-4 "[comment]"]
          [:div.font-bold "your comment"]
          [:form {:method "post" :action "/k/comment"}
           (h/raw (anti-forgery-field))
@@ -67,26 +67,26 @@
         testcode (:testcode (ds/pl e))]
     (t/log! {:level :debug :data {:testcode testcode}})
     (try
-      (if (r/before-upload user)
-        (do
-          (validate author answer testcode)
-          (ds/put! {:answer/status "yes"
-                    :to      e
-                    :author  author
-                    :answer  answer
-                    :digest  0
-                    :updated (now)})
-          (r/after-upload user)
-          (redirect (str "/k/problem/" e)))
+      (r/before-upload author)
+      (validate author answer testcode)
+      (ds/put! {:answer/status "yes"
+                :to      e
+                :author  author
+                :answer  answer
+                :digest  0
+                :updated (now)})
+      (r/after-upload author)
+      (redirect (str "/k/problem/" e))
+      (catch Exception ex
+        (t/log! {:level :warn :data {:exception ex}})
         (page
          [:div
           [:div.text-2xl "Error"]
-          (when-let [msg (c/get (format "kp2:%s:flash" user))]
-            [:p.text-red-500 msg])
-          [:p  "じゅうぶんに回答・コメント読んで自力回答しよう。"]]))
-      (catch Exception ex
-        (t/log! {:level :error :data answer})
-        (page
-         [:div
-          [:div.text-2xl.text-red-600 "Error"]
-          [:p (.getMessage ex)]])))))
+          [:p.text-red-600 (.getMessage ex)]])))))
+
+; (page
+        ;  [:div
+        ;   [:div.text-2xl "Error"]
+        ;   (when-let [msg (c/get (format "kp2:%s:flash" user))]
+        ;     [:p.text-red-500 msg])
+        ;   [:p  "じゅうぶんに回答・コメント読んで自力回答しよう。"]]))

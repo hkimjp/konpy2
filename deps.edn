@@ -2,7 +2,7 @@
 
  :deps
  {org.clojure/clojure            {:mvn/version "1.12.2"}
-  ;; org.slf4j/slf4j-nop            {:mvn/version "2.0.17"}
+  org.slf4j/slf4j-nop            {:mvn/version "2.0.17"}
   babashka/fs                    {:mvn/version "0.5.27"}
   buddy/buddy-hashers            {:mvn/version "2.0.167"}
   clojure.java-time/clojure.java-time {:mvn/version "1.4.3"}
