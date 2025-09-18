@@ -13,8 +13,11 @@
 (def min-interval-comments (-> (or (env :min-inverval-comments) "60") parse-long))
 (def min-interval-uploads  (-> (or (env :min-inverval-uploads)  "30") parse-long))
 (def kp2-flash (-> (or (env :flash) "3") parse-long))
-(def max-comments (-> (or (env :max-comments) "86400") parse-long))
-(def max-uploads  (-> (or (env :max-uploads)  "86400") parse-long))
+
+; how many comments/uploads allowed in 24 hours.
+; max uploads should be equal to the number of problems in this week.
+(def max-comments (-> (or (env :max-comments) "6") parse-long))
+(def max-uploads  (-> (or (env :max-uploads)  "6") parse-long))
 
 (defn- flash [user msg]
   (c/setex (format "kp2:%s:flash"  user) kp2-flash msg))
@@ -38,8 +41,7 @@
     true))
 
 (defn after-comment [user]
-  (let [key-interval (key-comment user)]
-    (c/setex  key-interval min-interval-comments (local-time))))
+  (c/setex (key-comment user) min-interval-comments (local-time)))
 
 (defn before-upload [user]
   (if-let [last-submission (c/get (key-upload user))]
@@ -51,8 +53,7 @@
     true))
 
 (defn after-upload [user]
-  (let [key (key-upload user)]
-    (c/setex key min-interval-uploads (local-time))))
+  (c/setex (key-upload user) min-interval-uploads (local-time)))
 
 (comment
   (before-comment "h")

@@ -37,7 +37,7 @@
 
 (defn root-handler
   [request]
-  (t/log! :info (str (user request) " " (:request-method request) " - " (:uri request)))
+  (t/log! :info (str (:request-method request) " - " (:uri request)))
   (let [handler
         (rr/ring-handler
          (rr/router (routes))

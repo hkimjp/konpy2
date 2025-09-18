@@ -7,7 +7,7 @@
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [user now btn]]
+   [hkimjp.konpy2.util :refer [user now btn iso]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
 (def ^:private comments-to '[:find ?e ?author
@@ -35,7 +35,7 @@
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "] (:author ans)]
-           [:div [:span.font-bold "updated: "] (:updated ans)]
+           [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]
            [:div.font-bold "comments"]
            (for [[eid author] (sort-by first comments)]
@@ -48,7 +48,7 @@
            [:div [:span.font-bold "author: "] "chatgpt"]
            [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
            [:pre.border-1.p-2 gpt-ans]]]
-         [:div#comment "[comment]"]
+         [:div#comment.mx-4 "[comment]"]
          [:div.font-bold "your comment"]
          [:form {:method "post" :action "/k/comment"}
           (h/raw (anti-forgery-field))

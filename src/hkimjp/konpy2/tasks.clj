@@ -9,8 +9,8 @@
 
 (defn- wk [] (max 0 (week)))
 
-(def ^:private fetch-problems '[:find ?e ?num ?problem
-                                :keys e  num  problem
+(def ^:private fetch-problems '[:find ?e ?week ?num ?problem
+                                :keys e  week num  problem
                                 :in $ ?week
                                 :where
                                 [?e :problem/status "yes"]
@@ -18,20 +18,20 @@
                                 [?e :num ?num]
                                 [?e :problem ?problem]])
 
-;;(ds/qq fetch-problems 0)
+(ds/qq fetch-problems 0)
 
 (defn konpy [request]
-  (t/log! {:level :info :id "list" :data (user request)})
+  (t/log! {:level :info :msg (str "tasks/konpy " (user request))})
   (page
    [:div
     [:div.text-2xl "今週の Python"]
     (into [:div.m-4]
-          (for [{:keys [e num problem]} (->> (ds/qq fetch-problems (wk))
-                                             (sort-by :num))]
+          (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems (wk))
+                                                  (sort-by :num))]
             [:div
              [:a.hover:underline
               {:href (str "/k/problem/" e)}
-              [:span.mr-4 num] [:span problem]]]))]))
+              [:span.mr-4 week "-" num] [:span problem]]]))]))
 
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id
