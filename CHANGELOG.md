@@ -13,7 +13,7 @@
 * never show admin menu for non-admin users
 
 
-# 0.3.2 (2025-09-18) (2025-09-18) (2025-09-18)
+# 0.3.2 (2025-09-18)
 
 - added `util/iso`
 - route-handler does not know who is the user.
@@ -23,9 +23,9 @@
     - MAX_UPLOADS  = 2
 - order comments chronologically
 - adjust log levels
-* restrictions/before-* check uploads/comments frequencies and counts
-* restrictions/after-* reloads the process time and update counter
-* use try~catch to simplify codes
+- restrictions/before-* check uploads/comments frequencies and counts
+- restrictions/after-* reloads the process time and update counter
+- changed: use try~catch to simplify codes
 
 # 0.3.1 (2025-09-18)
 
