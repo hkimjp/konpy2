@@ -18,8 +18,6 @@
                                 [?e :num ?num]
                                 [?e :problem ?problem]])
 
-(ds/qq fetch-problems 0)
-
 (defn konpy [request]
   (t/log! {:level :info :msg (str "tasks/konpy " (user request))})
   (page

@@ -37,7 +37,7 @@
       str
       (subs 0 8)))
 
-(defn- iso
+(defn iso
   "(iso \"2025-09-17T21:32:01.360441\") -> \"2025-09-17 21:32:01\""
   [tm]
   (format "%s %s" (subs tm 0 10) (subs tm 11 19)))
