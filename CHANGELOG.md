@@ -29,9 +29,9 @@
 
   Cyclic load dependency: [ /hkimjp/konpy2/system ]->/hkimjp/konpy2/restrictions->/hkimjp/konpy2/comments->/hkimjp/konpy2/routes->[ /hkimjp/konpy2/system ]->/hkimjp/konpy2/main
 
+- FIXED: emulate flash.
 - restrict uploads
-* FIXME: no effect flash.
-
+- development on macos need poetry? without poetry, counld not find pytest.
 
 
 # 0.2.16 (2025-09-17)

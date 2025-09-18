@@ -83,7 +83,8 @@
 
 (defn- python-path []
   (some #(when (fs/exists? %) %)
-        ["/opt/homebrew/bin/python3"
+        ["/Users/hkim/workspace/github.com/hkimjp/konpy2/.venv/bin/python3"
+         "/opt/homebrew/bin/python3"
          "/usr/local/bin/python3"
          "/usr/bin/python3"]))
 
@@ -104,7 +105,8 @@
 
 (defn- pytest-path []
   (some #(when (fs/exists? %) %)
-        ["/opt/homebrew/bin/pytest"
+        ["/Users/hkim/workspace/github.com/hkimjp/konpy2/.venv/bin/pytest"
+         "/opt/homebrew/bin/pytest"
          "/usr/bin/pytest"]))
 
 (defn- pytest [answer testcode]

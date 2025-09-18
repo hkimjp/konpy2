@@ -3,8 +3,10 @@
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx redirect]]
+   [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [user now btn]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
@@ -65,14 +67,23 @@
         testcode (:testcode (ds/pl e))]
     (t/log! {:level :debug :data {:testcode testcode}})
     (try
-      (validate author answer testcode)
-      (ds/put! {:answer/status "yes"
-                :to      e
-                :author  author
-                :answer  answer
-                :digest  0
-                :updated (now)})
-      (redirect (str "/k/problem/" e))
+      (if (r/before-upload user)
+        (do
+          (validate author answer testcode)
+          (ds/put! {:answer/status "yes"
+                    :to      e
+                    :author  author
+                    :answer  answer
+                    :digest  0
+                    :updated (now)})
+          (r/after-upload user)
+          (redirect (str "/k/problem/" e)))
+        (page
+         [:div
+          [:div.text-2xl "Error"]
+          (when-let [msg (c/get (format "kp2:%s:flash" user))]
+            [:p.text-red-500 msg])
+          [:p  "じゅうぶんに回答・コメント読んで自力回答しよう。"]]))
       (catch Exception ex
         (t/log! {:level :error :data answer})
         (page
