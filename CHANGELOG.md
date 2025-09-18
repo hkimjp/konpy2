@@ -14,7 +14,7 @@
 * padding y in tasks page
 
 
-# 0.3.0-SNAPSHOT
+# 0.3.0 (2025-09-18)
 
 - java25 on macos
 - restrictions
@@ -31,9 +31,9 @@
 - FIXED: emulate flash.
 - restrict uploads
 - development on macos need poetry? without poetry, counld not find pytest.
-- added poetry.lock
-- added pyproject.toml
-
+- added `poetry.lock`
+- added `pyproject.toml`
+- bump-version-local.sh treats `pyproject.toml`
 
 
 # 0.2.16 (2025-09-17)
