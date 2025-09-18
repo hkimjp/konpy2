@@ -9,11 +9,7 @@
    [hkimjp.konpy2.comments :as comments]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
-   [hkimjp.konpy2.tasks :as tasks]
-   [hkimjp.konpy2.response :refer [page]]))
-
-(defn dummy [request]
-  (page [:div (:request-method request) " " (:uri request)]))
+   [hkimjp.konpy2.tasks :as tasks]))
 
 (defn routes []
   [["/" {:middleware [[wrap-defaults site-defaults]]}
@@ -33,8 +29,8 @@
     ["comment"      {:post comments/comment!}]
     ["comment/:e"   {:get  comments/hx-comment}]
     ;;
-    ["scores"       {:get dummy}]
-    ["stocks"       {:get dummy}]]])
+    #_["scores"       {:get dummy}]
+    #_["stocks"       {:get dummy}]]])
 
 (defn root-handler
   [request]

@@ -10,6 +10,8 @@
 * emulate flash
 * testcodes as answers
 * show or doesn't show chatgtp user's answers
+* improve admin page
+* padding y in tasks page
 
 
 # 0.3.0-SNAPSHOT
@@ -23,9 +25,13 @@
     - system/max-uploads
     - system/kp2-flash
 - restrict comments
-* restrict uploads
-* improve admin page
-* padding y in tasks page
+- FIXED cyclic load dependency by removing system things to restrictions namespace.
+
+  Cyclic load dependency: [ /hkimjp/konpy2/system ]->/hkimjp/konpy2/restrictions->/hkimjp/konpy2/comments->/hkimjp/konpy2/routes->[ /hkimjp/konpy2/system ]->/hkimjp/konpy2/main
+
+- restrict uploads
+* FIXME: no effect flash.
+
 
 
 # 0.2.16 (2025-09-17)

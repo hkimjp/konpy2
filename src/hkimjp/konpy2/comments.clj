@@ -1,8 +1,9 @@
 (ns hkimjp.konpy2.comments
   (:require
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [hx redirect error-page]]
+   [hkimjp.konpy2.response :refer [hx redirect page]]
    [hkimjp.konpy2.util :refer [now user]]
    [hkimjp.konpy2.restrictions :as r]))
 
@@ -22,7 +23,12 @@
                 :updated (now)})
       (r/after-comment (user request))
       (redirect (str "/k/problem/" pid)))
-    (error-page (user request) "きちんと回答、コメント読んでコメントしないと。")))
+    (page
+     [:div
+      [:div.text-2xl "Error"
+       (when-let [msg (c/get (format "kp2:%s:flash" user))]
+         [:p.text-red-500 msg])
+       [:p  "じゅうぶんに回答・コメント読んでコメントしないと。"]]])))
 
 (defn hx-comment [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-comment"})
