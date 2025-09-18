@@ -16,7 +16,7 @@
    [:div {:class menu} [:a {:href "/k/stocks"} "stocks"]]
    [:div {:class menu} [:a {:href "/logout"}   "logout"]]
    [:div {:class menu} [:a {:href "/help"}     "HELP"]]
-   [:div {:class menu} [:a {:href "/admin/"}   "(admin)"]]])
+   [:div {:class menu} [:a {:href "/admin/"}   "admin"]]])
 
 (def footer
   [:div.text-base
@@ -47,7 +47,7 @@
 
 (defn page
   [content]
-  (t/log! :info (str "page"))
+  (t/log! :debug (str "page"))
   (-> (str (h/html (h/raw "<!DOCTYPE html>") (base content)))
       resp/response
       (resp/header "Content-Type" "text/html")))

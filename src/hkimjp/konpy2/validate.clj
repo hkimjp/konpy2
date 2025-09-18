@@ -72,7 +72,7 @@
 (defn- ruff
   "ruff requires '\n' at the end of the code"
   [answer]
-  (t/log! {:level :debug :id "ruff"})
+  (t/log! {:level :info :id "ruff"})
   (let [f (create-tempfile-with (str answer "\n"))
         ret (timeout-sh
              timeout
