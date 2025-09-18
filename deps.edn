@@ -15,7 +15,7 @@
   hiccup/hiccup                  {:mvn/version "2.0.0"}
   timeout-shell/timeout-shell    {:mvn/version "1.0.0"}
   ;;
-  io.github.hkimjp/carmine-farm {:git/tag "0.2.7" :git/sha "7c7e643"}
+  io.github.hkimjp/carmine-farm {:git/tag "0.2.8" :git/sha "f06c59e"}
   io.github.hkimjp/datascript-storage-javatime
   {:git/tag "0.7.4" :git/sha "f5c3196"}}
 
