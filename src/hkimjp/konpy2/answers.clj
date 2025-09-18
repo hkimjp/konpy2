@@ -67,26 +67,26 @@
         testcode (:testcode (ds/pl e))]
     (t/log! {:level :debug :data {:testcode testcode}})
     (try
-      (if (r/before-upload user)
-        (do
-          (validate author answer testcode)
-          (ds/put! {:answer/status "yes"
-                    :to      e
-                    :author  author
-                    :answer  answer
-                    :digest  0
-                    :updated (now)})
-          (r/after-upload user)
-          (redirect (str "/k/problem/" e)))
+      (r/before-upload author)
+      (validate author answer testcode)
+      (ds/put! {:answer/status "yes"
+                :to      e
+                :author  author
+                :answer  answer
+                :digest  0
+                :updated (now)})
+      (r/after-upload author)
+      (redirect (str "/k/problem/" e))
+      (catch Exception ex
+        (t/log! {:level :warn :data {:exception ex}})
         (page
          [:div
           [:div.text-2xl "Error"]
-          (when-let [msg (c/get (format "kp2:%s:flash" user))]
-            [:p.text-red-500 msg])
-          [:p  "じゅうぶんに回答・コメント読んで自力回答しよう。"]]))
-      (catch Exception ex
-        (t/log! {:level :error :data answer})
-        (page
-         [:div
-          [:div.text-2xl.text-red-600 "Error"]
-          [:p (.getMessage ex)]])))))
+          [:p.text-red-600 (.getMessage ex)]])))))
+
+; (page
+        ;  [:div
+        ;   [:div.text-2xl "Error"]
+        ;   (when-let [msg (c/get (format "kp2:%s:flash" user))]
+        ;     [:p.text-red-500 msg])
+        ;   [:p  "じゅうぶんに回答・コメント読んで自力回答しよう。"]]))
