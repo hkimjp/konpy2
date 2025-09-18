@@ -18,11 +18,10 @@
 
 - java25 on macos
 - restrictions
-    - system/min-interval-answers
     - system/min-interval-comments
     - system/min-interval-uploads
-    - system/max-comments
-    - system/max-uploads
+    * system/max-comments
+    * system/max-uploads
     - system/kp2-flash
 - restrict comments
 - FIXED cyclic load dependency by removing system things to restrictions namespace.
@@ -32,6 +31,9 @@
 - FIXED: emulate flash.
 - restrict uploads
 - development on macos need poetry? without poetry, counld not find pytest.
+- added poetry.lock
+- added pyproject.toml
+
 
 
 # 0.2.16 (2025-09-17)
