@@ -20,7 +20,9 @@
 (defn before-comment [user]
   (if-let [last-submission (c/get (key-comment user))]
     (do
-      (flash user (format "しっかりコメント読んでからコメントする。%s" last-submission))
+      (flash user (format "しっかりコメント読むには%s秒は短いだろ。最終コメント時間 => %s"
+                          sys/min-interval-comments
+                          last-submission))
       false)
     true))
 
@@ -31,7 +33,9 @@
 (defn before-upload [user]
   (if-let [last-submission (c/get (key-upload user))]
     (do
-      (flash user (format "一題ずつ。自力で。%s" last-submission))
+      (flash user (format "%s秒で解ける？一題ずつ。自力で。%s"
+                          sys/min-interval-uploads
+                          last-submission))
       false)
     true))
 

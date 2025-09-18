@@ -2,7 +2,8 @@
   (:require
    [hiccup2.core :as h]
    [ring.util.response :as resp]
-   [taoensso.telemere :as t]))
+   [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]))
 
 (def version "0.3.0-SNAPSHOT")
 
@@ -54,6 +55,14 @@
 
 (defn redirect [uri]
   (resp/redirect uri))
+
+(defn error-page
+  [user content]
+  (t/log! {:level :info :id "error-page"})
+  (page [:div [:div.text-2xl "Error"]
+         (when-let [msg (c/get (format "kp2:%s:flash" user))]
+           [:p.text-red-500 msg])
+         [:p content]]))
 
 ;; htmx requires html response.
 (defn hx [content]

@@ -5,7 +5,6 @@
 * scores.clj
 * stocks.clj
 * admin/toggle-status
-* time restrictions
 * digest namespace. used only from answers
 * effective upsert
 * emulate flash
@@ -16,14 +15,15 @@
 # 0.3.0-SNAPSHOT
 
 - java25 on macos
-* restrictions
+- restrictions
     - system/min-interval-answers
     - system/min-interval-comments
     - system/min-interval-uploads
     - system/max-comments
     - system/max-uploads
     - system/kp2-flash
-
+- restrict comments
+* restrict uploads
 * improve admin page
 * padding y in tasks page
 
