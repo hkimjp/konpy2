@@ -38,8 +38,6 @@
                                [?e :to ?id]
                                [?e :author ?author]])
 
-; (ds/qq fetch-answers 10)
-
 (defn- answerers [pid]
   (t/log! {:level :info :id "answerers" :data pid})
   [:div

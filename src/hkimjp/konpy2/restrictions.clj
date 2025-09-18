@@ -6,10 +6,10 @@
    [hkimjp.konpy2.util :refer [local-time]]))
 
 (def min-interval-comments (-> (or (env :min-interval-comments) "60") parse-long))
-(def min-interval-uploads  (-> (or (env :min-interval-uploads)  "30") parse-long))
-(def kp2-flash (-> (or (env :flash) "3") parse-long))
+(def min-interval-uploads  (-> (or (env :min-interval-uploads)  "60") parse-long))
 (def max-comments (-> (or (env :max-comments) "6") parse-long))
 (def max-uploads  (-> (or (env :max-uploads)  "6") parse-long))
+(def kp2-flash (-> (or (env :flash) "3") parse-long))
 
 (defn- key- [what user]
   (format "kp2:%s:%s" what user))
@@ -20,17 +20,8 @@
 (defn- key-upload [user]
   (key- "upload" user))
 
-(defn- key-comment-max [user]
-  (key- "comment-max" user))
-
-(defn- key-upload-max [user]
-  (key- "upload-max" user))
-
 (defn- uniq-name [s]
   (format "%s-%s" s (-> (random-uuid) str (subs 0 8))))
-
-; (uniq-name "hkimura")
-; (key-upload "hkimura")
 
 (defn before-upload [user]
   (when-let [last-submission (c/get (key-upload user))]

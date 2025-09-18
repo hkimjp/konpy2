@@ -11,8 +11,7 @@
    [hkimjp.konpy2.login :refer [login login! logout!]]
    [hkimjp.konpy2.scores :as scores]
    [hkimjp.konpy2.stocks :as stocks]
-   [hkimjp.konpy2.tasks :as tasks]
-   [hkimjp.konpy2.util :refer [user]]))
+   [hkimjp.konpy2.tasks :as tasks]))
 
 (defn routes []
   [["/" {:middleware [[wrap-defaults site-defaults]]}
@@ -56,8 +55,4 @@
                          :body "not acceptable"})}))
          {:middleware []})]
     (handler request)))
-
-; (root-handler {:request-method "get" :uri "/k/problem/3"})
-; (root-handler {:request-method "get" :uri "/k/scores"})
-; (dummy {:request-method "get" :url "dummy"})
 

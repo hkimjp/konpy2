@@ -3,7 +3,7 @@
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
-   [hkimjp.carmine :as c]
+   ; [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
@@ -83,10 +83,3 @@
          [:div
           [:div.text-2xl "Error"]
           [:p.text-red-600 (.getMessage ex)]])))))
-
-; (page
-        ;  [:div
-        ;   [:div.text-2xl "Error"]
-        ;   (when-let [msg (c/get (format "kp2:%s:flash" user))]
-        ;     [:p.text-red-500 msg])
-        ;   [:p  "じゅうぶんに回答・コメント読んで自力回答しよう。"]]))
