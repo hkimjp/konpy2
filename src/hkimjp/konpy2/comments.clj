@@ -1,8 +1,9 @@
 (ns hkimjp.konpy2.comments
   (:require
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [hx redirect error-page]]
+   [hkimjp.konpy2.response :refer [hx redirect page]]
    [hkimjp.konpy2.util :refer [now user]]
    [hkimjp.konpy2.restrictions :as r]))
 
