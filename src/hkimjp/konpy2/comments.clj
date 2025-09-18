@@ -14,18 +14,18 @@
   (t/log! {:level :info
            :id    "comment!"
            :data  {:to to :author author :comment comment :pid pid}})
-  (let [user (user request)]
+  (let [author (user request)]
     (try
-      (r/before-comment user)
+      (r/before-comment author)
       (ds/put! {:comment/status "yes"
                 :author author
                 :to (parse-long to)
                 :comment comment
                 :updated (now)})
-      (r/after-comment user)
+      (r/after-comment author)
       (redirect (str "/k/problem/" pid))
       (catch Exception ex
-        (t/log! {:level :warn :data {:user user :ex ex}})
+        (t/log! {:level :warn :data {:user author :ex ex}})
         (page
          [:div
           [:div.text-2xl "Error"]

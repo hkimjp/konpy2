@@ -67,7 +67,7 @@
         testcode (:testcode (ds/pl e))]
     (t/log! {:level :debug :data {:testcode testcode}})
     (try
-      (r/before-upload user)
+      (r/before-upload author)
       (validate author answer testcode)
       (ds/put! {:answer/status "yes"
                 :to      e
@@ -75,7 +75,7 @@
                 :answer  answer
                 :digest  0
                 :updated (now)})
-      (r/after-upload user)
+      (r/after-upload author)
       (redirect (str "/k/problem/" e))
       (catch Exception ex
         (t/log! {:level :warn :data {:exception ex}})
