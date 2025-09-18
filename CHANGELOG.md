@@ -14,7 +14,7 @@
 * order commens by time
 
 
-# 0.3.1-SNAPSHOT
+# 0.3.1 (2025-09-18)
 
 - improved/clean-upped the admin page
 
