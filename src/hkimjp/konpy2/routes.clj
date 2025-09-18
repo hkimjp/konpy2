@@ -9,7 +9,8 @@
    [hkimjp.konpy2.comments :as comments]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
-   [hkimjp.konpy2.tasks :as tasks]))
+   [hkimjp.konpy2.tasks :as tasks]
+   [hkimjp.konpy2.util :refer [user]]))
 
 (defn routes []
   [["/" {:middleware [[wrap-defaults site-defaults]]}
@@ -34,7 +35,7 @@
 
 (defn root-handler
   [request]
-  (t/log! :info (str (:request-method request) " - " (:uri request)))
+  (t/log! :info (str (user request) " " (:request-method request) " - " (:uri request)))
   (let [handler
         (rr/ring-handler
          (rr/router (routes))

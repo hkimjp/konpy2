@@ -20,5 +20,5 @@
     [:p.mx-4 "ログアウト。"]
     [:div.font-bold "HELP"]
     [:p.mx-4 "このページ。"]
-    [:div.font-bold "(admin)"]
+    [:div.font-bold "admin"]
     [:p.mx-4 "管理者専用ページ。開発中はチラ見させるけど、本番では不可。"]]))

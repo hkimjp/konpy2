@@ -26,7 +26,7 @@
                      [?e :to ?to]])
 
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
-  (t/log! {:level :info :id "hx-answer" :data e})
+  (t/log! {:level :debug :id "hx-answer" :data e})
   (let [e (parse-long e)
         ans (ds/pl e)
         gpt-ans (-> (ds/qq gpt (parse-long p)) ffirst)

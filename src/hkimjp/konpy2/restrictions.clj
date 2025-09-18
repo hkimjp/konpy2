@@ -31,7 +31,7 @@
 (defn before-comment [user]
   (if-let [last-submission (c/get (key-comment user))]
     (do
-      (flash user (format "しっかりコメント読むには%s秒は短いだろ。最終コメント時間 %s"
+      (flash user (format "しっかりコメント読み書きするに%s秒は短いだろ。最終コメント時間 %s"
                           min-interval-comments
                           last-submission))
       false)
