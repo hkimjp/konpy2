@@ -1,8 +1,9 @@
 (ns hkimjp.konpy2.stocks
   (:require
    [taoensso.telemere :as t]
-   [hkimjp.konpy2.response :refer [page]]))
+   [hkimjp.konpy2.response :refer [page]]
+   [hkimjp.konpy2.util :refer [user]]))
 
 (defn stocks [request]
-  (t/log! {:level :info :id "stocks"})
+  (t/log! {:level :info :msg (str "stocks " (user request))})
   (page [:div "scores"]))
