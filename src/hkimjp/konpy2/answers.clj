@@ -38,7 +38,7 @@
            [:div [:span.font-bold "updated: "] (:updated ans)]
            [:pre.border-1.p-2 (:answer ans)]
            [:div.font-bold "comments"]
-           (for [[eid author] comments]
+           (for [[eid author] (sort-by first comments)]
              [:button.pr-4.hover:underline
               {:hx-get (str "/k/comment/" eid)
                :hx-target "#comment"
