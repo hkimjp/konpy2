@@ -11,7 +11,8 @@
 * show or doesn't show chatgtp user's answers
 * padding p-y (space for each line) in tasks page
 * never show admin menu for non-admin users
-
+* darken authors except me
+* reports who uploads now
 
 # 0.3.2 (2025-09-18)
 

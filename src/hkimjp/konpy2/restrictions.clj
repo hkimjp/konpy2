@@ -29,9 +29,8 @@
 (defn- uniq-name [s]
   (format "%s-%s" s (-> (random-uuid) str (subs 0 8))))
 
-;;(uniq-name "hkimura")
-
-(key-upload "hkimura")
+; (uniq-name "hkimura")
+; (key-upload "hkimura")
 
 (defn before-upload [user]
   (when-let [last-submission (c/get (key-upload user))]
@@ -42,12 +41,6 @@
   (when (<= max-uploads (count (c/keys (str (key-upload user) "-*"))))
     (throw (Exception.
             (format "一日の最大アップロード数 %d を超えました。" max-uploads)))))
-
-(defn after-upload [user]
-  (let [lt (local-time)]
-    (t/log! {:level :debug :data {:key (key-upload user) :min-inverval-uploads min-interval-uploads}})
-    (c/setex (key-upload user) min-interval-uploads lt)
-    (c/setex (uniq-name (key-upload user)) (* 24 60 60) lt)))
 
 ;; FIXME:
 ;; almost same with before-upload
@@ -61,20 +54,15 @@
     (throw (Exception.
             (format "一日の最大コメント数 %d を超えました。" max-comments)))))
 
+(defn after-upload [user]
+  (let [lt (local-time)]
+    (t/log! {:level :debug :data {:key (key-upload user) :min-inverval-uploads min-interval-uploads}})
+    (c/setex (key-upload user) min-interval-uploads lt)
+    (c/setex (uniq-name (key-upload user)) (* 24 60 60) lt)))
+
 ;; FIXME:
 ;; almost same with after-upload
 (defn after-comment [user]
   (let [lt (local-time)]
     (c/setex (key-comment user) min-interval-comments lt)
     (c/setex (uniq-name (key-comment user)) (* 24 60 60) lt)))
-
-(comment
-  (before-comment "h")
-  (c/get "kp2:h:flash")
-  (after-comment "h")
-  (before-upload "h")
-  (c/get "kp2:h:flash")
-  (c/ttl "kp2:h:flash")
-  (after-upload "h")
-
-  :rcf)
