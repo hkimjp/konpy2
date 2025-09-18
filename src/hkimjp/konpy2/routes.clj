@@ -9,6 +9,8 @@
    [hkimjp.konpy2.comments :as comments]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
+   [hkimjp.konpy2.scores :as scores]
+   [hkimjp.konpy2.stocks :as stocks]
    [hkimjp.konpy2.tasks :as tasks]
    [hkimjp.konpy2.util :refer [user]]))
 
@@ -30,8 +32,8 @@
     ["comment"      {:post comments/comment!}]
     ["comment/:e"   {:get  comments/hx-comment}]
     ;;
-    #_["scores"       {:get dummy}]
-    #_["stocks"       {:get dummy}]]])
+    ["scores"       {:get scores/scores}]
+    ["stocks"       {:get stocks/stocks}]]])
 
 (defn root-handler
   [request]

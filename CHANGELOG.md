@@ -12,7 +12,14 @@
 * padding p-y (space for each line) in tasks page
 * never show admin menu for non-admin users
 * order commens by time
+* adjust log levels
 
+
+# 0.3.2-SNAPSHOT
+
+- started two branches
+    - features/scores
+    - features/stocks
 
 # 0.3.1 (2025-09-18)
 
