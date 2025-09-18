@@ -31,3 +31,10 @@
 (defn now []
   (jt/local-date-time))
 
+;; use in restriction.clj
+(defn local-time []
+  (-> (jt/local-time)
+      str
+      (subs 0 8)))
+
+

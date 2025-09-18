@@ -15,10 +15,18 @@
 
 # 0.3.0-SNAPSHOT
 
+- java25 on macos
 * restrictions
+    - system/min-interval-answers
+    - system/min-interval-comments
+    - system/min-interval-uploads
+    - system/max-comments
+    - system/max-uploads
+    - system/kp2-flash
+
 * improve admin page
 * padding y in tasks page
-- java25 on macos
+
 
 # 0.2.16 (2025-09-17)
 
