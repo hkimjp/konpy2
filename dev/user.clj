@@ -1,13 +1,13 @@
 (ns user
   (:require
    [babashka.fs :as fs]
-   [clojure.java.io :as io]
+   ; [clojure.java.io :as io]
    [clj-reload.core :as reload]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.util :refer [now]]
-   [hkimjp.konpy2.system :refer [start-system stop-system]]))
+   [hkimjp.konpy2.system :refer [start-system stop-system] :as sys]))
 
 (t/set-min-level! :debug)
 
@@ -87,4 +87,12 @@
     (println (slurp (fs/file file)))
     (fs/delete-if-exists (fs/file file))
     (fs/exists? (fs/file file)))
+  :rcf)
+
+(comment
+  sys/min-interval-answers
+  sys/min-interval-comments
+  sys/min-interval-uploads
+  sys/max-comments
+  sys/max-uploads
   :rcf)

@@ -1,34 +1,38 @@
 (ns hkimjp.konpy2.comments
   (:require
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [hx redirect]]
-   [hkimjp.konpy2.util :refer [now]]))
-
-; (def ^:private comments-to
-;   '[:find ?e ?author
-;     :in $ ?to
-;     :where
-;     [?e :comment/status "yes"]
-;     [?e :author ?author]
-;     [?e :to ?to]])
+   [hkimjp.konpy2.response :refer [hx redirect page]]
+   [hkimjp.konpy2.util :refer [now user]]
+   [hkimjp.konpy2.restrictions :as r]))
 
 (defn comment!
   "send comments to `e`.
-   returns clickable commenter's list"
-  [{{:keys [to author comment pid]} :params}]
+   returns clickable commenters list"
+  [{{:keys [to author comment pid]} :params :as request}]
   (t/log! {:level :info
            :id    "comment!"
            :data  {:to to :author author :comment comment :pid pid}})
-  (ds/put! {:comment/status "yes"
-            :author author
-            :to (parse-long to)
-            :comment comment
-            :updated (now)})
-  (redirect (str "/k/problem/" pid)))
+  (let [user (user request)]
+    (if (r/before-comment user)
+      (do
+        (ds/put! {:comment/status "yes"
+                  :author author
+                  :to (parse-long to)
+                  :comment comment
+                  :updated (now)})
+        (r/after-comment user)
+        (redirect (str "/k/problem/" pid)))
+      (page
+       [:div
+        [:div.text-2xl "Error"]
+        (when-let [msg (c/get (format "kp2:%s:flash" user))]
+          [:p.text-red-500 msg])
+        [:p  "じゅうぶんに回答・コメント読んでコメントしないと。"]]))))
 
 (defn hx-comment [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-comment"})
-  (hx [:div (:comment  (ds/pl (parse-long e)))]))
+  (hx [:div (:comment (ds/pl (parse-long e)))]))
 
 ; (hx-comment {:path-params {:e "47"}})

@@ -9,6 +9,16 @@
 
 (defonce server (atom nil))
 
+; moved to restrictions.clj
+; ;; period restriction in second.
+; ;; 86400 = (* 24 60 60)
+; (def min-interval-answers  (-> (or (env :min-interval-answer)   "60") parse-long))
+; (def min-interval-comments (-> (or (env :min-inverval-comments) "60") parse-long))
+; (def min-interval-uploads  (-> (or (env :min-inverval-uploads)  "60") parse-long))
+; (def max-comments (-> (or (env :max-comments) "86400") parse-long))
+; (def max-uploads  (-> (or (env :max-uploads)  "86400") parse-long))
+; (def kp2-flash (-> (or (env :flash) "3") parse-long))
+
 (defn start-jetty
   []
   (let [port (parse-long (or (env :port) "3000"))
@@ -30,7 +40,7 @@
            :data {:redis (env :redis)
                   :datascript (env :datascript)}})
   (try
-    (c/redis-server (env :redis))
+    (c/create-conn (env :redis))
     (ds/start-or-restore {:url (env :datascript)})
     (start-jetty)
     (catch Exception e
@@ -40,4 +50,3 @@
 (defn stop-system []
   (stop-server)
   (ds/stop))
-

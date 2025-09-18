@@ -5,19 +5,43 @@
 * scores.clj
 * stocks.clj
 * admin/toggle-status
-* time restrictions
 * digest namespace. used only from answers
 * effective upsert
 * emulate flash
 * testcodes as answers
 * show or doesn't show chatgtp user's answers
+* improve admin page
+* padding y in tasks page
 
 
-# 0.2.16 (2025-09-17) (2025-09-17)
+# 0.3.0 (2025-09-18)
+
+- java25 on macos
+- restrictions
+    - system/min-interval-comments
+    - system/min-interval-uploads
+    * system/max-comments
+    * system/max-uploads
+    - system/kp2-flash
+- restrict comments
+- FIXED cyclic load dependency by removing system things to restrictions namespace.
+
+  Cyclic load dependency: [ /hkimjp/konpy2/system ]->/hkimjp/konpy2/restrictions->/hkimjp/konpy2/comments->/hkimjp/konpy2/routes->[ /hkimjp/konpy2/system ]->/hkimjp/konpy2/main
+
+- FIXED: emulate flash.
+- restrict uploads
+- development on macos need poetry? without poetry, counld not find pytest.
+- added `poetry.lock`
+- added `pyproject.toml`
+- bump-version-local.sh treats `pyproject.toml`
+
+
+# 0.2.16 (2025-09-17)
 
 - **BREAKING** attr :test -> :testcode
 - fixed bug - validate/get-last-answer
 - validate/pytest
+- /usr/bin/pytest (/opt/homebrew/bin/pytest)
 
 # 0.2.15 (2025-09-17)
 

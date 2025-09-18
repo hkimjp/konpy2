@@ -7,7 +7,7 @@
   (page
    [:div.mx-4
     [:div.text-2xl.font-medium "Help"]
-    [:p "under construction"]
+    [:br]
     [:div.font-bold "tasks"]
     [:p.mx-4 "今週の Python 課題を表示する。回答はここから。
          他受講生の回答へのリンクもここ。リンクをたどってコメントする。"]

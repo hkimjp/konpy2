@@ -9,24 +9,18 @@
    [hkimjp.konpy2.comments :as comments]
    [hkimjp.konpy2.help :refer [help]]
    [hkimjp.konpy2.login :refer [login login! logout!]]
-   [hkimjp.konpy2.tasks :as tasks]
-   [hkimjp.konpy2.response :refer [page]]))
-
-(defn dummy [request]
-  (page [:div (:request-method request) " " (:uri request)]))
+   [hkimjp.konpy2.tasks :as tasks]))
 
 (defn routes []
   [["/" {:middleware [[wrap-defaults site-defaults]]}
     ["" {:get login :post login!}]
     ["logout" logout!]]
    ["/help"   {:get help}]
-   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]};; m/wrap-admin
+   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
     [""           {:get admin/problems}]
     ["problems"   {:get admin/problems}]
     ["new"        {:get admin/new  :post admin/upsert!}]
-    ["update/:e"  {:get admin/edit :post admin/upsert!}]
-    ;;["toggle/:e"  {:post admin/toggle-status!}]
-    ]
+    ["update/:e"  {:get admin/edit :post admin/upsert!}]]
    ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
     ["tasks"        {:get tasks/konpy}]
     ["problem/:e"   {:get tasks/problem}]
@@ -35,11 +29,8 @@
     ["comment"      {:post comments/comment!}]
     ["comment/:e"   {:get  comments/hx-comment}]
     ;;
-    ["scores"       {:get dummy}]
-    ["stocks"       {:get dummy}]]
-   ; ["/hx/" {:middleware [[wrap-defaults api-defaults] m/wrap-users]}
-   ;  ["hello" {:post hx/dummy-post}]]
-   ])
+    #_["scores"       {:get dummy}]
+    #_["stocks"       {:get dummy}]]])
 
 (defn root-handler
   [request]
