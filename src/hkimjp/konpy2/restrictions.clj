@@ -41,7 +41,7 @@
     true))
 
 (defn after-comment [user]
-  (c/setex   (key-comment user) min-interval-comments (local-time)))
+  (c/setex (key-comment user) min-interval-comments (local-time)))
 
 (defn before-upload [user]
   (if-let [last-submission (c/get (key-upload user))]
