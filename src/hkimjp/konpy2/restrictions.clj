@@ -48,15 +48,24 @@
     (c/setex (key-upload user) min-interval-uploads lt)
     (c/setex (uniq-name (key-upload user)) (* 24 60 60)) lt))
 
+;; FIXME:
+;; almost same with before-upload
 (defn before-comment [user]
   (when-let [last-submission (c/get (key-comment user))]
     (throw (Exception.
             (format "しっかりコメント読み書きするに %s 秒は短いだろ。最終コメント時間 %s"
                     min-interval-comments
-                    last-submission)))))
+                    last-submission))))
+  (when (< max-comments (count (c/keys (str (key-comment user) "-*"))))
+    (throw (Exception.
+            (format "一日の最大コメント数 %d を超えました。" max-comments)))))
 
+;; FIXME:
+;; almost same with after-upload
 (defn after-comment [user]
-  (c/setex (key-comment user) min-interval-comments (local-time)))
+  (let [lt (local-time)]
+    (c/setex (key-comment user) min-interval-comments lt)
+    (c/setex (uniq-name (key-comment user)) (* 24 60 60)) lt))
 
 (comment
   (before-comment "h")
