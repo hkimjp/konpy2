@@ -39,7 +39,7 @@
            :data {:redis (env :redis)
                   :datascript (env :datascript)}})
   (try
-    (c/redis-server (env :redis))
+    (c/create-conn (env :redis))
     (ds/start-or-restore {:url (env :datascript)})
     (start-jetty)
     (catch Exception e

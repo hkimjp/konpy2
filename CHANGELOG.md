@@ -23,6 +23,10 @@
     - system/max-uploads
     - system/kp2-flash
 - restrict comments
+- FIXME:
+
+  Cyclic load dependency: [ /hkimjp/konpy2/system ]->/hkimjp/konpy2/restrictions->/hkimjp/konpy2/comments->/hkimjp/konpy2/routes->[ /hkimjp/konpy2/system ]->/hkimjp/konpy2/main
+
 * restrict uploads
 * improve admin page
 * padding y in tasks page
