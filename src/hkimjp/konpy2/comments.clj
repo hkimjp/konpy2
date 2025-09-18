@@ -14,21 +14,22 @@
   (t/log! {:level :info
            :id    "comment!"
            :data  {:to to :author author :comment comment :pid pid}})
-  (if (r/before-comment (user request))
-    (do
-      (ds/put! {:comment/status "yes"
-                :author author
-                :to (parse-long to)
-                :comment comment
-                :updated (now)})
-      (r/after-comment (user request))
-      (redirect (str "/k/problem/" pid)))
-    (page
-     [:div
-      [:div.text-2xl "Error"
-       (when-let [msg (c/get (format "kp2:%s:flash" user))]
-         [:p.text-red-500 msg])
-       [:p  "じゅうぶんに回答・コメント読んでコメントしないと。"]]])))
+  (let [user (user request)]
+    (if (r/before-comment user)
+      (do
+        (ds/put! {:comment/status "yes"
+                  :author author
+                  :to (parse-long to)
+                  :comment comment
+                  :updated (now)})
+        (r/after-comment user)
+        (redirect (str "/k/problem/" pid)))
+      (page
+       [:div
+        [:div.text-2xl "Error"]
+        (when-let [msg (c/get (format "kp2:%s:flash" user))]
+          [:p.text-red-500 msg])
+        [:p  "じゅうぶんに回答・コメント読んでコメントしないと。"]]))))
 
 (defn hx-comment [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-comment"})

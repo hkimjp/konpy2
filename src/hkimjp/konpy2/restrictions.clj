@@ -9,17 +9,16 @@
 
 ;; period restriction in second.
 ;; 86400 = (* 24 60 60)
-(def min-interval-answers  (-> (or (env :min-interval-answer)   "60") parse-long))
+; (def min-interval-answers  (-> (or (env :min-interval-answer)   "60") parse-long))
 (def min-interval-comments (-> (or (env :min-inverval-comments) "60") parse-long))
-(def min-interval-uploads  (-> (or (env :min-inverval-uploads)  "60") parse-long))
+(def min-interval-uploads  (-> (or (env :min-inverval-uploads)  "30") parse-long))
+(def kp2-flash (-> (or (env :flash) "3") parse-long))
 (def max-comments (-> (or (env :max-comments) "86400") parse-long))
 (def max-uploads  (-> (or (env :max-uploads)  "86400") parse-long))
-(def kp2-flash (-> (or (env :flash) "3") parse-long))
 
 (defn- flash [user msg]
   (c/setex (format "kp2:%s:flash"  user) kp2-flash msg))
 
-; sys/kp2-flash
 (defn- key- [what user]
   (format "kp2:%s:%s" what user))
 
@@ -32,7 +31,7 @@
 (defn before-comment [user]
   (if-let [last-submission (c/get (key-comment user))]
     (do
-      (flash user (format "しっかりコメント読むには%s秒は短いだろ。最終コメント時間 => %s"
+      (flash user (format "しっかりコメント読むには%s秒は短いだろ。最終コメント時間 %s"
                           min-interval-comments
                           last-submission))
       false)
