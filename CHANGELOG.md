@@ -13,7 +13,7 @@
 * never show admin menu for non-admin users
 
 
-# 0.3.2-SNAPSHOT (2025-09-18) (2025-09-18)
+# 0.3.2 (2025-09-18) (2025-09-18) (2025-09-18)
 
 - added `util/iso`
 - route-handler does not know who is the user.
