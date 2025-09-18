@@ -13,7 +13,7 @@
 * never show admin menu for non-admin users
 
 
-# 0.3.2-SNAPSHOT
+# 0.3.1-SNAPSHOT (2025-09-18)
 
 - route-handler does not know who is the user.
 - changed
