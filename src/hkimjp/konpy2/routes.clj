@@ -23,9 +23,13 @@
     ["problems"   {:get admin/problems}]
     ["new"        {:get admin/new  :post admin/upsert!}]
     ["update/:e"  {:get admin/edit :post admin/upsert!}]]
-   ["/k/" {:middleware [[wrap-defaults site-defaults] m/wrap-users]}
+   ["/k/" {:middleware [[wrap-defaults site-defaults] #_m/wrap-users]}
     ["tasks"        {:get tasks/konpy}]
     ["problem/:e"   {:get tasks/problem}]
+    ;;
+    ["hx-answers"   {:get tasks/hx-answers}]
+    ["hx-comments"  {:get tasks/hx-comments}]
+    ;;
     ["answer"       {:post answers/answer!}]
     ["answer/:e/:p" {:get  answers/hx-answer}]
     ["comment"      {:post comments/comment!}]

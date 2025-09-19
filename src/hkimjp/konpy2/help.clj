@@ -5,7 +5,7 @@
 (defn help
   [_request]
   (page
-   [:div.mx-4
+   [:div.m-4
     [:div.text-2xl.font-medium "Help"]
     [:br]
     [:div.font-bold "tasks"]

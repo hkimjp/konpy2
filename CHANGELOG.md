@@ -17,9 +17,18 @@
 * flag skip-validation
 * flag loosen-restriction
 
-# 0.3.3-SNAPSHOT
+# 0.3.3-SNAPSHOT (2025-09-19)
 
-* not work on eq.local
+- use `java-time.api/before?` instead of `jt/before?` to avoid the error,
+
+  :Unknown predicate 'jt/before? in [(jt/before? ?now ?updated)])
+
+- resume to work on dq.local (was: not work on eq.local)
+- added `tasks/todays-answers` and `tasks/todays-comments`
+- added routes
+    ["hx-answers"]  {:get tasks/hx-answers}
+    ["hx-comments"] {:get "tasks/hx-comments"}
+
 
 # 0.3.2 (2025-09-18)
 
