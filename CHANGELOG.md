@@ -15,17 +15,18 @@
 * reports who uploads now
 * server push
 * flag skip-validation
-* flag loosen-restriction
 
-# 0.3.4-SNAPSHOT
 
+# 0.3.4-SNAPSHOT (2025-09-19)
+
+- flag loosen-restriction by .env or konpy.env
 - bufix validate/pytest
 
       (when-not (empty? testcode)
         (t/log! {:level :error :data {:testcode testcode
                                       :empty? (empty? testcode)}})
 
-* sort todays-answers
+- sort todays-answers
 
 # 0.3.3 (2025-09-19)
 
