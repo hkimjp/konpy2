@@ -25,11 +25,11 @@
       (r/after-comment author)
       (redirect (str "/k/problem/" pid))
       (catch Exception ex
-        (t/log! {:level :warn :data {:user author :ex ex}})
+        (t/log! {:level :warn :data {:user author :ex (.getMessage ex)}})
         (page
          [:div
           [:div.text-2xl "Error"]
-          [:p.text-red-600  ex]])))))
+          [:p.text-red-600  (.getMessage ex)]])))))
 
 (defn hx-comment [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-comment"})

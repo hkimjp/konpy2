@@ -26,7 +26,7 @@
                      [?e :to ?to]])
 
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
-  (t/log! {:level :debug :id "hx-answer" :data e})
+  (t/log! {:level :debug :id "hx-answer" :msg (str "e " e)})
   (let [e (parse-long e)
         ans (ds/pl e)
         gpt-ans (-> (ds/qq gpt (parse-long p)) ffirst)
@@ -55,7 +55,7 @@
           [:input {:type "hidden" :name "to" :value e}]
           [:input {:type "hidden" :name "author" :value (user request)}]
           [:input {:type "hidden" :name "pid" :value p}]
-          [:textarea.border-1.p-2 {:class "w-2/5" :name "comment"}]
+          [:textarea.border-1.p-2 {:class "w-2/3" :name "comment"}]
           [:button {:class btn} "send"]]])))
 
 (defn answer! [{{:keys [file e]} :params :as request}]
@@ -78,7 +78,7 @@
       (r/after-upload author)
       (redirect (str "/k/problem/" e))
       (catch Exception ex
-        (t/log! {:level :warn :data {:exception ex}})
+        (t/log! {:level :warn :data {:exception (.getMessage ex)}})
         (page
          [:div
           [:div.text-2xl "Error"]

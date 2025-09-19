@@ -13,11 +13,29 @@
 * never show admin menu for non-admin users
 * darken authors except me
 * reports who uploads now
-* server push
+* web server push
 * flag skip-validation
-* flag loosen-restriction
+* good/bad to comments
+* restrict empty comments
+* unify answers/comments
 
-# 0.3.3 (2025-09-19) (2025-09-19)
+
+# 0.3.4 (2025-09-20)
+
+- reconsidered t/log! level, facilities
+- let's use redis-cli `flushall` in development
+- showed commemt to whom?
+- fixed: not `e`, should `(.getMessage e)`. error messages are too noisy.
+- flag loosen-restriction by .env or konpy.env
+- bufix validate/pytest
+
+      (when-not (empty? testcode)
+        (t/log! {:level :error :data {:testcode testcode
+                                      :empty? (empty? testcode)}})
+
+- sort todays-answers
+
+# 0.3.3 (2025-09-19)
 
 - use `java-time.api/before?` instead of `jt/before?` to avoid the error,
 

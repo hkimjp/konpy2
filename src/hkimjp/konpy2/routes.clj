@@ -13,17 +13,17 @@
    [hkimjp.konpy2.stocks :as stocks]
    [hkimjp.konpy2.tasks :as tasks]))
 
-(defn routes []
-  [["/" {:middleware [[wrap-defaults site-defaults]]}
+(def routes
+  [["/" {:middleware []}
     ["" {:get login :post login!}]
     ["logout" logout!]]
    ["/help"   {:get help}]
-   ["/admin/" {:middleware [[wrap-defaults site-defaults] m/wrap-admin]}
+   ["/admin/" {:middleware [m/wrap-admin]}
     [""           {:get admin/problems}]
     ["problems"   {:get admin/problems}]
     ["new"        {:get admin/new  :post admin/upsert!}]
     ["update/:e"  {:get admin/edit :post admin/upsert!}]]
-   ["/k/" {:middleware [[wrap-defaults site-defaults] #_m/wrap-users]}
+   ["/k/" {:middleware [m/wrap-users]}
     ["tasks"        {:get tasks/konpy}]
     ["problem/:e"   {:get tasks/problem}]
     ;;
@@ -43,7 +43,7 @@
   (t/log! :info (str (:request-method request) " - " (:uri request)))
   (let [handler
         (rr/ring-handler
-         (rr/router (routes))
+         (rr/router routes)
          (rr/routes
           (rr/create-resource-handler {:path "/"})
           (rr/create-default-handler
@@ -57,6 +57,6 @@
             :not-acceptable
             (constantly {:status 406
                          :body "not acceptable"})}))
-         {:middleware []})]
+         {:middleware [[wrap-defaults site-defaults]]})]
     (handler request)))
 
