@@ -20,7 +20,7 @@
 * unify answers/comments
 
 
-# 0.3.4-SNAPSHOT
+# 0.3.4 (2025-09-20)
 
 - reconsidered t/log! level, facilities
 - let's use redis-cli `flushall` in development
