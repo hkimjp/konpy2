@@ -100,7 +100,7 @@
   (t/log! {:level :info :id "hx-answers"})
   (try
     (hx [:ul.list-disc.mx-4
-         (for [{:keys [week num author updated]} (todays-answers)]
+         (for [{:keys [week num author updated]} (sort-by :e (todays-answers))]
            (let [updated (subs (str updated) 0 20)]
              [:li (format "%d-%d %s %s" week num author updated)]))])
     (catch Exception e
@@ -128,7 +128,7 @@
   (t/log! {:level :info :id "hx-comments"})
   (try
     (hx [:ul.list-disc.mx-4
-         (for [{:keys [week num author updated]} (todays-comments)]
+         (for [{:keys [week num author updated]} (sort-by :e (todays-comments))]
            (let [updated (subs (str updated) 0 20)]
              [:li (format "%d-%d %s %s" week num author updated)]))])
     (catch Exception e

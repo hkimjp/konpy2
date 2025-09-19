@@ -128,7 +128,9 @@
     (try
       (ruff answer)
       (doctest answer)
-      (when (some? testcode)
+      (when-not (empty? testcode)
+        (t/log! {:level :error :data {:testcode testcode
+                                      :empty? (empty? testcode)}})
         (pytest answer testcode))
       (catch Exception e
         (t/log! {:level :warn
