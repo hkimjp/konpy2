@@ -15,10 +15,15 @@
 * reports who uploads now
 * server push
 * flag skip-validation
+* good/bad to comments
 
 
 # 0.3.4-SNAPSHOT (2025-09-19)
 
+* use redis flushall in development
+* commemt to whom?
+* unify answers/comments
+- fixed: not `e`, should `(.getMessage e)`. error messages are too noisy.
 - flag loosen-restriction by .env or konpy.env
 - bufix validate/pytest
 

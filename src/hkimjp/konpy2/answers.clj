@@ -78,7 +78,7 @@
       (r/after-upload author)
       (redirect (str "/k/problem/" e))
       (catch Exception ex
-        (t/log! {:level :warn :data {:exception ex}})
+        (t/log! {:level :warn :data {:exception (.getMessage ex)}})
         (page
          [:div
           [:div.text-2xl "Error"]
