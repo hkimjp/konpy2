@@ -96,9 +96,6 @@
                         [?to :num ?num]]
                       (jt/adjust date-time (jt/local-time 0)))))
 
-(todays-answers)
-;; (-> (todays-answers) count)
-
 (defn hx-answers [request]
   (t/log! {:level :info :id "hx-answers"})
   (try
@@ -108,14 +105,6 @@
              [:li (format "%d-%d %s %s" week num author updated)]))])
     (catch Exception e
       (t/log! :error (.getMessage e)))))
-
-(comment
-  (hx-answers nil)
-  (todays-answers)
-  (sort-by :e (todays-answers))
-  (for [{:keys [author week num updated]} (sort-by :e (todays-answers))]
-    [:li (format "%d-%d %s %s" week num author updated)])
-  :rcf)
 
 (defn- todays-comments
   "comments after `date-time`"
