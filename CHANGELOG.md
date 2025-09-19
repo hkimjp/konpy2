@@ -17,7 +17,7 @@
 * flag skip-validation
 * flag loosen-restriction
 
-# 0.3.3-SNAPSHOT (2025-09-19)
+# 0.3.3 (2025-09-19) (2025-09-19)
 
 - use `java-time.api/before?` instead of `jt/before?` to avoid the error,
 
