@@ -19,7 +19,7 @@
   (t/log! {:level :info :id "problem-form"})
   (t/log! {:level :debug :data params})
   (t/log! {:level :debug :data {:id id :status status}})
-  [:div
+  [:div.m-4
    [:div.text-2xl.font-bold "Problem"]
    [:form.mx-4 {:method "post"}
     (h/raw (anti-forgery-field))
@@ -76,22 +76,10 @@
       first
       (abbrev n)))
 
-; (defn- div-problems []
-;   (t/log! :debug "div-problems")
-;   [:div
-;    (for [p (->> (ds/qq get-problems)
-;                 (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
-;      [:div
-;       [:a.hover:underline {:href (str "/admin/update/" (:e p))}
-;        [:div.flex.gap-4
-;         [:div (:week p) "-" (:num p)]
-;         [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
-;         [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])])
-
 (defn problems [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
   (page
-   [:div
+   [:div.m-4
     [:div.text-2xl.font-bold "Problems"]
     [:div.m-4
      [:div [:a {:class btn :href "/admin/new"} "new"]]

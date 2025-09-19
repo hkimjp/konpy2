@@ -13,10 +13,9 @@
 
 :db/id id
 :answer/status "yes"|"no"
-:to problem/id
 :author
+:to problem/id
 :answer s
-:digest n or s?
 :updated jt
 
 
