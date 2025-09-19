@@ -13,7 +13,7 @@
    [hkimjp.konpy2.stocks :as stocks]
    [hkimjp.konpy2.tasks :as tasks]))
 
-(def routes
+(defn routes []
   [["/" {:middleware []}
     ["" {:get login :post login!}]
     ["logout" logout!]]
@@ -43,7 +43,7 @@
   (t/log! :info (str (:request-method request) " - " (:uri request)))
   (let [handler
         (rr/ring-handler
-         (rr/router routes)
+         (rr/router (routes))
          (rr/routes
           (rr/create-resource-handler {:path "/"})
           (rr/create-default-handler

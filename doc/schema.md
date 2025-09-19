@@ -26,6 +26,7 @@
 :author user
 :to answer/id
 :comment s
+:pt pt
 :updated jt
 
 

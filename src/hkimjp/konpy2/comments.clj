@@ -10,10 +10,10 @@
 (defn comment!
   "send comments to `e`.
    returns clickable commenters list"
-  [{{:keys [to author comment pid]} :params :as request}]
+  [{{:keys [to author comment pid pt]} :params :as request}]
   (t/log! {:level :info
            :id    "comment!"
-           :data  {:to to :author author :comment comment :pid pid}})
+           :data  {:to to :author author :comment comment :pid pid :pt pt}})
   (let [author (user request)]
     (try
       (r/before-comment author)
@@ -21,6 +21,7 @@
                 :author author
                 :to (parse-long to)
                 :comment comment
+                :pt pt
                 :updated (now)})
       (r/after-comment author)
       (redirect (str "/k/problem/" pid))
