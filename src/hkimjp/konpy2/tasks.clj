@@ -33,14 +33,14 @@
               [:span.mr-4 week "-" num] [:span problem]]]))
     [:div.text-2xl "本日の Konpy"]
     [:p "under construction, should be mixed."]
-    [:div.hover:underline {:hx-get "/k/hx-answers"
+    [:div.hover:underline {:hx-get    "/k/hx-answers"
                            :hx-target "#answers"
-                           :hx-swap "innerHTML"} "回答"]
-    [:div#answers "回答"]
-    [:div.hover:underline {:hx-get "/k/hx-comments"
+                           :hx-swap   "innerHTML"} "回答"]
+    [:div#answers "[***]"]
+    [:div.hover:underline {:hx-get    "/k/hx-comments"
                            :hx-target "#comments"
-                           :hx-swap "innerHTML"} "コメント"]
-    [:div#comments "コメント"]]))
+                           :hx-swap   "innerHTML"} "コメント"]
+    [:div#comments "[***]"]]))
 
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id
@@ -89,8 +89,8 @@
   "answers after `date-time`"
   ([] (todays-answers (jt/local-date-time)))
   ([date-time]
-   (ds/qq '[:find ?e ?author ?week ?num ?updated
-            :keys e  author  week  num  updated
+   (ds/qq '[:find ?e ?author ?week ?num
+            :keys e  author  week  num
             :in $ ?now
             :where
             [?e :answer/status "yes"]
@@ -102,7 +102,20 @@
             [?to :num ?num]]
           (jt/adjust date-time (jt/local-time 0)))))
 
-; (todays-answers)
+(defn hx-answers [request]
+  (t/log! {:level :info :id "hx-answers"})
+  (let [answers (todays-answers)]
+    (t/log! :debug (str todays-answers))
+    (hx [:div "answers3"
+         [:p (str answers)]])))
+
+(comment
+  (hx-answers nil)
+  (todays-answers)
+  (sort-by :e (todays-answers))
+  (for [{:keys [author week num updated]} (sort-by :e (todays-answers))]
+    [:li (format "%d-%d %s %s" week num author updated)])
+  :rcf)
 
 (defn- todays-comments
   "comments after `date-time`"
@@ -124,10 +137,8 @@
 
 ; (todays-comments (jt/local-date-time 2025 9 18))
 
-(defn hx-answers [request]
-  (t/log! {:level :info :id "hx-answers"})
-  (hx [:div "answers"]))
-
 (defn hx-comments [request]
   (t/log! {:level :info :id "hx-comments"})
   (hx [:div "comments"]))
+
+
