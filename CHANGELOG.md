@@ -13,6 +13,13 @@
 * never show admin menu for non-admin users
 * darken authors except me
 * reports who uploads now
+* server push
+* flag skip-validation
+* flag loosen-restriction
+
+# 0.3.3-SNAPSHOT
+
+* not work on eq.local
 
 # 0.3.2 (2025-09-18)
 

@@ -29,6 +29,10 @@
 .env
 .nrepl-port
 .repl-port
+.pytest_cache
+.ruff_cache
+
 resources/public/assets/css/output.css
 /storage/*
 !/storage/.keep
+/systemd
