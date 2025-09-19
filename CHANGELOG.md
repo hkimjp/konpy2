@@ -13,16 +13,18 @@
 * never show admin menu for non-admin users
 * darken authors except me
 * reports who uploads now
-* server push
+* web server push
 * flag skip-validation
 * good/bad to comments
-
-
-# 0.3.4-SNAPSHOT (2025-09-19)
-
-* use redis flushall in development
-* commemt to whom?
+* restrict empty comments
 * unify answers/comments
+
+
+# 0.3.4-SNAPSHOT
+
+- reconsidered t/log! level, facilities
+- let's use redis-cli `flushall` in development
+- showed commemt to whom?
 - fixed: not `e`, should `(.getMessage e)`. error messages are too noisy.
 - flag loosen-restriction by .env or konpy.env
 - bufix validate/pytest

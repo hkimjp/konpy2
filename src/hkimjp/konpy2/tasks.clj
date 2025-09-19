@@ -31,8 +31,7 @@
              [:a.hover:underline
               {:href (str "/k/problem/" e)}
               [:span.mr-4 week "-" num] [:span problem]]]))
-    [:div.text-2xl "本日の Konpy"]
-    [:p "under construction, should be mixed."]
+    [:div.text-2xl "本日の回答・コメント"]
     [:div.hover:underline {:hx-get    "/k/hx-answers"
                            :hx-target "#answers"
                            :hx-swap   "innerHTML"} "回答"]
@@ -50,7 +49,7 @@
                                [?e :author ?author]])
 
 (defn- answerers [pid]
-  (t/log! {:level :info :id "answerers" :data pid})
+  (t/log! {:level :debug :id "answerers" :msg (str "pid " pid)})
   [:div
    [:div.font-bold "answers"]
    (into [:div.inline.my-4]
@@ -62,8 +61,8 @@
             [:span.hover:underline user]]))
    [:div#answer "[answer]"]])
 
-(defn problem [{{:keys [e]} :path-params}]
-  (t/log! {:level :info :id "problem" :data e})
+(defn problem [{{:keys [e]} :path-params :as request}]
+  (t/log! {:level :info :id "problem" :msg (user request)})
   (let [eid (parse-long e)
         p (ds/pl eid)]
     (page
@@ -97,12 +96,12 @@
                       (jt/adjust date-time (jt/local-time 0)))))
 
 (defn hx-answers [request]
-  (t/log! {:level :info :id "hx-answers"})
+  (t/log! {:level :info :id "hx-answers" :msg (user request)})
   (try
     (hx [:ul.list-disc.mx-4
          (for [{:keys [week num author updated]} (sort-by :e (todays-answers))]
-           (let [updated (subs (str updated) 0 20)]
-             [:li (format "%d-%d %s %s" week num author updated)]))])
+           (let [updated (subs (str updated) 11 19)]
+             [:li (format "%d-%d %s %s" week num updated author)]))])
     (catch Exception e
       (t/log! :error (.getMessage e)))))
 
@@ -110,8 +109,8 @@
   "comments after `date-time`"
   ([] (todays-comments (jt/local-date-time)))
   ([date-time]
-   (ds/qq '[:find ?e ?author ?week ?num ?updated
-            :keys e  author  week  num  updated
+   (ds/qq '[:find ?e ?author ?week ?num ?updated ?commentee
+            :keys e  author  week  num  updated  commentee
             :in $ ?now
             :where
             [?e :comment/status "yes"]
@@ -119,18 +118,18 @@
             [(java-time.api/before? ?now ?updated)]
             [?e :to ?to]
             [?e :author ?author]
+            [?to :author ?commentee]
             [?to :to ?p]
             [?p :week ?week]
             [?p :num ?num]]
           (jt/adjust date-time (jt/local-time 0)))))
 
 (defn hx-comments [request]
-  (t/log! {:level :info :id "hx-comments"})
+  (t/log! {:level :info :id "hx-comments" :msg (user request)})
   (try
     (hx [:ul.list-disc.mx-4
-         (for [{:keys [week num author updated]} (sort-by :e (todays-comments))]
-           (let [updated (subs (str updated) 0 20)]
-             [:li (format "%d-%d %s %s" week num author updated)]))])
+         (for [{:keys [week num author updated commentee]} (sort-by :e (todays-comments))]
+           (let [updated (subs (str updated) 11 19)]
+             [:li (format "%d-%d %s %s → %s" week num updated author commentee)]))])
     (catch Exception e
       (t/log! :error (.getMessage e)))))
-
