@@ -1,10 +1,31 @@
 (ns hkimjp.konpy2.validate
   (:require
-   [clojure.string :as str]
    [babashka.fs :as fs]
+   [clojure.string :as str]
+   [environ.core :refer [env]]
    [jx.java.shell :refer [timeout-sh]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]))
+
+(defn- ruff-path []
+  (some #(when (fs/exists? %) %)
+        ["/opt/homebrew/bin/ruff"
+         "/home/ubuntu/.local/bin/ruff"
+         (str (env :home) "/.local/bin/ruff")
+         "/snap/bin/ruff"]))
+
+(defn- python-path []
+  (some #(when (fs/exists? %) %)
+        [(str (env :home) "/workspace/konpy2/.venv/bin/python3")
+         "/opt/homebrew/bin/python3"
+         "/usr/local/bin/python3"
+         "/usr/bin/python3"]))
+
+(defn- pytest-path []
+  (some #(when (fs/exists? %) %)
+        [(str (env :home) "/workspace/konpy2/.venv/bin/pytest")
+         "/opt/homebrew/bin/pytest"
+         "/usr/bin/pytest"]))
 
 (def ^:private timeout 10)
 
@@ -34,8 +55,6 @@
                :id "get-last-answer"
                :msg (.getMessage e)}))))
 
-; (get-last-answer "hkimura" 0 0)
-
 (defn- expand-includes
   "expand `#include` recursively."
   [author answer]
@@ -63,12 +82,6 @@
     (spit (fs/file f) answer)
     f))
 
-(defn- ruff-path []
-  (some #(when (fs/exists? %) %)
-        ["/opt/homebrew/bin/ruff"
-         "/home/ubuntu/.local/bin/ruff"
-         "/snap/bin/ruff"]))
-
 (defn- ruff
   "ruff requires '\n' at the end of the code"
   [answer]
@@ -80,13 +93,6 @@
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "using VScode/Ruff?")))))
-
-(defn- python-path []
-  (some #(when (fs/exists? %) %)
-        ["/Users/hkim/workspace/github.com/hkimjp/konpy2/.venv/bin/python3"
-         "/opt/homebrew/bin/python3"
-         "/usr/local/bin/python3"
-         "/usr/bin/python3"]))
 
 (defn- has-doctest? [answer]
   (re-find #">>> " (-> answer str/split-lines str/join)))
@@ -102,12 +108,6 @@
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "doctest failed")))))
-
-(defn- pytest-path []
-  (some #(when (fs/exists? %) %)
-        ["/Users/hkim/workspace/github.com/hkimjp/konpy2/.venv/bin/pytest"
-         "/opt/homebrew/bin/pytest"
-         "/usr/bin/pytest"]))
 
 (defn- pytest [answer testcode]
   (t/log! {:level :info :id "pytest"})

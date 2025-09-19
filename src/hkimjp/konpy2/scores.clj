@@ -6,4 +6,8 @@
 
 (defn scores [request]
   (t/log! {:level :info :msg (str "scores " (user request))})
-  (page [:div "scores"]))
+  (page
+   [:div.m-4
+    [:div.text-2xl "Scores"]
+    [:p "under construction"]]))
+

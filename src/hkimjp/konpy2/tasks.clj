@@ -1,11 +1,12 @@
 (ns hkimjp.konpy2.tasks
   (:require
    [hiccup2.core :as h]
+   [java-time.api :as jt]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page]]
-   [hkimjp.konpy2.util :refer [btn input-box user week]]))
+   [hkimjp.konpy2.response :refer [page hx]]
+   [hkimjp.konpy2.util :refer [btn input-box user week now]]))
 
 (defn- wk [] (max 0 (week)))
 
@@ -21,7 +22,7 @@
 (defn konpy [request]
   (t/log! {:level :info :msg (str "tasks/konpy " (user request))})
   (page
-   [:div
+   [:div.m-4
     [:div.text-2xl "今週の Python"]
     (into [:div.m-4]
           (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems (wk))
@@ -29,7 +30,17 @@
             [:div
              [:a.hover:underline
               {:href (str "/k/problem/" e)}
-              [:span.mr-4 week "-" num] [:span problem]]]))]))
+              [:span.mr-4 week "-" num] [:span problem]]]))
+    [:div.text-2xl "本日の Konpy"]
+    [:p "under construction, should be mixed."]
+    [:div.hover:underline {:hx-get    "/k/hx-answers"
+                           :hx-target "#answers"
+                           :hx-swap   "innerHTML"} "回答"]
+    [:div#answers "[***]"]
+    [:div.hover:underline {:hx-get    "/k/hx-comments"
+                           :hx-target "#comments"
+                           :hx-swap   "innerHTML"} "コメント"]
+    [:div#comments "[***]"]]))
 
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id
@@ -37,8 +48,6 @@
                                [?e :answer/status "yes"]
                                [?e :to ?id]
                                [?e :author ?author]])
-
-; (ds/qq fetch-answers 10)
 
 (defn- answerers [pid]
   (t/log! {:level :info :id "answerers" :data pid})
@@ -72,6 +81,67 @@
         [:input {:class input-box :type "file" :accept ".py" :name "file"}]
         [:button {:class btn} "upload"]]]])))
 
-(defn post-comment [{params :params}]
-  (t/log! {:level :info :id "post-comment" :data params})
-  (page [:div "under construction"]))
+(defn todays-answers
+  ([] (todays-answers (jt/local-date-time)))
+  ([date-time] (ds/qq '[:find ?e ?author ?week ?num ?updated
+                        :keys e  author  week  num  updated
+                        :in $ ?now
+                        :where
+                        [?e :answer/status "yes"]
+                        [?e :updated ?updated]
+                        [(java-time.api/before? ?now ?updated)]
+                        [?e :to ?to]
+                        [?e :author ?author]
+                        [?to :week ?week]
+                        [?to :num ?num]]
+                      (jt/adjust date-time (jt/local-time 0)))))
+
+(todays-answers)
+;; (-> (todays-answers) count)
+
+(defn hx-answers [request]
+  (t/log! {:level :info :id "hx-answers"})
+  (try
+    (hx [:ul.list-disc.mx-4
+         (for [{:keys [week num author updated]} (todays-answers)]
+           (let [updated (subs (str updated) 0 20)]
+             [:li (format "%d-%d %s %s" week num author updated)]))])
+    (catch Exception e
+      (t/log! :error (.getMessage e)))))
+
+(comment
+  (hx-answers nil)
+  (todays-answers)
+  (sort-by :e (todays-answers))
+  (for [{:keys [author week num updated]} (sort-by :e (todays-answers))]
+    [:li (format "%d-%d %s %s" week num author updated)])
+  :rcf)
+
+(defn- todays-comments
+  "comments after `date-time`"
+  ([] (todays-comments (jt/local-date-time)))
+  ([date-time]
+   (ds/qq '[:find ?e ?author ?week ?num ?updated
+            :keys e  author  week  num  updated
+            :in $ ?now
+            :where
+            [?e :comment/status "yes"]
+            [?e :updated ?updated]
+            [(java-time.api/before? ?now ?updated)]
+            [?e :to ?to]
+            [?e :author ?author]
+            [?to :to ?p]
+            [?p :week ?week]
+            [?p :num ?num]]
+          (jt/adjust date-time (jt/local-time 0)))))
+
+(defn hx-comments [request]
+  (t/log! {:level :info :id "hx-comments"})
+  (try
+    (hx [:ul.list-disc.mx-4
+         (for [{:keys [week num author updated]} (todays-comments)]
+           (let [updated (subs (str updated) 0 20)]
+             [:li (format "%d-%d %s %s" week num author updated)]))])
+    (catch Exception e
+      (t/log! :error (.getMessage e)))))
+

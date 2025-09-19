@@ -1,14 +1,46 @@
 (ns user
   (:require
-   [babashka.fs :as fs]
+   ; [babashka.fs :as fs]
    ; [clojure.java.io :as io]
    [clj-reload.core :as reload]
+   [java-time.api :as jt]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.util :refer [now]]
    [hkimjp.konpy2.system :refer [start-system stop-system] :as sys]))
 
+;------------------------
+
+(comment
+  (jt/local-date-time)
+  (str (jt/local-date))
+
+  (str jt/local-date-time)
+  (jt/local-date-time 2025 9 18)
+  (now)
+
+  (jt/truncate-to (jt/local-date-time) :days)
+  (jt/= (jt/truncate-to (jt/local-date-time) :days)
+        (jt/truncate-to (jt/local-date-time) :days))
+
+  (jt/adjust (jt/local-date-time 2015 9 28 10 15) (jt/local-time 6))
+  (jt/adjust (jt/local-date-time) (jt/local-time 0))
+
+  (-> (ds/qq '[:find ?author ?to ?updated
+               :in $ ?now
+               :keys author to updated
+               :where
+               [?e :answer/status "yes"]
+               [?e :updated ?updated]
+               [(jt/before? ?now ?updated)]
+               [?e :to ?to]
+               [?e :author ?author]]
+             (jt/adjust (jt/local-date-time) (jt/local-time 0)))
+      count)
+  :rcf)
+
+;------------------------
 (t/set-min-level! :debug)
 
 (start-system)
@@ -79,20 +111,5 @@
     assert set(eqn2(1, -6, 13)) == {(3 + 2j), (3 - 2j)}
     assert set(eqn2(3, -6, 6)) == {(1 + 1j), (1 - 1j)}"]])
 
-  :rcf)
-
-(comment
-  (let [file (fs/create-temp-file {:suffix ".py"})]
-    (spit (fs/file file) "print('use bb?\nhow is it?\n')")
-    (println (slurp (fs/file file)))
-    (fs/delete-if-exists (fs/file file))
-    (fs/exists? (fs/file file)))
-  :rcf)
-
-(comment
-  sys/min-interval-answers
-  sys/min-interval-comments
-  sys/min-interval-uploads
-  sys/max-comments
-  sys/max-uploads
+  (c/ping)
   :rcf)

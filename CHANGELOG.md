@@ -11,9 +11,26 @@
 * show or doesn't show chatgtp user's answers
 * padding p-y (space for each line) in tasks page
 * never show admin menu for non-admin users
+* darken authors except me
+* reports who uploads now
+* server push
+* flag skip-validation
+* flag loosen-restriction
+
+# 0.3.3 (2025-09-19) (2025-09-19)
+
+- use `java-time.api/before?` instead of `jt/before?` to avoid the error,
+
+  :Unknown predicate 'jt/before? in [(jt/before? ?now ?updated)])
+
+- resume to work on dq.local (was: not work on eq.local)
+- added `tasks/todays-answers` and `tasks/todays-comments`
+- added routes
+    ["hx-answers"]  {:get tasks/hx-answers}
+    ["hx-comments"] {:get "tasks/hx-comments"}
 
 
-# 0.3.2 (2025-09-18) (2025-09-18) (2025-09-18)
+# 0.3.2 (2025-09-18)
 
 - added `util/iso`
 - route-handler does not know who is the user.
@@ -23,9 +40,9 @@
     - MAX_UPLOADS  = 2
 - order comments chronologically
 - adjust log levels
-* restrictions/before-* check uploads/comments frequencies and counts
-* restrictions/after-* reloads the process time and update counter
-* use try~catch to simplify codes
+- restrictions/before-* check uploads/comments frequencies and counts
+- restrictions/after-* reloads the process time and update counter
+- changed: use try~catch to simplify codes
 
 # 0.3.1 (2025-09-18)
 
