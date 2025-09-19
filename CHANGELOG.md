@@ -19,6 +19,10 @@
 
 # 0.3.3-SNAPSHOT (2025-09-19)
 
+- use `java-time.api/before?` instead of `jt/before?` to avoid the error,
+
+  :Unknown predicate 'jt/before? in [(jt/before? ?now ?updated)])
+
 - resume to work on dq.local (was: not work on eq.local)
 - added `tasks/todays-answers` and `tasks/todays-comments`
 - added routes

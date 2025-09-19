@@ -6,7 +6,7 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx]]
-   [hkimjp.konpy2.util :refer [btn input-box user week]]))
+   [hkimjp.konpy2.util :refer [btn input-box user week now]]))
 
 (defn- wk [] (max 0 (week)))
 
@@ -81,33 +81,33 @@
         [:input {:class input-box :type "file" :accept ".py" :name "file"}]
         [:button {:class btn} "upload"]]]])))
 
-; (defn post-comment [{params :params}]
-;   (t/log! {:level :info :id "post-comment" :data params})
-;   (page [:div "under construction"]))
-
-(defn- todays-answers
-  "answers after `date-time`"
+(defn todays-answers
   ([] (todays-answers (jt/local-date-time)))
-  ([date-time]
-   (ds/qq '[:find ?e ?author ?week ?num
-            :keys e  author  week  num
-            :in $ ?now
-            :where
-            [?e :answer/status "yes"]
-            [?e :updated ?updated]
-            [(jt/before? ?now ?updated)]
-            [?e :to ?to]
-            [?e :author ?author]
-            [?to :week ?week]
-            [?to :num ?num]]
-          (jt/adjust date-time (jt/local-time 0)))))
+  ([date-time] (ds/qq '[:find ?e ?author ?week ?num ?updated
+                        :keys e  author  week  num  updated
+                        :in $ ?now
+                        :where
+                        [?e :answer/status "yes"]
+                        [?e :updated ?updated]
+                        [(java-time.api/before? ?now ?updated)]
+                        [?e :to ?to]
+                        [?e :author ?author]
+                        [?to :week ?week]
+                        [?to :num ?num]]
+                      (jt/adjust date-time (jt/local-time 0)))))
+
+(todays-answers)
+;; (-> (todays-answers) count)
 
 (defn hx-answers [request]
   (t/log! {:level :info :id "hx-answers"})
-  (let [answers (todays-answers)]
-    (t/log! :debug (str todays-answers))
-    (hx [:div "answers3"
-         [:p (str answers)]])))
+  (try
+    (hx [:ul.list-disc.mx-4
+         (for [{:keys [week num author updated]} (todays-answers)]
+           (let [updated (subs (str updated) 0 20)]
+             [:li (format "%d-%d %s %s" week num author updated)]))])
+    (catch Exception e
+      (t/log! :error (.getMessage e)))))
 
 (comment
   (hx-answers nil)
@@ -127,7 +127,7 @@
             :where
             [?e :comment/status "yes"]
             [?e :updated ?updated]
-            [(jt/before? ?now ?updated)]
+            [(java-time.api/before? ?now ?updated)]
             [?e :to ?to]
             [?e :author ?author]
             [?to :to ?p]
@@ -135,10 +135,13 @@
             [?p :num ?num]]
           (jt/adjust date-time (jt/local-time 0)))))
 
-; (todays-comments (jt/local-date-time 2025 9 18))
-
 (defn hx-comments [request]
   (t/log! {:level :info :id "hx-comments"})
-  (hx [:div "comments"]))
-
+  (try
+    (hx [:ul.list-disc.mx-4
+         (for [{:keys [week num author updated]} (todays-comments)]
+           (let [updated (subs (str updated) 0 20)]
+             [:li (format "%d-%d %s %s" week num author updated)]))])
+    (catch Exception e
+      (t/log! :error (.getMessage e)))))
 
