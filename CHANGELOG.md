@@ -17,13 +17,14 @@
 * confirm empty comments
 * show his/her comments on scores page. admin can see them. with hx.
 * restrict comments to him/her-self
-* link to stock
 
 
 # 0.3.6 (2025-09-20)
 
+- removed "under construction" from `help.clj`
 - fixed - display author name for his/her answers.
 - can stock and display a list of the first lines of the stocked text.
+- link to stocks
 
 # 0.3.5 (2025-09-20)
 

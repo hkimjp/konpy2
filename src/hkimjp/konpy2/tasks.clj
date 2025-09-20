@@ -32,14 +32,19 @@
               {:href (str "/k/problem/" e)}
               [:span.mr-4 week "-" num] [:span problem]]]))
     [:div.text-2xl "本日の回答・コメント"]
-    [:div.hover:underline {:hx-get    "/k/hx-answers"
-                           :hx-target "#answers"
-                           :hx-swap   "innerHTML"} "回答"]
-    [:div#answers "[***]"]
-    [:div.hover:underline {:hx-get    "/k/hx-comments"
-                           :hx-target "#comments"
-                           :hx-swap   "innerHTML"} "コメント"]
-    [:div#comments "[***]"]]))
+    [:div.m-4.flex
+     [:div {:class "w-1/2"}
+      [:div.hover:underline {:hx-get    "/k/hx-answers"
+                             :hx-target "#answers"
+                             :hx-swap   "innerHTML"}
+       [:span.font-bold "回答"]]
+      [:div#answers "[***]"]]
+     [:div {:class "w-1/2"}
+      [:div.hover:underline {:hx-get    "/k/hx-comments"
+                             :hx-target "#comments"
+                             :hx-swap   "innerHTML"}
+       [:span.font-bold "コメント"]]
+      [:div#comments "[***]"]]]]))
 
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id

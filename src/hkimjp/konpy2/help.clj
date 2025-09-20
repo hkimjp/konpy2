@@ -13,7 +13,7 @@
          他受講生の回答へのリンクもここ。リンクをたどってコメントする。"]
     [:div.font-bold "scores"]
     [:p.mx-4 "自分の KONPY 点数。GPT まみれ回答よりも心からのコメントにウェート置きたい。"]
-    [:div.font-bold "stocks(under construction)"]
+    [:div.font-bold "stocks"]
     [:p.mx-4 "いいね・悪いね自分用ストック。"
      "hkimura にストックされた悪いね回答・コメントは後日、晒されるだろう。"]
     [:div.font-bold "logout"]
