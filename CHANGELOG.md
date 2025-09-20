@@ -19,6 +19,10 @@
 * restrict comments to him/her-self
 
 
+# 0.3.5-SNAPSHOT
+
+- fixed - display author name for his/her answers.
+
 # 0.3.5 (2025-09-20)
 
 - A,B,C to comments
