@@ -18,10 +18,10 @@
     [?e :stock ?stock]
     [?e :updated ?updated]])
 
-(def s (->> (ds/qq fetch-stocks "hkimura")
-            (sort-by :e)
-            reverse
-            first))
+; (def s (->> (ds/qq fetch-stocks "hkimura")
+;             (sort-by :e)
+;             reverse
+;             first))
 
 (defn- abbrev [date-time text]
   (str
@@ -70,4 +70,4 @@
 
 (defn stock [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "stock" :msg e})
-  (hx [:div "stock/" e]))
+  (hx [:pre (:stock (ds/pl (parse-long e)))]))
