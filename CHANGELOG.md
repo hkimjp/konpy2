@@ -20,7 +20,7 @@
 * link to stock
 
 
-# 0.3.6-SNAPSHOT
+# 0.3.6 (2025-09-20)
 
 - fixed - display author name for his/her answers.
 - can stock and display a list of the first lines of the stocked text.
