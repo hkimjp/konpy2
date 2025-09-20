@@ -1,16 +1,60 @@
 (ns hkimjp.konpy2.scores
   (:require
+   [clojure.string :as str]
    [taoensso.telemere :as t]
+   [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page]]
    [hkimjp.konpy2.util :refer [user]]))
 
+(def ^:private sent
+  '[:find ?e
+    :in $ ?author
+    :where
+    [?e :comment/status "yes"]
+    [?e :author ?author]])
+
+; (ds/qq sent "hkimura")
+
+(def ^:private received
+  '[:find ?e ?pt
+    :in $ ?author
+    :where
+    [?e :comment/status "yes"]
+    [?e :to ?a]
+    [?a :author ?author]
+    [?e :pt ?pt]])
+
+; (ds/qq received "tue2")
+; (filter #(= "B" (second %)) (ds/qq received "hkimura"))
+; (ds/qq received "chatgpt")
+
+(defn- score [sym coll]
+  (str/join (repeat (count coll) sym)))
+
+; (score "😃" (ds/qq sent "hkimura"))
+
+(def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
+
+; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
+
+(defn- div-score [ABC received]
+  [:div ABC ": " (score (pict ABC) (filter #(= ABC (second %)) received))])
+
+; (div-score "A" (ds/qq received "hkimura"))
+
 (defn scores [request]
-  (t/log! {:level :info :msg (str "scores " (user request))})
-  (page
-   [:div.m-4
-    [:div.text-2xl "Scores"]
-    [:p "日頃から取り組まないと平常点がなくなる。失った平常点は取り返せない。平常点は平常につく。"]
-    [:p "情報処理応用では、中間、期末テストは 5 問中 2 問できないと C はつけない。"
-     "前期の情報基礎では 0.5 問で C つけた。しかも C は 20/30 点だった。"
-     "hkimura の誤りだった。勘違いを増やした。是正する。"]]))
+  (let [author (user request)
+        sent (ds/qq sent author)
+        received (ds/qq received author)]
+    (t/log! {:level :info :msg (str "scores " author)})
+    (page
+     [:div.m-4
+      [:div.text-2xl "Scores " author]
+      [:p "平常点は平常につく。日頃から取り組まないと平常点がなくなる。失った平常点は取り返せない。"]
+      [:div.font-bold "Sends"]
+      [:div.mx-4 (score "😃" sent)]
+      [:div.font-bold "Receives"]
+      [:div.mx-4
+       (for [sc ["A" "B" "C"]]
+         (div-score sc received))]])))
 
