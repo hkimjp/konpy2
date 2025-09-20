@@ -22,6 +22,7 @@
 # 0.3.7-SNAPSHOT (2025-09-20) (2025-09-20)
 
 - fixed: "yy-MM-dd HH:mm " is the correct format.
+- stop using `[***]` as placeholder.
 
 # 0.3.6 (2025-09-20)
 

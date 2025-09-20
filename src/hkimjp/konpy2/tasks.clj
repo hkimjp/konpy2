@@ -31,20 +31,26 @@
              [:a.hover:underline
               {:href (str "/k/problem/" e)}
               [:span.mr-4 week "-" num] [:span problem]]]))
-    [:div.text-2xl "本日の回答・コメント"]
+    [:div.text-2xl "本日の回答・コメント・ストック"]
     [:div.m-4.flex
-     [:div {:class "w-1/2"}
+     [:div {:class "w-1/3"}
       [:div.hover:underline {:hx-get    "/k/hx-answers"
                              :hx-target "#answers"
                              :hx-swap   "innerHTML"}
        [:span.font-bold "回答"]]
-      [:div#answers "[***]"]]
-     [:div {:class "w-1/2"}
+      [:div#answers ""]]
+     [:div {:class "w-1/3"}
       [:div.hover:underline {:hx-get    "/k/hx-comments"
                              :hx-target "#comments"
                              :hx-swap   "innerHTML"}
        [:span.font-bold "コメント"]]
-      [:div#comments "[***]"]]]]))
+      [:div#comments ""]]
+     [:div {:class "w-1/3"}
+      [:div.hover:underline {:hx-get    "/k/hx-stocks"
+                             :hx-target "#stocks"
+                             :hx-swap   "innerHTML"}
+       [:span.font-bold "ストック"]]
+      [:div#stocks ""]]]]))
 
 (def ^:private fetch-answers '[:find ?e ?author
                                :in $ ?id
@@ -86,7 +92,7 @@
         [:button {:class btn} "upload"]]]])))
 
 (defn todays-answers
-  ([] (todays-answers (jt/local-date-time)))
+  ([] (todays-answers (now)))
   ([date-time] (ds/qq '[:find ?e ?author ?week ?num ?updated
                         :keys e  author  week  num  updated
                         :in $ ?now
@@ -112,7 +118,7 @@
 
 (defn- todays-comments
   "comments after `date-time`"
-  ([] (todays-comments (jt/local-date-time)))
+  ([] (todays-comments (now)))
   ([date-time]
    (ds/qq '[:find ?e ?author ?week ?num ?updated ?commentee
             :keys e  author  week  num  updated  commentee
@@ -138,3 +144,25 @@
              [:li (format "%d-%d %s %s → %s" week num updated author commentee)]))])
     (catch Exception e
       (t/log! :error (.getMessage e)))))
+
+(def ^:private stocks
+  '[:find ?e ?owner ?updated
+    :keys e  owner  updated
+    :in $ ?now
+    :where
+    [?e :stock/status "yes"]
+    [?e :owner ?owner]
+    [?e :updated ?updated]
+    [(java-time.api/before? ?now ?updated)]])
+
+(sort-by :e (ds/qq stocks
+                   (jt/adjust (now) (jt/local-time 0))))
+
+(defn hx-stocks [request]
+  (let [owner (user request)
+        stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
+    (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
+    (hx [:ul.list-disc.mx-4
+         (for [{:keys [updated owner]} (sort-by :e stocks)]
+           [:li (jt/format "HH:mm:ss " updated) owner])])))
+
