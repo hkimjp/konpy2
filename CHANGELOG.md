@@ -19,7 +19,7 @@
 * restrict comments to him/her-self
 
 
-# 0.3.7-SNAPSHOT
+# 0.3.7-SNAPSHOT (2025-09-20)
 
 * 0.4.0?
 
