@@ -27,14 +27,16 @@
 
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
   (t/log! {:level :debug :id "hx-answer" :msg (str "e " e)})
-  (let [e (parse-long e)
+  (let [author (user request)
+        e (parse-long e)
         ans (ds/pl e)
         gpt-ans (-> (ds/qq gpt (parse-long p)) ffirst)
         comments (ds/qq comments-to e)]
     (hx [:div
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
-           [:div [:span.font-bold "author: "] "******" #_(:author ans)]
+           [:div [:span.font-bold "author: "]
+            (if (= author (:author ans)) author "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]
            [:div.font-bold "comments"]
@@ -53,7 +55,7 @@
          [:form {:method "post" :action "/k/comment"}
           (h/raw (anti-forgery-field))
           [:input {:type "hidden" :name "to" :value e}]
-          [:input {:type "hidden" :name "author" :value (user request)}]
+          [:input {:type "hidden" :name "author" :value author}]
           [:input {:type "hidden" :name "pid" :value p}]
           [:textarea.border-1.p-2 {:class "w-2/3" :name "comment"}]
           (for [pt ["A" "B" "C"]]
