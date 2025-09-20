@@ -13,16 +13,12 @@
     [?e :answer/status "yes"]
     [?e :author ?author]])
 
-; (ds/qq answered "hkimura")
-
 (def ^:private sent
   '[:find ?e
     :in $ ?author
     :where
     [?e :comment/status "yes"]
     [?e :author ?author]])
-
-; (ds/qq sent "hkimura")
 
 (def ^:private received
   '[:find ?e ?pt
@@ -33,14 +29,8 @@
     [?a :author ?author]
     [?e :pt ?pt]])
 
-; (ds/qq received "tue2")
-; (filter #(= "B" (second %)) (ds/qq received "hkimura"))
-; (ds/qq received "chatgpt")
-
 (defn- score [sym coll]
   (str/join (repeat (count coll) sym)))
-
-; (score "😃" (ds/qq sent "hkimura"))
 
 (def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
 
@@ -48,8 +38,6 @@
 
 (defn- div-score [ABC received]
   [:div ABC ": " (score (pict ABC) (filter #(= ABC (second %)) received))])
-
-; (div-score "A" (ds/qq received "hkimura"))
 
 (defn scores [request]
   (let [author (user request)

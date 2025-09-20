@@ -18,11 +18,6 @@
     [?e :stock ?stock]
     [?e :updated ?updated]])
 
-; (def s (->> (ds/qq fetch-stocks "hkimura")
-;             (sort-by :e)
-;             reverse
-;             first))
-
 (defn- abbrev [date-time text]
   (str
    (jt/format "yyyy-MM-dd hh:mm " (jt/local-date-time))
