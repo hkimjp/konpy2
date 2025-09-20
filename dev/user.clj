@@ -13,6 +13,12 @@
 ;------------------------
 
 (comment
+  (ds/qq '[:find (max ?e)
+           :where
+           [?e :comment/status "yes"]])
+
+  (ds/pl 84)
+
   (jt/local-date-time)
   (str (jt/local-date))
 

@@ -8,17 +8,23 @@
 * digest namespace. used only from answers
 * effective upsert
 * testcodes as answers
-* show or doesn't show chatgtp user's answers
 * padding p-y (space for each line) in tasks page
 * never show admin menu for non-admin users
 * darken authors except me
-* reports who uploads now
-* web server push
+* reports who uploads now(server push)
 * flag skip-validation
-* good/bad to comments
-* restrict empty comments
 * unify answers/comments
+* confirm empty comments
+* show his/her comments on scores page. admin can see them. with hx.
+* restrict comments to him/her-self
 
+
+# 0.3.5 (2025-09-20)
+
+- A,B,C to comments
+- comment points - attr :pt
+- **BREAKING** anonymize author names
+- no anonymize self
 
 # 0.3.4 (2025-09-20)
 
