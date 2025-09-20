@@ -48,7 +48,7 @@
                                [?e :to ?id]
                                [?e :author ?author]])
 
-(defn- answerers [pid]
+(defn- answerers [pid author]
   (t/log! {:level :debug :id "answerers" :msg (str "pid " pid)})
   [:div
    [:div.font-bold "answers"]
@@ -58,7 +58,7 @@
             {:hx-get (str "/k/answer/" eid "/" pid)
              :hx-target "#answer"
              :hx-swap "innerHTML"}
-            [:span.hover:underline user]]))
+            [:span.hover:underline (if (= user author) user "******")]]))
    [:div#answer "[answer]"]])
 
 (defn problem [{{:keys [e]} :path-params :as request}]
@@ -70,7 +70,7 @@
       [:div.text-2xl (str "Problem " (:week p) "-" (:num p))]
       [:div.m-4
        [:p (:problem p)]
-       (answerers eid)
+       (answerers eid (user request))
        [:div.font-bold "your answer"]
        [:form {:method "post"
                :action "/k/answer"

@@ -34,7 +34,7 @@
     (hx [:div
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
-           [:div [:span.font-bold "author: "] (:author ans)]
+           [:div [:span.font-bold "author: "] "******" #_(:author ans)]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]
            [:div.font-bold "comments"]
@@ -56,7 +56,8 @@
           [:input {:type "hidden" :name "author" :value (user request)}]
           [:input {:type "hidden" :name "pid" :value p}]
           [:textarea.border-1.p-2 {:class "w-2/3" :name "comment"}]
-          [:button {:class btn} "send"]]])))
+          (for [pt ["A" "B" "C"]]
+            [:button {:class btn :name "pt" :value pt} pt])]])))
 
 (defn answer! [{{:keys [file e]} :params :as request}]
   (t/log! {:level :info :id "answer!"})
