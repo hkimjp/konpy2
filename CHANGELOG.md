@@ -19,6 +19,11 @@
 * restrict comments to him/her-self
 
 
+# 0.3.7-SNAPSHOT
+
+* 0.4.0?
+
+
 # 0.3.6 (2025-09-20)
 
 - removed "under construction" from `help.clj`
