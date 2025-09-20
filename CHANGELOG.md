@@ -13,17 +13,18 @@
 * darken authors except me
 * reports who uploads now(server push)
 * flag skip-validation
-* good/bad to comments
 * unify answers/comments
-
-
-# 0.3.5-SNAPSHOT
-
-- comment points - attr :pt
-- **BREAKING** anonymize author names
-* no anonymize self?
 * confirm empty comments
 * show his/her comments on scores page. admin can see them. with hx.
+* restrict comments to him/her-self
+
+
+# 0.3.5 (2025-09-20)
+
+- A,B,C to comments
+- comment points - attr :pt
+- **BREAKING** anonymize author names
+- no anonymize self
 
 # 0.3.4 (2025-09-20)
 
