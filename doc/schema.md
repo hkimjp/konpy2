@@ -35,6 +35,5 @@
 :db/id id
 :stock/status "yes"|"no"
 :owner user
-:sid id
-:type "problem"|"answer"|"comment"
+:stock text
 :updated jt
