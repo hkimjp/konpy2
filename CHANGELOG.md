@@ -19,10 +19,9 @@
 * restrict comments to him/her-self
 
 
-# 0.3.7-SNAPSHOT (2025-09-20)
+# 0.3.7-SNAPSHOT (2025-09-20) (2025-09-20)
 
-* 0.4.0?
-
+- fixed: "yy-MM-dd HH:mm " is the correct format.
 
 # 0.3.6 (2025-09-20)
 
