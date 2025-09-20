@@ -36,7 +36,8 @@
     ["comment/:e"   {:get  comments/hx-comment}]
     ;;
     ["scores"       {:get scores/scores}]
-    ["stocks"       {:get stocks/stocks :post stocks/stocks!}]]])
+    ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
+    ["stock/:e"     {:get stocks/stock}]]])
 
 (defn root-handler
   [request]

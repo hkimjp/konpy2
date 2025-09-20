@@ -46,11 +46,17 @@
                       :hx-swap   "afterbegin"}
              "stock"]]
            [:div.font-bold "Your Stocks"]
-           [:div#stocks
-            (for [s (->> (ds/qq fetch-stocks author)
-                         (sort-by :e)
-                         reverse)]
-              [:p (abbrev (:updated s) (:stock s))])]])))
+           [:div.flex
+            [:div#stocks {:class "w-1/2"}
+             (for [s (->> (ds/qq fetch-stocks author)
+                          (sort-by :e)
+                          reverse)]
+               [:p [:a.hover:underline
+                    {:hx-get    (str "/k/stock/" (:e s))
+                     :hx-target "#preview"
+                     :hx-swap   "innerHTML"}
+                    (abbrev (:updated s) (:stock s))]])]
+            [:div#preview {:class "w-1/2 border-1"}]]])))
 
 (defn stocks! [{{:keys [text]} :params :as request}]
   (let [owner (user request)]
@@ -61,3 +67,7 @@
               :updated (now)})
     ;; trick
     (hx [:p (abbrev (jt/local-date-time) text)])))
+
+(defn stock [{{:keys [e]} :path-params}]
+  (t/log! {:level :info :id "stock" :msg e})
+  (hx [:div "stock/" e]))
