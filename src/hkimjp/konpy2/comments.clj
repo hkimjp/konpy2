@@ -15,6 +15,8 @@
            :data  {:to to :author author :comment comment :pid pid :pt pt}})
   (let [author (user request)]
     (try
+      (when-not (re-find #"\S" comment)
+        (throw (Exception. "empty comment")))
       (r/before-comment author)
       (ds/put! {:comment/status "yes"
                 :author author

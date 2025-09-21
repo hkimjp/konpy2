@@ -15,19 +15,20 @@
 * flag skip-validation
 * unify answers/comments
 * show his/her comments on scores page. admin can see them.
-
+* enable markdown in comments.
+* digest
+* restrict comments to himself/herself
+* test deployment to eq.local
 
 # 0.3.7-SNAPSHOT
 
 - fixed: "yy-MM-dd HH:mm " is the correct format.
 - stopped using `[***]` as a placeholder.
 - added login account in the title of the page.
-* FIXME: did not stop when no redis connection
-* digest
-* test-deply to eq.local
-* restrict comments to himself/herself
-* confirm empty comments
-* font size
+- stops if redis does not respond.
+- do not receive empty comments
+- font size - stocks/preview text-sm
+* taller `your comment` height, enable markdown.
 
 # 0.3.6 (2025-09-20)
 

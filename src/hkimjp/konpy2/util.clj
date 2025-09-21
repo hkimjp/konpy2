@@ -15,6 +15,8 @@
   ([s n] (let [pat (re-pattern (str "(^.{" n "}).*"))]
            (str/replace-first s pat "$1..."))))
 
+;; (abbrev "012345678901234567890" 10)
+
 (defn user [request]
   (get-in request [:session :identity]))
 
