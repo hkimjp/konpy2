@@ -1,10 +1,11 @@
 (ns hkimjp.konpy2.comments
   (:require
+   [nextjournal.markdown :as md]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [hx redirect page]]
-   [hkimjp.konpy2.util :refer [now user]]
-   [hkimjp.konpy2.restrictions :as r]))
+   [hkimjp.konpy2.restrictions :as r]
+   [hkimjp.konpy2.util :refer [now user]]))
 
 (defn comment!
   "send comments to `e`.
@@ -35,5 +36,7 @@
 
 (defn hx-comment [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-comment"})
-  (hx [:div (:comment (ds/pl (parse-long e)))]))
+  (hx [:div (-> (:comment (ds/pl (parse-long e)))
+                md/parse
+                md/->hiccup)]))
 

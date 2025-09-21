@@ -20,15 +20,18 @@
 * restrict comments to himself/herself
 * test deployment to eq.local
 
+
 # 0.3.7-SNAPSHOT
 
+- enable markdown in comments.
 - fixed: "yy-MM-dd HH:mm " is the correct format.
 - stopped using `[***]` as a placeholder.
 - added login account in the title of the page.
 - stops if redis does not respond.
 - do not receive empty comments
 - font size - stocks/preview text-sm
-* taller `your comment` height, enable markdown.
+- taller `your comment` height, make it bg-green-200.
+- added nextjournal/markdown to dependencies.
 
 # 0.3.6 (2025-09-20)
 
