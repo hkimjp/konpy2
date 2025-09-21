@@ -57,7 +57,7 @@
           [:input {:type "hidden" :name "author" :value author}]
           [:input {:type "hidden" :name "pid" :value p}]
           [:textarea
-           {:class "bg-green-100 h-40 border-1 p-2 w-2/3"
+           {:class "bg-lime-200 h-40 border-1 p-2 w-2/3"
             :name "comment"
             :placeholder "markdown OK"}]
           (for [pt ["A" "B" "C"]]

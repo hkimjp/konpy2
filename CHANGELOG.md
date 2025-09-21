@@ -21,6 +21,11 @@
 * test deployment to eq.local
 
 
+# 0.3.8-SNAPSHOT (2025-09-21)
+
+- {:class "bg-lime-200 h-40 border-1 p-2 w-2/3"}
+
+
 # 0.3.7 (2025-09-21)
 
 - enable markdown in comments.
