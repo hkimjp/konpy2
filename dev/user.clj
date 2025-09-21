@@ -10,8 +10,11 @@
    [hkimjp.konpy2.util :refer [now]]
    [hkimjp.konpy2.system :refer [start-system stop-system] :as sys]))
 
-;------------------------
-
+;------------------------------------
+(t/set-min-level! :debug)
+(start-system)
+; (c/ping)
+;------------------------------------
 (comment
   (ds/qq '[:find (max ?e)
            :where
@@ -46,10 +49,7 @@
       count)
   :rcf)
 
-;------------------------
-(t/set-min-level! :debug)
-
-(start-system)
+;------------------------------------
 
 (defn restart-system
   []
@@ -64,6 +64,7 @@
 (defn after-reload []
   (start-system))
 
+;------------------------------------
 (reload/init
  {:dirs ["src" "dev" "test"]
   :no-reload '#{user}
@@ -72,6 +73,7 @@
 
 ;; (reload/reload)
 
+;------------------------------------
 (defn problem! [w n problem testcode]
   (ds/puts! [{:db/id -1
               :problem/status "yes"

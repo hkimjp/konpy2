@@ -14,16 +14,31 @@
 * reports who uploads now(server push)
 * flag skip-validation
 * unify answers/comments
-* confirm empty comments
-* show his/her comments on scores page. admin can see them. with hx.
-* restrict comments to him/her-self
-* link to stock
+* show his/her comments on scores page. admin can see them.
+* enable markdown in comments.
+* digest
+* restrict comments to himself/herself
+* test deployment to eq.local
 
+
+# 0.3.7 (2025-09-21)
+
+- enable markdown in comments.
+- fixed: "yy-MM-dd HH:mm " is the correct format.
+- stopped using `[***]` as a placeholder.
+- added login account in the title of the page.
+- stops if redis does not respond.
+- do not receive empty comments
+- font size - stocks/preview text-sm
+- taller `your comment` height, make it bg-green-200.
+- added nextjournal/markdown to dependencies.
 
 # 0.3.6 (2025-09-20)
 
+- removed "under construction" from `help.clj`
 - fixed - display author name for his/her answers.
 - can stock and display a list of the first lines of the stocked text.
+- link to stocks
 
 # 0.3.5 (2025-09-20)
 

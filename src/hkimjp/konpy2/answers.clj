@@ -3,7 +3,6 @@
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
-   ; [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
@@ -57,7 +56,10 @@
           [:input {:type "hidden" :name "to" :value e}]
           [:input {:type "hidden" :name "author" :value author}]
           [:input {:type "hidden" :name "pid" :value p}]
-          [:textarea.border-1.p-2 {:class "w-2/3" :name "comment"}]
+          [:textarea
+           {:class "bg-green-100 h-40 border-1 p-2 w-2/3"
+            :name "comment"
+            :placeholder "markdown OK"}]
           (for [pt ["A" "B" "C"]]
             [:button {:class btn :name "pt" :value pt} pt])]])))
 

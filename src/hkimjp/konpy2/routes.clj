@@ -1,7 +1,7 @@
 (ns hkimjp.konpy2.routes
   (:require
    [reitit.ring :as rr]
-   [ring.middleware.defaults :refer [wrap-defaults api-defaults site-defaults]]
+   [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
    [taoensso.telemere :as t]
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
@@ -26,15 +26,13 @@
    ["/k/" {:middleware [m/wrap-users]}
     ["tasks"        {:get tasks/konpy}]
     ["problem/:e"   {:get tasks/problem}]
-    ;;
     ["hx-answers"   {:get tasks/hx-answers}]
     ["hx-comments"  {:get tasks/hx-comments}]
-    ;;
+    ["hx-stocks"    {:get tasks/hx-stocks}]
     ["answer"       {:post answers/answer!}]
     ["answer/:e/:p" {:get  answers/hx-answer}]
     ["comment"      {:post comments/comment!}]
     ["comment/:e"   {:get  comments/hx-comment}]
-    ;;
     ["scores"       {:get scores/scores}]
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
     ["stock/:e"     {:get stocks/stock}]]])

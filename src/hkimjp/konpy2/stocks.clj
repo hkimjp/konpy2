@@ -1,12 +1,12 @@
 (ns hkimjp.konpy2.stocks
   (:require
-   [java-time.api :as jt]
    [hiccup2.core :as h]
+   [java-time.api :as jt]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx]]
-   [hkimjp.konpy2.util :refer [user btn now]]))
+   [hkimjp.konpy2.util :refer [user btn now abbrev]]))
 
 (def ^:private fetch-stocks
   '[:find ?e ?stock ?updated
@@ -18,21 +18,17 @@
     [?e :stock ?stock]
     [?e :updated ?updated]])
 
-; (def s (->> (ds/qq fetch-stocks "hkimura")
-;             (sort-by :e)
-;             reverse
-;             first))
-
-(defn- abbrev [date-time text]
+(defn- summary [date-time text]
   (str
-   (jt/format "yyyy-MM-dd hh:mm " (jt/local-date-time))
-   (re-find #".*" text)))
+   (jt/format "MM/dd HH:mm " date-time)
+   (-> (re-find #".*" text)
+       (abbrev 20))))
 
 (defn stocks [request]
   (let [author (user request)]
     (t/log! {:level :info :id "stocks" :msg author})
     (page [:div.m-4
-           [:div.text-2xl "Stocks"]
+           [:div.text-2xl (format "Stocks (%s)" author)]
            [:p "イージーに、コピペすると日付打ってデータベースに入れるだけとか。自分専用ページ。"]
            [:p "自分でやるべきことまでアプリ側で用意することないか。"]
            [:p "hkimura 的には時々閲覧させてビビらせる閻魔帳のイメージ。"]
@@ -47,7 +43,7 @@
              "stock"]]
            [:div.font-bold "Your Stocks"]
            [:div.flex
-            [:div#stocks {:class "w-1/2"}
+            [:div#stocks {:class "w-2/5"}
              (for [s (->> (ds/qq fetch-stocks author)
                           (sort-by :e)
                           reverse)]
@@ -55,8 +51,8 @@
                     {:hx-get    (str "/k/stock/" (:e s))
                      :hx-target "#preview"
                      :hx-swap   "innerHTML"}
-                    (abbrev (:updated s) (:stock s))]])]
-            [:div#preview {:class "w-1/2 border-1"}]]])))
+                    (summary (:updated s) (:stock s))]])]
+            [:div#preview {:class "w-3/5 border-1 text-sm"}]]])))
 
 (defn stocks! [{{:keys [text]} :params :as request}]
   (let [owner (user request)]
@@ -66,7 +62,7 @@
               :stock text
               :updated (now)})
     ;; trick
-    (hx [:p (abbrev (jt/local-date-time) text)])))
+    (hx [:p (summary (jt/local-date-time) text)])))
 
 (defn stock [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "stock" :msg e})

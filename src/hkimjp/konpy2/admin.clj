@@ -107,7 +107,3 @@
   (t/log! {:level :info :id "edit" :data {:e e}})
   (page
    (problem-form (ds/pl (parse-long e)))))
-
-; (defn toggle! [{params :params}]
-;   (t/log! {:level :info :id "toggle!" :data params})
-;   (page [:div "toggle!"]))
