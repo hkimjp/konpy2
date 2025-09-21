@@ -28,7 +28,7 @@
 
 # 0.3.7 (2025-09-21)
 
-- enable markdown in comments.
+- enabled markdown in comments.
 - fixed: "yy-MM-dd HH:mm " is the correct format.
 - stopped using `[***]` as a placeholder.
 - added login account in the title of the page.
