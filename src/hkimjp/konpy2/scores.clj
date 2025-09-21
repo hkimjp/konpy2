@@ -47,7 +47,7 @@
     (t/log! {:level :info :msg (str "scores " author)})
     (page
      [:div.m-4
-      [:div.text-2xl "Scores " author]
+      [:div.text-2xl (format "Scores (%s)" author)]
       [:p "平常点は平常につく。日頃から取り組まないと平常点がなくなる。失った平常点は取り返せない。"]
       [:p "konpy の出題は週平均6つの予定。一題解いたら3個は他の回答読んでコメントしなさい。"]
       [:p "平常点はコメント重視。"]

@@ -23,7 +23,7 @@
   (t/log! {:level :info :msg (str "tasks/konpy " (user request))})
   (page
    [:div.m-4
-    [:div.text-2xl "今週の Python"]
+    [:div.text-2xl (format "今週の Python (%s)" (user request))]
     (into [:div.m-4]
           (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems (wk))
                                                   (sort-by :num))]

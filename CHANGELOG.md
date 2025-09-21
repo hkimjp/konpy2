@@ -14,15 +14,20 @@
 * reports who uploads now(server push)
 * flag skip-validation
 * unify answers/comments
-* confirm empty comments
-* show his/her comments on scores page. admin can see them. with hx.
-* restrict comments to him/her-self
+* show his/her comments on scores page. admin can see them.
 
 
-# 0.3.7-SNAPSHOT (2025-09-20) (2025-09-20) (2025-09-20) (2025-09-20)
+# 0.3.7-SNAPSHOT
 
 - fixed: "yy-MM-dd HH:mm " is the correct format.
-- stop using `[***]` as placeholder.
+- stopped using `[***]` as a placeholder.
+- added login account in the title of the page.
+* FIXME: did not stop when no redis connection
+* digest
+* test-deply to eq.local
+* restrict comments to himself/herself
+* confirm empty comments
+* font size
 
 # 0.3.6 (2025-09-20)
 

@@ -38,8 +38,8 @@ deploy: build
 container-nrepl:
   clj -M:dev -m nrepl.cmdline -b 0.0.0.0 -p 5555
 
-update:
-  clojure -Tantq outdated :upgrade true :force true
+upgrade:
+  clojure -Tantq outdated :upgrade true
 
 clean:
   rm -rf target

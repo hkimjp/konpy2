@@ -28,7 +28,7 @@
   (let [author (user request)]
     (t/log! {:level :info :id "stocks" :msg author})
     (page [:div.m-4
-           [:div.text-2xl "Stocks"]
+           [:div.text-2xl (format "Stocks (%s)" author)]
            [:p "イージーに、コピペすると日付打ってデータベースに入れるだけとか。自分専用ページ。"]
            [:p "自分でやるべきことまでアプリ側で用意することないか。"]
            [:p "hkimura 的には時々閲覧させてビビらせる閻魔帳のイメージ。"]
