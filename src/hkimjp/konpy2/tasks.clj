@@ -155,9 +155,6 @@
     [?e :updated ?updated]
     [(java-time.api/before? ?now ?updated)]])
 
-(sort-by :e (ds/qq stocks
-                   (jt/adjust (now) (jt/local-time 0))))
-
 (defn hx-stocks [request]
   (let [owner (user request)
         stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
