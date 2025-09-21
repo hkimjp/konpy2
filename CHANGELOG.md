@@ -21,7 +21,7 @@
 * test deployment to eq.local
 
 
-# 0.3.7-SNAPSHOT
+# 0.3.7 (2025-09-21)
 
 - enable markdown in comments.
 - fixed: "yy-MM-dd HH:mm " is the correct format.
