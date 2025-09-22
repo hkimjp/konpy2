@@ -4,6 +4,7 @@
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
+   [hkimjp.konpy2.digest :refer [digest]]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [user now btn iso]]
@@ -63,14 +64,24 @@
           (for [pt ["A" "B" "C"]]
             [:button {:class btn :name "pt" :value pt} pt])]])))
 
+(def ^:private same-digest
+  '[:find ?author
+    :in $ ?digest
+    :where
+    [?e :answer/status "yes"]
+    [?e :digest ?digest]
+    [?e :author ?author]])
+
 (defn answer! [{{:keys [file e]} :params :as request}]
   (t/log! {:level :info :id "answer!"})
   (t/log! {:level :debug :data {:e e :file file}})
   (let [author (user request)
         answer (slurp (:tempfile file))
+        dgst (digest answer)
+        same (ds/qq same-digest dgst)
         e (parse-long e)
         testcode (:testcode (ds/pl e))]
-    (t/log! {:level :debug :data {:testcode testcode}})
+    (t/log! {:level :debug :data {:testcode testcode :digest dgst}})
     (try
       (r/before-upload author)
       (validate author answer testcode)
@@ -78,7 +89,8 @@
                 :to      e
                 :author  author
                 :answer  answer
-                :digest  0
+                :digest  dgst
+                :same    "same"
                 :updated (now)})
       (r/after-upload author)
       (redirect (str "/k/problem/" e))

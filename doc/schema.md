@@ -16,6 +16,8 @@
 :author
 :to problem/id
 :answer s
+:digest sha1
+:same authors
 :updated jt
 
 

@@ -16,11 +16,11 @@
 ; (c/ping)
 ;------------------------------------
 (comment
-  (ds/qq '[:find (max ?e)
+  (ds/qq '[:find ?e
            :where
-           [?e :comment/status "yes"]])
+           [?e :answer/status "yes"]])
 
-  (ds/pl 84)
+  (ds/pl 31)
 
   (jt/local-date-time)
   (str (jt/local-date))
