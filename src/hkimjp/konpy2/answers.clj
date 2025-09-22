@@ -38,8 +38,9 @@
            [:div [:span.font-bold "author: "]
             (if (= author (:author ans)) author "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-           [:div [:span.font-bold "same: "] (:same ans)]
+           ;[:div [:span.font-bold "same: "] (:same ans)]
            [:pre.border-1.p-2 (:answer ans)]
+           [:div [:span.font-bold "same: "] (:same ans)]
            [:div.font-bold "comments"]
            (for [[eid author] (sort-by first comments)]
              [:button.pr-4.hover:underline
@@ -49,7 +50,7 @@
               author])]
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "] "chatgpt"]
-           ; [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
+           [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
            [:pre.border-1.p-2 gpt-ans]]]
          [:div#comment.mx-4 "[comment]"]
          [:div.font-bold "your comment"]
