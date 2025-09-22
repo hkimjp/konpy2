@@ -11,7 +11,7 @@
 * restrict comments to themhimselves
 * test deployment to eq.local
 
-# 0.3.8-SNAPSHOT
+# 0.3.8 (2025-09-22)
 
 - show authors sent same answer.
 - added `digest.clj`
