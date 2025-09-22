@@ -18,6 +18,7 @@
 
 # 0.3.8-SNAPSHOT
 
+- added `digest.clj`
 - {:class "bg-lime-200 h-40 border-1 p-2 w-2/3"}
 
 

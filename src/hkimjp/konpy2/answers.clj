@@ -72,16 +72,20 @@
     [?e :digest ?digest]
     [?e :author ?author]])
 
+; (digest "abcde")
+; (ds/qq same-digest "abc")
+
 (defn answer! [{{:keys [file e]} :params :as request}]
   (t/log! {:level :info :id "answer!"})
   (t/log! {:level :debug :data {:e e :file file}})
   (let [author (user request)
         answer (slurp (:tempfile file))
-        dgst (digest answer)
-        same (ds/qq same-digest dgst)
         e (parse-long e)
-        testcode (:testcode (ds/pl e))]
-    (t/log! {:level :debug :data {:testcode testcode :digest dgst}})
+        testcode (:testcode (ds/pl e))
+        ; dgst (digest answer)
+        ; same (ds/qq same-digest dgst)
+        ]
+    (t/log! {:level :debug :data {:testcode testcode}})
     (try
       (r/before-upload author)
       (validate author answer testcode)
@@ -89,7 +93,7 @@
                 :to      e
                 :author  author
                 :answer  answer
-                :digest  dgst
+                :digest  1
                 :same    "same"
                 :updated (now)})
       (r/after-upload author)
