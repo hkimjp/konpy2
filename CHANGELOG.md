@@ -12,7 +12,7 @@
 * test deployment to eq.local
 * require comments before submit answers.
 
-# 0.3.9-SNAPSHOT (2025-09-22)
+# 0.3.9 (2025-09-22) (2025-09-22)
 
 - div rearange. 0.3.8 is better?
 - display restriction constants in admin page.
