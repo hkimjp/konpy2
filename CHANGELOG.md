@@ -10,8 +10,6 @@
 * show his/her comments on scores page. admin can see them.
 * restrict comments to themhimselves
 * test deployment to eq.local
-* pyproject.toml refuses version number `*.*.*-SNAPSHOT`
-
 
 # 0.3.8-SNAPSHOT
 
