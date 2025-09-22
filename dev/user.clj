@@ -61,18 +61,19 @@
 
 ;; (restart-system)
 
-(defn before-unload []
-  (stop-system))
-
-(defn after-reload []
-  (start-system))
-
 ;------------------------------------
+
 (reload/init
  {:dirs ["src" "dev" "test"]
   :no-reload '#{user}
   :unload-hook 'before-unload
   :after-reload 'start-system})
+
+(defn before-unload []
+  (stop-system))
+
+(defn after-reload []
+  (start-system))
 
 ;; (reload/reload)
 

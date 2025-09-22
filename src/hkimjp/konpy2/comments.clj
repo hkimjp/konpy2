@@ -30,7 +30,7 @@
       (catch Exception ex
         (t/log! {:level :warn :data {:user author :ex (.getMessage ex)}})
         (page
-         [:div
+         [:div.my-4
           [:div.text-2xl "Error"]
           [:p.text-red-600  (.getMessage ex)]])))))
 

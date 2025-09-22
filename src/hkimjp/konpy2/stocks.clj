@@ -64,4 +64,4 @@
 
 (defn stock [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "stock" :msg e})
-  (hx [:pre (:stock (ds/pl (parse-long e)))]))
+  (hx [:pre.p-2 (:stock (ds/pl (parse-long e)))]))
