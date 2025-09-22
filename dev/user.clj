@@ -18,10 +18,13 @@
 (comment
   (ds/qq '[:find (max ?e)
            :where
-           [?e :comment/status "yes"]])
+           [?e :answer/status "yes"]])
 
-  (ds/pl 84)
+  (ds/pl 111)
 
+  (ds/qq '[:find ?same
+           :where
+           [?e :same ?same]])
   (jt/local-date-time)
   (str (jt/local-date))
 
