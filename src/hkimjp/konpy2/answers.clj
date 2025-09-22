@@ -38,16 +38,15 @@
            [:div [:span.font-bold "author: "]
             (if (= author (:author ans)) author "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-           ;[:div [:span.font-bold "same: "] (:same ans)]
            [:pre.border-1.p-2 (:answer ans)]
            [:div [:span.font-bold "same: "] (:same ans)]
-           [:div.font-bold "comments"]
-           (for [[eid author] (sort-by first comments)]
-             [:button.pr-4.hover:underline
-              {:hx-get (str "/k/comment/" eid)
-               :hx-target "#comment"
-               :hx-swap "innerHTML"}
-              author])]
+           [:div [:span.font-bold "comments: "]
+            (for [[eid author] (sort-by first comments)]
+              [:button.pr-4.hover:underline
+               {:hx-get (str "/k/comment/" eid)
+                :hx-target "#comment"
+                :hx-swap "innerHTML"}
+               author])]]
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "] "chatgpt"]
            [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
@@ -60,7 +59,7 @@
           [:input {:type "hidden" :name "author" :value author}]
           [:input {:type "hidden" :name "pid" :value p}]
           [:textarea
-           {:class "bg-lime-200 h-40 border-1 p-2 w-2/3"
+           {:class "bg-lime-100 h-40 border-1 p-2 w-1/2"
             :name "comment"
             :placeholder "markdown OK"}]
           (for [pt ["A" "B" "C"]]

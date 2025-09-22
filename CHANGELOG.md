@@ -11,6 +11,11 @@
 * restrict comments to themhimselves
 * test deployment to eq.local
 
+# 0.3.9-SNAPSHOT (2025-09-22)
+
+* div arange
+* require comments before submit answers.
+
 # 0.3.8 (2025-09-22)
 
 - improved `bump-version.sh`
