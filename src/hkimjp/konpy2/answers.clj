@@ -46,24 +46,25 @@
                {:hx-get (str "/k/comment/" eid)
                 :hx-target "#comment"
                 :hx-swap "innerHTML"}
-               author])]]
+               author])]
+           [:div#comment.mx-4 "[comment]"]]
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "] "chatgpt"]
            [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
-           [:pre.border-1.p-2 gpt-ans]]]
-         [:div#comment.mx-4 "[comment]"]
-         [:div.font-bold "your comment"]
-         [:form {:method "post" :action "/k/comment"}
-          (h/raw (anti-forgery-field))
-          [:input {:type "hidden" :name "to" :value e}]
-          [:input {:type "hidden" :name "author" :value author}]
-          [:input {:type "hidden" :name "pid" :value p}]
-          [:textarea
-           {:class "bg-lime-100 h-40 border-1 p-2 w-1/2"
-            :name "comment"
-            :placeholder "markdown OK"}]
-          (for [pt ["A" "B" "C"]]
-            [:button {:class btn :name "pt" :value pt} pt])]])))
+           [:pre.border-1.p-2 gpt-ans]
+           [:br]
+           [:div.font-bold "your comment"]
+           [:form {:method "post" :action "/k/comment"}
+            (h/raw (anti-forgery-field))
+            [:input {:type "hidden" :name "to" :value e}]
+            [:input {:type "hidden" :name "author" :value author}]
+            [:input {:type "hidden" :name "pid" :value p}]
+            [:textarea
+             {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
+              :name "comment"
+              :placeholder "markdown OK"}]
+            (for [pt ["A" "B" "C"]]
+              [:button {:class btn :name "pt" :value pt} pt])]]]])))
 
 (def ^:private same-answers
   '[:find ?author

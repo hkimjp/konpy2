@@ -10,11 +10,12 @@
 * show his/her comments on scores page. admin can see them.
 * restrict comments to themhimselves
 * test deployment to eq.local
+* require comments before submit answers.
 
 # 0.3.9-SNAPSHOT (2025-09-22)
 
-* div arange
-* require comments before submit answers.
+- div rearange. 0.3.8 is better?
+- display restriction constants in admin page.
 
 # 0.3.8 (2025-09-22)
 
