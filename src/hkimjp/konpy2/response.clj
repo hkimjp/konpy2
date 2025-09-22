@@ -4,7 +4,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.3.7")
+(def version "0.3.9")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
@@ -52,6 +52,8 @@
       resp/response
       (resp/header "Content-Type" "text/html")))
 
+(defn error-page
+  [s])
 (defn redirect [uri]
   (resp/redirect uri))
 

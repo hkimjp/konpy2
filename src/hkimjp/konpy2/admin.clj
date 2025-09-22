@@ -6,6 +6,7 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page redirect]]
+   [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [btn user now abbrev]]))
 
 (defn- section [title]
@@ -32,10 +33,10 @@
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section  "problem")
-    [:textarea.w-full.h-20.p-2.outline.outline-black.shadow-lg
+    [:textarea.w-full.h-20.p-2.border-1
      {:name "problem"} problem]
     (section  "testcode")
-    [:textarea.w-full.h-40.p-2.outline.outline-black.shadow-lg
+    [:textarea.w-full.h-40.p-2.border-1
      {:name "testcode"} testcode]
     (section  "updated")
     [:div updated]
@@ -91,7 +92,14 @@
           [:div.flex.gap-4
            [:div (:week p) "-" (:num p)]
            [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
-           [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]]))
+           [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]
+    [:div.text-2xl.font-bold "Vars"]
+    [:div.m-4
+     [:p "min-interval-comments: " r/min-interval-comments]
+     [:p "min-interval-uploads: " r/min-interval-uploads]
+     [:p "max-comments:" r/max-comments]
+     [:p "max-uploads:"  r/max-uploads]
+     [:p "kp2-flash:" r/kp2-flash]]]))
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})

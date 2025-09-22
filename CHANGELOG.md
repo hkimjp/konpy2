@@ -1,29 +1,34 @@
 # Unreleased
 
-* clj-reload
 * problems/test-codes for production from `py99`
-* scores.clj
-* stocks.clj
 * admin/toggle-status
-* digest namespace. used only from answers
 * effective upsert
-* testcodes as answers
 * padding p-y (space for each line) in tasks page
-* never show admin menu for non-admin users
-* darken authors except me
-* reports who uploads now(server push)
+* reports who uploads now(SSE)
 * flag skip-validation
 * unify answers/comments
 * show his/her comments on scores page. admin can see them.
-* enable markdown in comments.
-* digest
-* restrict comments to himself/herself
+* restrict comments to themhimselves
 * test deployment to eq.local
+* require comments before submit answers.
 
+# 0.3.9 (2025-09-22) (2025-09-22)
+
+- div rearange. 0.3.8 is better?
+- display restriction constants in admin page.
+
+# 0.3.8 (2025-09-22)
+
+- improved `bump-version.sh`
+- show authors name who sent the same answer.
+- added `digest.clj`
+- {:class "bg-lime-200 h-40 border-1 p-2 w-2/3"}
+- throw exception when not find ruff, python, pytest.
+- throw exception when uploading without choosing a file
 
 # 0.3.7 (2025-09-21)
 
-- enable markdown in comments.
+- enabled markdown in comments.
 - fixed: "yy-MM-dd HH:mm " is the correct format.
 - stopped using `[***]` as a placeholder.
 - added login account in the title of the page.

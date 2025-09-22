@@ -73,15 +73,16 @@
    [:div#answer "[answer]"]])
 
 (defn problem [{{:keys [e]} :path-params :as request}]
-  (t/log! {:level :info :id "problem" :msg (user request)})
   (let [eid (parse-long e)
-        p (ds/pl eid)]
+        p (ds/pl eid)
+        author (user request)]
+    (t/log! {:level :info :id "problem" :msg author})
     (page
-     [:div
-      [:div.text-2xl (str "Problem " (:week p) "-" (:num p))]
+     [:div.m-4
+      [:div.text-2xl (format "Problem %d-%d (%s)" (:week p) (:num p) author)]
       [:div.m-4
        [:p (:problem p)]
-       (answerers eid (user request))
+       (answerers eid author)
        [:div.font-bold "your answer"]
        [:form {:method "post"
                :action "/k/answer"

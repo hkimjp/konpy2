@@ -18,10 +18,13 @@
 (comment
   (ds/qq '[:find (max ?e)
            :where
-           [?e :comment/status "yes"]])
+           [?e :answer/status "yes"]])
 
-  (ds/pl 84)
+  (ds/pl 111)
 
+  (ds/qq '[:find ?same
+           :where
+           [?e :same ?same]])
   (jt/local-date-time)
   (str (jt/local-date))
 
@@ -58,18 +61,19 @@
 
 ;; (restart-system)
 
-(defn before-unload []
-  (stop-system))
-
-(defn after-reload []
-  (start-system))
-
 ;------------------------------------
+
 (reload/init
  {:dirs ["src" "dev" "test"]
   :no-reload '#{user}
   :unload-hook 'before-unload
   :after-reload 'start-system})
+
+(defn before-unload []
+  (stop-system))
+
+(defn after-reload []
+  (start-system))
 
 ;; (reload/reload)
 

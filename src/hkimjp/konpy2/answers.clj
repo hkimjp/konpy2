@@ -4,6 +4,7 @@
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
+   [hkimjp.konpy2.digest :refer [digest]]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [user now btn iso]]
@@ -38,53 +39,70 @@
             (if (= author (:author ans)) author "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]
-           [:div.font-bold "comments"]
-           (for [[eid author] (sort-by first comments)]
-             [:button.pr-4.hover:underline
-              {:hx-get (str "/k/comment/" eid)
-               :hx-target "#comment"
-               :hx-swap "innerHTML"}
-              author])]
+           [:div [:span.font-bold "same: "] (:same ans)]
+           [:div [:span.font-bold "comments: "]
+            (for [[eid author] (sort-by first comments)]
+              [:button.pr-4.hover:underline
+               {:hx-get (str "/k/comment/" eid)
+                :hx-target "#comment"
+                :hx-swap "innerHTML"}
+               author])]
+           [:div#comment.mx-4 "[comment]"]]
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "] "chatgpt"]
            [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
-           [:pre.border-1.p-2 gpt-ans]]]
-         [:div#comment.mx-4 "[comment]"]
-         [:div.font-bold "your comment"]
-         [:form {:method "post" :action "/k/comment"}
-          (h/raw (anti-forgery-field))
-          [:input {:type "hidden" :name "to" :value e}]
-          [:input {:type "hidden" :name "author" :value author}]
-          [:input {:type "hidden" :name "pid" :value p}]
-          [:textarea
-           {:class "bg-green-100 h-40 border-1 p-2 w-2/3"
-            :name "comment"
-            :placeholder "markdown OK"}]
-          (for [pt ["A" "B" "C"]]
-            [:button {:class btn :name "pt" :value pt} pt])]])))
+           [:pre.border-1.p-2 gpt-ans]
+           [:br]
+           [:div.font-bold "your comment"]
+           [:form {:method "post" :action "/k/comment"}
+            (h/raw (anti-forgery-field))
+            [:input {:type "hidden" :name "to" :value e}]
+            [:input {:type "hidden" :name "author" :value author}]
+            [:input {:type "hidden" :name "pid" :value p}]
+            [:textarea
+             {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
+              :name "comment"
+              :placeholder "markdown OK"}]
+            (for [pt ["A" "B" "C"]]
+              [:button {:class btn :name "pt" :value pt} pt])]]]])))
+
+(def ^:private same-answers
+  '[:find ?author
+    :in $ ?digest
+    :where
+    [?e :answer/status "yes"]
+    [?e :digest ?digest]
+    [?e :author ?author]])
 
 (defn answer! [{{:keys [file e]} :params :as request}]
   (t/log! {:level :info :id "answer!"})
   (t/log! {:level :debug :data {:e e :file file}})
-  (let [author (user request)
-        answer (slurp (:tempfile file))
-        e (parse-long e)
-        testcode (:testcode (ds/pl e))]
-    (t/log! {:level :debug :data {:testcode testcode}})
-    (try
+  (try
+    (when (nil? file)
+      (throw (Exception. "please select your python file.")))
+    (let [author   (user request)
+          answer   (slurp (:tempfile file))
+          e        (parse-long e)
+          testcode (:testcode (ds/pl e))
+          dgst     (digest answer)
+          same     (->> (ds/qq same-answers dgst)
+                        (map first)
+                        (interpose " ")
+                        (apply str))]
       (r/before-upload author)
       (validate author answer testcode)
       (ds/put! {:answer/status "yes"
                 :to      e
                 :author  author
                 :answer  answer
-                :digest  0
+                :digest  dgst
+                :same    same
                 :updated (now)})
       (r/after-upload author)
-      (redirect (str "/k/problem/" e))
-      (catch Exception ex
-        (t/log! {:level :warn :data {:exception (.getMessage ex)}})
-        (page
-         [:div
-          [:div.text-2xl "Error"]
-          [:p.text-red-600 (.getMessage ex)]])))))
+      (redirect (str "/k/problem/" e)))
+    (catch Exception e
+      (t/log! {:level :warn :data {:exception (.getMessage e)}})
+      (page
+       [:div.m-4
+        [:div.text-2xl "Error"]
+        [:p.text-red-600 (.getMessage e)]]))))
