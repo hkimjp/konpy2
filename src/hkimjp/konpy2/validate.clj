@@ -8,24 +8,37 @@
    [hkimjp.datascript :as ds]))
 
 (defn- ruff-path []
-  (some #(when (fs/exists? %) %)
-        ["/opt/homebrew/bin/ruff"
-         "/home/ubuntu/.local/bin/ruff"
-         (str (env :home) "/.local/bin/ruff")
-         "/snap/bin/ruff"]))
+  (let [ruff (some #(when (fs/exists? %) %)
+                   ["/opt/homebrew/bin/ruff"
+                    "/home/ubuntu/.local/bin/ruff"
+                    (str (env :home) "/.local/bin/ruff")
+                    "/snap/bin/ruff"])]
+    (if (some? ruff)
+      ruff
+      (throw (Exception. "did not find ruff")))))
 
 (defn- python-path []
-  (some #(when (fs/exists? %) %)
-        [(str (env :home) "/workspace/konpy2/.venv/bin/python3")
-         "/opt/homebrew/bin/python3"
-         "/usr/local/bin/python3"
-         "/usr/bin/python3"]))
+  (let [python (some #(when (fs/exists? %) %)
+                     [(str (env :home) "/workspace/konpy2/.venv/bin/python3")
+                      "/opt/homebrew/bin/python3"
+                      "/usr/local/bin/python3"
+                      "/usr/bin/python3"])]
+    (if (some? python)
+      python
+      (throw (Exception. "did not find python3")))))
 
 (defn- pytest-path []
-  (some #(when (fs/exists? %) %)
-        [(str (env :home) "/workspace/konpy2/.venv/bin/pytest")
-         "/opt/homebrew/bin/pytest"
-         "/usr/bin/pytest"]))
+  (let [pytest (some #(when (fs/exists? %) %)
+                     [(str (env :home) "/workspace/konpy2/.venv/bin/pytest")
+                      "/opt/homebrew/bin/pytest"
+                      "/usr/bin/pytest"])]
+    (if (some? pytest)
+      pytest
+      (throw "did not find pytest"))))
+
+; (ruff-path)
+; (python-path)
+; (pytest-path)
 
 (def ^:private timeout 10)
 
@@ -134,7 +147,8 @@
         (pytest answer testcode))
       (catch Exception e
         (t/log! {:level :warn
-                 :msg "validate error"
-                 :data {:author author
-                        :error (.getMessage e)}})
-        (throw (Exception. e))))))
+                 :msg   "validate error"
+                 :data  {:author author
+                         :error (.getMessage e)}})
+        (throw (Exception. (.getMessage e)))))))
+
