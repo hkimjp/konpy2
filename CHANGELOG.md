@@ -1,25 +1,21 @@
 # Unreleased
 
-* clj-reload
 * problems/test-codes for production from `py99`
 * admin/toggle-status
 * effective upsert
 * padding p-y (space for each line) in tasks page
-* never show admin menu for non-admin users
-* darken authors except me
 * reports who uploads now(SSE)
 * flag skip-validation
 * unify answers/comments
 * show his/her comments on scores page. admin can see them.
-* digest
 * restrict comments to themhimselves
 * test deployment to eq.local
 * pyproject.toml refuses version number `*.*.*-SNAPSHOT`
 
 
-
 # 0.3.8-SNAPSHOT
 
+- show authors sent same answer.
 - added `digest.clj`
 - {:class "bg-lime-200 h-40 border-1 p-2 w-2/3"}
 - throw exception when not find ruff, python, pytest.
