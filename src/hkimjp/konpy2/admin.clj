@@ -32,10 +32,10 @@
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section  "problem")
-    [:textarea.w-full.h-20.p-2.outline.outline-black.shadow-lg
+    [:textarea.w-full.h-20.p-2.border-1
      {:name "problem"} problem]
     (section  "testcode")
-    [:textarea.w-full.h-40.p-2.outline.outline-black.shadow-lg
+    [:textarea.w-full.h-40.p-2.border-1
      {:name "testcode"} testcode]
     (section  "updated")
     [:div updated]

@@ -74,11 +74,6 @@
     [?e :digest ?digest]
     [?e :author ?author]])
 
-; (def x (->> (ds/qq same-answers "64a4213")
-;             (map first)
-;             (interpose " ")
-;             (apply str)))
-
 (defn answer! [{{:keys [file e]} :params :as request}]
   (t/log! {:level :info :id "answer!"})
   (t/log! {:level :debug :data {:e e :file file}})
@@ -94,7 +89,6 @@
                         (map first)
                         (interpose " ")
                         (apply str))]
-      (t/log! {:level :debug :data {:digest dgst}})
       (r/before-upload author)
       (validate author answer testcode)
       (ds/put! {:answer/status "yes"

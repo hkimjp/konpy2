@@ -13,7 +13,8 @@
 
 # 0.3.8 (2025-09-22)
 
-- show authors sent same answer.
+- improved `bump-version.sh`
+- show authors name who sent the same answer.
 - added `digest.clj`
 - {:class "bg-lime-200 h-40 border-1 p-2 w-2/3"}
 - throw exception when not find ruff, python, pytest.

@@ -26,10 +26,10 @@
        (apply str)
        remove-docstrings))
 
+; seven digits are enough
 (defn digest [s]
   (-> s
       remove-comments
       sha1
       (subs 0 7)))
 
-; (digest "abc\ndef")

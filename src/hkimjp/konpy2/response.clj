@@ -52,6 +52,8 @@
       resp/response
       (resp/header "Content-Type" "text/html")))
 
+(defn error-page
+  [s])
 (defn redirect [uri]
   (resp/redirect uri))
 

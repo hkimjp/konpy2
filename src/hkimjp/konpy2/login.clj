@@ -41,8 +41,7 @@
           (assoc-in [:session :identity] login)))
     (try
       (let [resp (hc/get (str l22 "/api/user/" login) {:timeout 3000 :as :json})]
-        (if (and (some? resp)
-                 (hashers/check password (get-in resp [:body :password])))
+        (if (and (some? resp) (hashers/check password (get-in resp [:body :password])))
           (do
             (t/log! :info (str "login success: " login))
             (-> (resp/redirect "/k/tasks")
@@ -51,6 +50,7 @@
             (t/log! :info (str "login failed: " login))
             (-> (resp/redirect "/")
                 (assoc :session {} :flash "login failed")))))
+      ;; maybe auth server error
       (catch Exception e
         (t/log! :warn (.getMessage e))
         (-> (resp/redirect "/")
