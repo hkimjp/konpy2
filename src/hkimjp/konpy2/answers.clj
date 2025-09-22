@@ -64,7 +64,7 @@
           (for [pt ["A" "B" "C"]]
             [:button {:class btn :name "pt" :value pt} pt])]])))
 
-(def ^:private same-digest
+(def ^:private same-answers
   '[:find ?author
     :in $ ?digest
     :where
@@ -72,35 +72,41 @@
     [?e :digest ?digest]
     [?e :author ?author]])
 
-; (digest "abcde")
-; (ds/qq same-digest "abc")
+(def x (->> (ds/qq same-answers "64a4213")
+            (map first)
+            (interpose " ")
+            (apply str)))
 
 (defn answer! [{{:keys [file e]} :params :as request}]
   (t/log! {:level :info :id "answer!"})
   (t/log! {:level :debug :data {:e e :file file}})
-  (let [author (user request)
-        answer (slurp (:tempfile file))
-        e (parse-long e)
-        testcode (:testcode (ds/pl e))
-        ; dgst (digest answer)
-        ; same (ds/qq same-digest dgst)
-        ]
-    (t/log! {:level :debug :data {:testcode testcode}})
-    (try
+  (try
+    (when (nil? file)
+      (throw (Exception. "please select your python file.")))
+    (let [author   (user request)
+          answer   (slurp (:tempfile file))
+          e        (parse-long e)
+          testcode (:testcode (ds/pl e))
+          dgst     (digest answer)
+          same     (->> (ds/qq same-answers dgst)
+                        (map first)
+                        (interpose " ")
+                        (apply str))]
+      (t/log! {:level :debug :data {:digest dgst}})
       (r/before-upload author)
       (validate author answer testcode)
       (ds/put! {:answer/status "yes"
                 :to      e
                 :author  author
                 :answer  answer
-                :digest  1
-                :same    "same"
+                :digest  dgst
+                :same    same
                 :updated (now)})
       (r/after-upload author)
-      (redirect (str "/k/problem/" e))
-      (catch Exception ex
-        (t/log! {:level :warn :data {:exception (.getMessage ex)}})
-        (page
-         [:div
-          [:div.text-2xl "Error"]
-          [:p.text-red-600 (.getMessage ex)]])))))
+      (redirect (str "/k/problem/" e)))
+    (catch Exception e
+      (t/log! {:level :warn :data {:exception (.getMessage e)}})
+      (page
+       [:div.m-4
+        [:div.text-2xl "Error"]
+        [:p.text-red-600 (.getMessage e)]]))))
