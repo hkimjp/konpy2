@@ -3,7 +3,7 @@
    [clojure.string :as str]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.response :refer [page]]
+   [hkimjp.konpy2.response :refer [page hx]]
    [hkimjp.konpy2.util :refer [user]]))
 
 (def ^:private answered
@@ -29,15 +29,32 @@
     [?a :author ?author]
     [?e :pt ?pt]])
 
-(defn- score [sym coll]
-  (str/join (repeat (count coll) sym)))
+; (defn- score [sym coll]
+;   (str/join (repeat (count coll) sym)))
+
+(defn- score [sym coll target]
+  [:div
+   [:div
+    (for [[e _] coll]
+      [:span {:hx-get    (str "/k/score/" e)
+              :hx-target (str "#" target)
+              :hx-swap   "innerHTML"} sym])]
+   [:div {:id target}]])
 
 (def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
 
 ; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
 
 (defn- div-score [ABC received]
-  [:div ABC ": " (score (pict ABC) (filter #(= ABC (second %)) received))])
+  [:div ABC ": " (score (pict ABC) (filter #(= ABC (second %)) received) ABC)])
+
+(defn hx-show [{{:keys [e]} :path-params}]
+  (t/log! {:level :info :id "hx-show"})
+  (let [submit (ds/pl (parse-long e))]
+    (hx [:pre.border-1 (or (:comment submit) (:answer submit))])))
+
+; (:answer (ds/pl 42))
+; (hx [:div (:comment (ds/pl 42))])
 
 (defn scores [request]
   (let [author (user request)
@@ -53,9 +70,9 @@
       [:p "平常点はコメント重視。"]
       [:br]
       [:div.font-bold "Answered"]
-      [:div.mx-4 (score "💪" answered)]
+      [:div.mx-4 (score "💪" answered "answered")]
       [:div.font-bold "Comments Sent"]
-      [:div.mx-4 (score "😃" sent)]
+      [:div.mx-4 (score "😃" sent "sent")]
       [:div.font-bold "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]

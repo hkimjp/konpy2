@@ -10,11 +10,16 @@
 * show his/her comments on scores page. admin can see them.
 * restrict comments to themhimselves
 * test deployment to eq.local
-* require comments before submit answers.
+* require reading comments before submit answers.
 
-# 0.3.9 (2025-09-22) (2025-09-22)
 
-- div rearange. 0.3.8 is better?
+# 0.3.10 (2025-09-23) (2025-09-23)
+
+- improved scores page. link to the answer, comment.
+
+# 0.3.9 (2025-09-22)
+
+- reformat divs. 0.3.8's formation is better?
 - display restriction constants in admin page.
 
 # 0.3.8 (2025-09-22)
