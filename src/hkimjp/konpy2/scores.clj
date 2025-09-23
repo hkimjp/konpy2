@@ -47,7 +47,9 @@
 ; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
 
 (defn- div-score [ABC received]
-  [:div ABC ": " (score (pict ABC) (filter #(= ABC (second %)) received) ABC)])
+  [:div.flex
+   [:div ABC ": "]
+   (score (pict ABC) (filter #(= ABC (second %)) received) ABC)])
 
 (defn hx-show [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
