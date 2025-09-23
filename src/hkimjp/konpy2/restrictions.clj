@@ -5,11 +5,33 @@
    [hkimjp.carmine :as c]
    [hkimjp.konpy2.util :refer [local-time]]))
 
-(def min-interval-comments (-> (or (env :min-interval-comments) "60") parse-long))
-(def min-interval-uploads  (-> (or (env :min-interval-uploads)  "60") parse-long))
-(def max-comments (-> (or (env :max-comments) "6") parse-long))
-(def max-uploads  (-> (or (env :max-uploads)  "6") parse-long))
+(def min-interval-comments
+  "minimum interval between comments"
+  (-> (or (env :min-interval-comments) "60") parse-long))
+
+(def min-interval-uploads
+  "minimum interval between uploads"
+  (-> (or (env :min-interval-uploads)  "60") parse-long))
+
+(def max-comments
+  "max number of comments in a day"
+  (-> (or (env :max-comments) "6") parse-long))
+
+(def max-uploads
+  "max number of uploads in a day"
+  (-> (or (env :max-uploads)  "6") parse-long))
+
 (def kp2-flash (-> (or (env :flash) "3") parse-long))
+
+(def must_read_before_upload
+  "min number of reading comments before uploading one's answer"
+  (-> (or (env :must-read-before-upload)  "3") parse-long))
+
+(def must_send_before_upload
+  "min number of reading comments before uploading one's answer"
+  (-> (or (env :must-send-before-upload)  "1") parse-long))
+
+;-----------------------
 
 (defn- key- [what user]
   (format "kp2:%s:%s" what user))
