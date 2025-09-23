@@ -15,7 +15,7 @@
   he has not yet sent any comments.
 
 
-# 0.3.12-SNAPSHOT
+# 0.3.12-SNAPSHOT (2025-09-23)
 
 - `hover:underline` answers/comments in `scores` page
 - sort answers/comments in `scores` page
