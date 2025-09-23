@@ -3,19 +3,18 @@
 * problems/test-codes for production from `py99`
 * admin/toggle-status
 * effective upsert
-* padding p-y (space for each line) in tasks page
+* pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
-* unify answers/comments
-* show his/her comments on scores page. admin can see them.
-* restrict comments to themhimselves
+* sdmin can see his/her answers/comments
+* restrict comments to themselves
 * test deployment to eq.local
 * require reading comments before submit answers - what to do the first answerer?
   no comments available. not the first answerer only. before his first answer/comment,
   he has not yet sent any comments.
 
 
-# 0.3.12-SNAPSHOT (2025-09-23)
+# 0.3.12-SNAPSHOT
 
 - `hover:underline` answers/comments in `scores` page
 - sort answers/comments in `scores` page
