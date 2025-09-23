@@ -13,7 +13,7 @@
 * require reading comments before submit answers.
 
 
-# 0.3.10-SNAPSHOT (2025-09-23)
+# 0.3.10 (2025-09-23) (2025-09-23)
 
 - improved scores page. link to the answer, comment.
 
