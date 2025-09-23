@@ -36,9 +36,10 @@
   [:div
    [:div
     (for [[e _] coll]
-      [:span {:hx-get    (str "/k/score/" e)
-              :hx-target (str "#" target)
-              :hx-swap   "innerHTML"} sym])]
+      [:span.hover:underline
+       {:hx-get    (str "/k/score/" e)
+        :hx-target (str "#" target)
+        :hx-swap   "innerHTML"} sym])]
    [:div {:id target}]])
 
 (def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
@@ -56,11 +57,12 @@
 ; (:answer (ds/pl 42))
 ; (hx [:div (:comment (ds/pl 42))])
 
+; (sort (ds/qq answered "hkimura"))
 (defn scores [request]
-  (let [author (user request)
-        answered (ds/qq answered author)
-        sent (ds/qq sent author)
-        received (ds/qq received author)]
+  (let [author   (user request)
+        answered (sort (ds/qq answered author))
+        sent     (sort (ds/qq sent author))
+        received (sort (ds/qq received author))]
     (t/log! {:level :info :msg (str "scores " author)})
     (page
      [:div.m-4
@@ -69,11 +71,11 @@
       [:p "konpy の出題は週平均6つの予定。一題解いたら3個は他の回答読んでコメントしなさい。"]
       [:p "平常点はコメント重視。"]
       [:br]
-      [:div.font-bold "Answered"]
+      [:div.font-bold "Your Answers"]
       [:div.mx-4 (score "💪" answered "answered")]
-      [:div.font-bold "Comments Sent"]
+      [:div.font-bold.mu-4 "Comments Sent"]
       [:div.mx-4 (score "😃" sent "sent")]
-      [:div.font-bold "Comments Received"]
+      [:div.font-bold.mu-4 "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]
          (div-score sc received))]])))

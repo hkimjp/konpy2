@@ -15,9 +15,12 @@
   he has not yet sent any comments.
 
 
-# 0.3.11 (2025-09-23)
+# 0.3.12-SNAPSHOT (2025-09-23)
 
-* scores page, need sort answers/comments? `e` can be used.
+- `hover:underline` answers/comments in `scores` page
+- sort answers/comments in `scores` page
+
+# 0.3.11 (2025-09-23)
 
 # 0.3.10 (2025-09-23)
 
