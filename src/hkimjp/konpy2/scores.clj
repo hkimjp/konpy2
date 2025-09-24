@@ -37,21 +37,37 @@
        :hx-target (str "#" target)
        :hx-swap   "innerHTML"} sym])])
 
-(def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
+; (def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
 
 ; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
 
 (defn- div-score [ABC received]
-  [:div
-   [:div.flex
-    [:div ABC ": "]
-    (score (pict ABC) (filter #(= ABC (second %)) received) ABC)]
-   [:div.mx-4 {:id ABC}]])
+  (let [pict  {"A" "❤️", "B" "💚","C" "🩶"}]
+    [:div
+     [:div.flex
+      [:div ABC ": "]
+      (score (pict ABC) (filter #(= ABC (second %)) received) ABC)]
+     [:div.mx-4 {:id ABC}]]))
+
+(defn- week-num [e]
+  (let [record (ds/pl e)]
+    (t/log! {:level :debug :data record})
+    (try
+      (if (some? (:week record))
+        (str (:week record) "-" (:num record))
+        (week-num (:to record)))
+      (catch Exception ex
+        (t/log! :error (.getMessage ex))
+        nil))))
+
+; (week-num 120)
 
 (defn hx-show [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
-  (let [submit (ds/pl (parse-long e))]
+  (let [e (parse-long e)
+        submit (ds/pl e)]
     (hx [:div
+         [:div [:span.font-bold "to: "] (week-num e)]
          [:div [:span.font-bold "updated: "] (:updated submit)]
          [:pre.border-1 (or (:comment submit) (:answer submit))]
          [:br]])))
