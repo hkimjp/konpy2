@@ -34,12 +34,11 @@
 
 (defn- score [sym coll target]
   [:div
-   [:div
-    (for [[e _] coll]
-      [:span.hover:underline
-       {:hx-get    (str "/k/score/" e)
-        :hx-target (str "#" target)
-        :hx-swap   "innerHTML"} sym])]
+   (for [[e _] coll]
+     [:span.hover:underline
+      {:hx-get    (str "/k/score/" e)
+       :hx-target (str "#" target)
+       :hx-swap   "innerHTML"} sym])
    [:div {:id target}]])
 
 (def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
@@ -47,8 +46,8 @@
 ; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
 
 (defn- div-score [ABC received]
-  [:div ABC ": "]
-  (score (pict ABC) (filter #(= ABC (second %)) received) ABC))
+  [:div ABC ": "
+   (score (pict ABC) (filter #(= ABC (second %)) received) ABC)])
 
 (defn hx-show [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
@@ -74,9 +73,9 @@
       [:br]
       [:div.font-bold "Your Answers"]
       [:div.mx-4 (score "💪" answered "answered")]
-      [:div.font-bold.mu-4 "Comments Sent"]
+      [:div.font-bold.my-4 "Comments Sent"]
       [:div.mx-4 (score "😃" sent "sent")]
-      [:div.font-bold.mu-4 "Comments Received"]
+      [:div.font-bold.my-4 "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]
          (div-score sc received))]])))
