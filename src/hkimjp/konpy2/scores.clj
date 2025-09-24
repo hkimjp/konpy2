@@ -29,9 +29,6 @@
     [?a :author ?author]
     [?e :pt ?pt]])
 
-; (defn- score [sym coll]
-;   (str/join (repeat (count coll) sym)))
-
 (defn- score [sym coll target]
   [:div
    (for [[e _] coll]
@@ -52,12 +49,10 @@
 (defn hx-show [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
   (let [submit (ds/pl (parse-long e))]
-    (hx [:pre.border-1 (or (:comment submit) (:answer submit))])))
+    (hx [:div
+         [:div [:span.font-bold "updated: "] (:updated submit)]
+         [:pre.border-1 (or (:comment submit) (:answer submit))]])))
 
-; (:answer (ds/pl 42))
-; (hx [:div (:comment (ds/pl 42))])
-
-; (sort (ds/qq answered "hkimura"))
 (defn scores [request]
   (let [author   (user request)
         answered (sort (ds/qq answered author))
