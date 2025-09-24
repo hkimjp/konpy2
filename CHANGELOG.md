@@ -18,6 +18,8 @@
 
 - `hover:underline` answers/comments in `scores` page
 - sort answers/comments in `scores` page
+- show updated: on `/k/scores` page
+
 
 # 0.3.11 (2025-09-23)
 

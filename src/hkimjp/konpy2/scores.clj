@@ -35,23 +35,26 @@
      [:span.hover:underline
       {:hx-get    (str "/k/score/" e)
        :hx-target (str "#" target)
-       :hx-swap   "innerHTML"} sym])
-   [:div {:id target}]])
+       :hx-swap   "innerHTML"} sym])])
 
 (def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
 
 ; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
 
 (defn- div-score [ABC received]
-  [:div ABC ": "
-   (score (pict ABC) (filter #(= ABC (second %)) received) ABC)])
+  [:div
+   [:div.flex
+    [:div ABC ": "]
+    (score (pict ABC) (filter #(= ABC (second %)) received) ABC)]
+   [:div {:id ABC}]])
 
 (defn hx-show [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
   (let [submit (ds/pl (parse-long e))]
     (hx [:div
          [:div [:span.font-bold "updated: "] (:updated submit)]
-         [:pre.border-1 (or (:comment submit) (:answer submit))]])))
+         [:pre.border-1 (or (:comment submit) (:answer submit))]
+         [:br]])))
 
 (defn scores [request]
   (let [author   (user request)
