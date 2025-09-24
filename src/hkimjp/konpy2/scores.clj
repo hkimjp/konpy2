@@ -71,8 +71,10 @@
       [:br]
       [:div.font-bold "Your Answers"]
       [:div.mx-4 (score "💪" answered "answered")]
+      [:div#answered]
       [:div.font-bold.my-4 "Comments Sent"]
       [:div.mx-4 (score "😃" sent "sent")]
+      [:div#sent]
       [:div.font-bold.my-4 "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]
