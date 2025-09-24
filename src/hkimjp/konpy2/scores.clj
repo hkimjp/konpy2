@@ -29,38 +29,54 @@
     [?a :author ?author]
     [?e :pt ?pt]])
 
-; (defn- score [sym coll]
-;   (str/join (repeat (count coll) sym)))
-
 (defn- score [sym coll target]
   [:div
-   [:div
-    (for [[e _] coll]
-      [:span {:hx-get    (str "/k/score/" e)
-              :hx-target (str "#" target)
-              :hx-swap   "innerHTML"} sym])]
-   [:div {:id target}]])
+   (for [[e _] coll]
+     [:span.hover:underline
+      {:hx-get    (str "/k/score/" e)
+       :hx-target (str "#" target)
+       :hx-swap   "innerHTML"} sym])])
 
-(def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
+; (def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
 
 ; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
 
 (defn- div-score [ABC received]
-  [:div ABC ": " (score (pict ABC) (filter #(= ABC (second %)) received) ABC)])
+  (let [pict  {"A" "❤️", "B" "💚","C" "🩶"}]
+    [:div
+     [:div.flex
+      [:div ABC ": "]
+      (score (pict ABC) (filter #(= ABC (second %)) received) ABC)]
+     [:div.mx-4 {:id ABC}]]))
+
+(defn- week-num [e]
+  (let [record (ds/pl e)]
+    (t/log! {:level :debug :data record})
+    (try
+      (if (some? (:week record))
+        (str (:week record) "-" (:num record))
+        (week-num (:to record)))
+      (catch Exception ex
+        (t/log! :error (.getMessage ex))
+        nil))))
+
+; (week-num 120)
 
 (defn hx-show [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
-  (let [submit (ds/pl (parse-long e))]
-    (hx [:pre.border-1 (or (:comment submit) (:answer submit))])))
-
-; (:answer (ds/pl 42))
-; (hx [:div (:comment (ds/pl 42))])
+  (let [e (parse-long e)
+        submit (ds/pl e)]
+    (hx [:div
+         [:div [:span.font-bold "to: "] (week-num e)]
+         [:div [:span.font-bold "updated: "] (:updated submit)]
+         [:pre.border-1 (or (:comment submit) (:answer submit))]
+         [:br]])))
 
 (defn scores [request]
-  (let [author (user request)
-        answered (ds/qq answered author)
-        sent (ds/qq sent author)
-        received (ds/qq received author)]
+  (let [author   (user request)
+        answered (sort (ds/qq answered author))
+        sent     (sort (ds/qq sent author))
+        received (sort (ds/qq received author))]
     (t/log! {:level :info :msg (str "scores " author)})
     (page
      [:div.m-4
@@ -69,11 +85,13 @@
       [:p "konpy の出題は週平均6つの予定。一題解いたら3個は他の回答読んでコメントしなさい。"]
       [:p "平常点はコメント重視。"]
       [:br]
-      [:div.font-bold "Answered"]
+      [:div.font-bold "Your Answers"]
       [:div.mx-4 (score "💪" answered "answered")]
-      [:div.font-bold "Comments Sent"]
+      [:div#answered.mx-4]
+      [:div.font-bold.my-4 "Comments Sent"]
       [:div.mx-4 (score "😃" sent "sent")]
-      [:div.font-bold "Comments Received"]
+      [:div#sent.mx-4]
+      [:div.font-bold.my-4 "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]
          (div-score sc received))]])))
