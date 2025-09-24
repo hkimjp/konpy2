@@ -46,7 +46,7 @@
    [:div.flex
     [:div ABC ": "]
     (score (pict ABC) (filter #(= ABC (second %)) received) ABC)]
-   [:div {:id ABC}]])
+   [:div.mx-4 {:id ABC}]])
 
 (defn hx-show [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
@@ -71,8 +71,10 @@
       [:br]
       [:div.font-bold "Your Answers"]
       [:div.mx-4 (score "💪" answered "answered")]
+      [:div#answered.mx-4]
       [:div.font-bold.my-4 "Comments Sent"]
       [:div.mx-4 (score "😃" sent "sent")]
+      [:div#sent.mx-4]
       [:div.font-bold.my-4 "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]
