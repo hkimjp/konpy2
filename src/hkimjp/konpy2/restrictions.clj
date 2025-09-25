@@ -1,9 +1,18 @@
 (ns hkimjp.konpy2.restrictions
   (:require
    [environ.core :refer [env]]
+   [java-time.api :as jt]
    [taoensso.telemere :as t]
-   [hkimjp.carmine :as c]
-   [hkimjp.konpy2.util :refer [local-time]]))
+   [hkimjp.carmine :as c]))
+
+; name                       expire        value
+; kp2:upload:<user>          min-interval  last submission time
+; kp2:upload:<user>-<time>   24            local-time of uploading
+; kp2:comment:<user>         min-interval  last comment time
+; kp2:comment:<user>-<uuid>  24 hour       local-time of commenting
+
+(defn- local-time []
+  (jt/format "HHmmss" (jt/local-time)))
 
 (def min-interval-comments
   "minimum interval between comments"
@@ -39,11 +48,14 @@
 (defn- key-comment [user]
   (key- "comment" user))
 
+(defn- key-comment-time [user]
+  (str (key-comment user) "-" (local-time)))
+
 (defn- key-upload [user]
   (key- "upload" user))
 
-(defn- uniq-name [s]
-  (format "%s-%s" s (-> (random-uuid) str (subs 0 8))))
+(defn- key-upload-time [user]
+  (str (key-upload user) "-" (local-time)))
 
 (defn before-upload [user]
   (when-let [last-submission (c/get (key-upload user))]
@@ -55,8 +67,6 @@
     (throw (Exception.
             (format "一日の最大アップロード数 %d を超えました。" max-uploads)))))
 
-;; FIXME:
-;; almost same with before-upload
 (defn before-comment [user]
   (when-let [last-submission (c/get (key-comment user))]
     (throw (Exception.
@@ -71,11 +81,9 @@
   (let [lt (local-time)]
     (t/log! {:level :debug :data {:key (key-upload user) :min-inverval-uploads min-interval-uploads}})
     (c/setex (key-upload user) min-interval-uploads lt)
-    (c/setex (uniq-name (key-upload user)) (* 24 60 60) lt)))
+    (c/setex (key-upload-time user) (* 24 60 60) lt)))
 
-;; FIXME:
-;; almost same with after-upload
 (defn after-comment [user]
   (let [lt (local-time)]
     (c/setex (key-comment user) min-interval-comments lt)
-    (c/setex (uniq-name (key-comment user)) (* 24 60 60) lt)))
+    (c/setex (key-comment-time user) (* 24 60 60) lt)))
