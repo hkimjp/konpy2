@@ -12,9 +12,16 @@
 * require reading comments before submit answers - what to do the first answerer?
   no comments available. not the first answerer only. before his first answer/comment,
   he has not yet sent any comments.
+* peep
 
 
 # 0.3.12-SNAPSHOT
+
+- updated jetty
+
+| :file    | :name                   | :current | :latest |
+|----------|-------------------------|----------|---------|
+| deps.edn | ring/ring-jetty-adapter | 1.15.2   | 1.15.3  |
 
 - `hover:underline` answers/comments in `scores` page
 - sort answers/comments in `scores` page
