@@ -7,9 +7,9 @@
 
 ; name                       expire        value
 ; kp2:upload:<user>          min-interval  last submission time
-; kp2:upload:<user>-<time>   24            local-time of uploading
+; kp2:upload:<user>:<time>   24            local-time of uploading
 ; kp2:comment:<user>         min-interval  last comment time
-; kp2:comment:<user>-<uuid>  24 hour       local-time of commenting
+; kp2:comment:<user>:<time>  24 hour       local-time of commenting
 
 (defn- local-time []
   (jt/format "HHmmss" (jt/local-time)))
@@ -67,32 +67,26 @@
   (str (key-comment user) ":write"))
 
 ;-------------------------
-; (c/get (key-comment-read "hkimura"))
-; (c/get (key-comment-write "hkimsura"))
-; must-read-before-upload
-; must-write-before-upload
-(<= must-read-before-upload
-    (-> (c/get (key-comment-read "hkimura")) parse-long))
-(<= must-write-before-upload
-    (-> (c/get (key-comment-write "hkimura")) parse-long))
 
 (defn before-upload [user]
+  (when (<= max-uploads (count (c/keys (str (key-upload user) "-*"))))
+    (throw (Exception.
+            (format "一日の最大アップロード数 %d を超えました。" max-uploads))))
   (when-let [last-submission (c/get (key-upload user))]
     (throw (Exception.
             (format "アップロードは %s 秒以内にはできない。一題ずつ自力で。最終アップロード %s"
                     min-interval-uploads
                     last-submission))))
-  (when (<= max-uploads (count (c/keys (str (key-upload user) "-*"))))
-    (throw (Exception.
-            (format "一日の最大アップロード数 %d を超えました。" max-uploads))))
-  (when (and (<= (-> (c/get (key-comment-read user)) parse-long)
+  ;FIXME: complex.
+  (when (and (pos? (count (c/keys (str (key-upload user) ":*"))))
+             (<= (-> (c/get (key-comment-read user)) parse-long)
                  must-read-before-upload)
              (<= (-> (c/get (key-comment-write user)) parse-long)
-                 must-write-before-upload)))
-  (throw (Exception.
-          (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書かないとだめ。"
-                  must-read-before-upload
-                  must-write-before-upload))))
+                 must-write-before-upload))
+    (throw (Exception.
+            (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書かないとだめ。"
+                    must-read-before-upload
+                    must-write-before-upload)))))
 
 (defn before-comment [user]
   (when-let [last-submission (c/get (key-comment user))]
@@ -110,7 +104,7 @@
     (c/setex (key-upload user) min-interval-uploads lt)
     (c/setex (key-upload-time user) (* 24 60 60) lt)
     (c/set (key-comment-read user) 0)
-    (c/set (key-comment-read user) 0)))
+    (c/set (key-comment-write user) 0)))
 
 (defn after-comment [user]
   (let [lt (local-time)]
