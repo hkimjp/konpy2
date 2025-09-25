@@ -13,7 +13,7 @@
   no comments available. not the first answerer only. before his first answer/comment,
   he has not yet sent any comments.
 
-# 0.3.13-SNAPSHOT
+# 0.3.13 (2025-09-25)
 
 - peep other student's points
 - changed scores.clj - `to:` -> `problem:`
