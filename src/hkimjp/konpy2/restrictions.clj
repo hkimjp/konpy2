@@ -32,16 +32,17 @@
 
 (def kp2-flash (-> (or (env :flash) "3") parse-long))
 
-(def must_read_before_upload
+(def must-read-before-upload
   "min number of reading comments before uploading one's answer"
   (-> (or (env :must-read-before-upload)  "3") parse-long))
 
-(def must_send_before_upload
+(def must-write-before-upload
   "min number of reading comments before uploading one's answer"
-  (-> (or (env :must-send-before-upload)  "1") parse-long))
+  (-> (or (env :must-write-before-upload)  "1") parse-long))
 
 ;-----------------------
 
+;; keys will be exipred
 (defn- key- [what user]
   (format "kp2:%s:%s" what user))
 
@@ -49,13 +50,31 @@
   (key- "comment" user))
 
 (defn- key-comment-time [user]
-  (str (key-comment user) "-" (local-time)))
+  (str (key-comment user) ":" (local-time)))
 
 (defn- key-upload [user]
   (key- "upload" user))
 
 (defn- key-upload-time [user]
-  (str (key-upload user) "-" (local-time)))
+  (str (key-upload user) ":" (local-time)))
+
+;; keys not expired
+; must be export. must be public.
+(defn key-comment-read [user]
+  (str (key-comment user) ":read"))
+
+(defn- key-comment-write [user]
+  (str (key-comment user) ":write"))
+
+;-------------------------
+; (c/get (key-comment-read "hkimura"))
+; (c/get (key-comment-write "hkimsura"))
+; must-read-before-upload
+; must-write-before-upload
+(<= must-read-before-upload
+    (-> (c/get (key-comment-read "hkimura")) parse-long))
+(<= must-write-before-upload
+    (-> (c/get (key-comment-write "hkimura")) parse-long))
 
 (defn before-upload [user]
   (when-let [last-submission (c/get (key-upload user))]
@@ -65,7 +84,15 @@
                     last-submission))))
   (when (<= max-uploads (count (c/keys (str (key-upload user) "-*"))))
     (throw (Exception.
-            (format "一日の最大アップロード数 %d を超えました。" max-uploads)))))
+            (format "一日の最大アップロード数 %d を超えました。" max-uploads))))
+  (when (and (<= (-> (c/get (key-comment-read user)) parse-long)
+                 must-read-before-upload)
+             (<= (-> (c/get (key-comment-write user)) parse-long)
+                 must-write-before-upload)))
+  (throw (Exception.
+          (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書かないとだめ。"
+                  must-read-before-upload
+                  must-write-before-upload))))
 
 (defn before-comment [user]
   (when-let [last-submission (c/get (key-comment user))]
@@ -81,9 +108,12 @@
   (let [lt (local-time)]
     (t/log! {:level :debug :data {:key (key-upload user) :min-inverval-uploads min-interval-uploads}})
     (c/setex (key-upload user) min-interval-uploads lt)
-    (c/setex (key-upload-time user) (* 24 60 60) lt)))
+    (c/setex (key-upload-time user) (* 24 60 60) lt)
+    (c/set (key-comment-read user) 0)
+    (c/set (key-comment-read user) 0)))
 
 (defn after-comment [user]
   (let [lt (local-time)]
     (c/setex (key-comment user) min-interval-comments lt)
-    (c/setex (key-comment-time user) (* 24 60 60) lt)))
+    (c/setex (key-comment-time user) (* 24 60 60) lt)
+    (c/incr (key-comment-write user))))
