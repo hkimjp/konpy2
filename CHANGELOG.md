@@ -15,8 +15,7 @@
 
 # 0.3.13-SNAPSHOT
 
-* peep
-
+- peep other student's points
 - changed scores.clj - `to:` -> `problem:`
 - updated jetty
 
