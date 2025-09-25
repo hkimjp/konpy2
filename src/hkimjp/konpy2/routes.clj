@@ -35,7 +35,7 @@
     ["comment/:e"   {:get  comments/hx-comment}]
     ["scores"       {:get scores/scores}]
     ["score/:e"     {:get scores/hx-show}]
-    ["scores/peep"  {:get scores/hx-peep}]
+    ["scores/peep"  {:post scores/hx-peep}]
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
     ["stock/:e"     {:get stocks/stock}]]])
 

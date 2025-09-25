@@ -81,16 +81,20 @@
    [:div.font-bold.my-4 "Peep other student's score"]
    [:form
     (h/raw (anti-forgery-field))
-    [:input.border-1.p-2 {:name "user"}]
+    [:input.border-1.px-1.rounded {:name "user" :value "hkimura"}]
     [:buttn {:class btn
              :hx-post    "/k/scores/peep"
              :hx-target "#peep"
              :hx-swap   "innerHTML"} "peep"]]
    [:div#peep]])
 
-(defn hx-peep [{params :params}]
-  (t/log! {:level :info :id "hx-peep" :data params})
-  (hx [:div (str "data: " params)]))
+(defn hx-peep [{{:keys [user]} :params}]
+  (t/log! {:level :info :id "hx-peep" :data user})
+  (let [ans (sort (ds/qq answered user))
+        coms (sort (ds/qq sent user))]
+    (hx [:div
+         (section ans  "💪" (str user " answered") "answered")
+         (section coms "😃" (str user " comments") "sent")])))
 
 (defn scores [request]
   (let [author   (user request)
