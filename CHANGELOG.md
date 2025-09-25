@@ -13,11 +13,23 @@
   no comments available. not the first answerer only. before his first answer/comment,
   he has not yet sent any comments.
 
+# 0.3.13-SNAPSHOT
 
-# 0.3.12-SNAPSHOT
+* peep
+
+- updated jetty
+
+| :file    | :name                   | :current | :latest |
+|----------|-------------------------|----------|---------|
+| deps.edn | ring/ring-jetty-adapter | 1.15.2   | 1.15.3  |
+
+# 0.3.12 (2025-09-24)
 
 - `hover:underline` answers/comments in `scores` page
 - sort answers/comments in `scores` page
+- show updated: on `/k/scores` page
+- show to: on `/k/scores` page. recursion is something!
+
 
 # 0.3.11 (2025-09-23)
 
