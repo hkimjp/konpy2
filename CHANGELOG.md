@@ -15,7 +15,7 @@
 * peep
 
 
-# 0.3.12-SNAPSHOT
+# 0.3.12 (2025-09-24)
 
 - updated jetty
 
@@ -25,6 +25,9 @@
 
 - `hover:underline` answers/comments in `scores` page
 - sort answers/comments in `scores` page
+- show updated: on `/k/scores` page
+- show to: on `/k/scores` page. recursion is something!
+
 
 # 0.3.11 (2025-09-23)
 

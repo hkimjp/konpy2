@@ -16,6 +16,10 @@
 ; (c/ping)
 ;------------------------------------
 (comment
+  (ds/pl 115)
+  (ds/pl 6)
+  :rcf)
+(comment
   (ds/qq '[:find (max ?e)
            :where
            [?e :answer/status "yes"]])
