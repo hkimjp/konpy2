@@ -59,7 +59,7 @@
   (str (key-upload user) ":" (local-time)))
 
 ;; keys not expired
-; must be export. must be public.
+; must be export to the `comments` namespace. must be public.
 (defn key-comment-read [user]
   (str (key-comment user) ":read"))
 
@@ -74,26 +74,23 @@
             (format "一日の最大アップロード数 %d を超えました。" max-uploads))))
   (when-let [last-submission (c/get (key-upload user))]
     (throw (Exception.
-            (format "アップロードは %s 秒以内にはできない。一題ずつ自力で。最終アップロード %s"
-                    min-interval-uploads
-                    last-submission))))
-  ;FIXME: complex.
-  (when (and (pos? (count (c/keys (str (key-upload user) ":*"))))
-             (<= (-> (c/get (key-comment-read user)) parse-long)
-                 must-read-before-upload)
-             (<= (-> (c/get (key-comment-write user)) parse-long)
-                 must-write-before-upload))
+            (format "アップロードは %d 秒以内にはできない。一題ずつ自力でな。最終アップロード %s"
+                    min-interval-uploads last-submission))))
+  ;FIXME:
+  (when (and (< (-> (c/get (key-comment-read user)) parse-long)
+                must-read-before-upload)
+             (< (-> (c/get (key-comment-write user)) parse-long)
+                must-write-before-upload))
     (throw (Exception.
-            (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書かないとだめ。"
-                    must-read-before-upload
-                    must-write-before-upload)))))
+            (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書く必要ある。"
+                    must-read-before-upload must-write-before-upload)))))
 
 (defn before-comment [user]
-  (when-let [last-submission (c/get (key-comment user))]
+  (when-let [last-comment-at (c/get (key-comment user))]
     (throw (Exception.
-            (format "しっかりコメント読み書きするのに %s 秒は短いだろ。最終コメント時間 %s"
+            (format "しっかりコメント読み書きするのに %d 秒は短いだろ。最終コメント時間 %s"
                     min-interval-comments
-                    last-submission))))
+                    last-comment-at))))
   (when (<= max-comments (count (c/keys (str (key-comment user) "-*"))))
     (throw (Exception.
             (format "一日の最大コメント数 %d を超えました。" max-comments)))))

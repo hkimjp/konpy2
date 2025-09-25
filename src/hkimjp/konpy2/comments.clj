@@ -41,3 +41,9 @@
   (hx [:div (-> (:comment (ds/pl (parse-long e)))
                 md/parse
                 md/->hiccup)]))
+
+(comment
+  (let [key (r/key-comment-read "hkimura")]
+    (c/get key)
+    (c/incr key))
+  :rcf)
