@@ -13,6 +13,15 @@
   no comments available. not the first answerer only. before his first answer/comment,
   he has not yet sent any comments.
 
+# 0.3.13 (2025-09-25)
+
+- peep other student's points
+- changed scores.clj - `to:` -> `problem:`
+- updated jetty
+
+| :file    | :name                   | :current | :latest |
+|----------|-------------------------|----------|---------|
+| deps.edn | ring/ring-jetty-adapter | 1.15.2   | 1.15.3  |
 
 # 0.3.12 (2025-09-24)
 

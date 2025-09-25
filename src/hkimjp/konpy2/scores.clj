@@ -1,10 +1,12 @@
 (ns hkimjp.konpy2.scores
   (:require
    [clojure.string :as str]
+   [hiccup2.core :as h]
+   [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx]]
-   [hkimjp.konpy2.util :refer [user]]))
+   [hkimjp.konpy2.util :refer [user btn]]))
 
 (def ^:private answered
   '[:find ?e
@@ -37,8 +39,6 @@
        :hx-target (str "#" target)
        :hx-swap   "innerHTML"} sym])])
 
-; (def ^:private pict {"A" "❤️", "B" "💚","C" "🩶"})
-
 ; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
 
 (defn- div-score [ABC received]
@@ -60,17 +60,41 @@
         (t/log! :error (.getMessage ex))
         nil))))
 
-; (week-num 120)
-
 (defn hx-show [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
   (let [e (parse-long e)
         submit (ds/pl e)]
     (hx [:div
-         [:div [:span.font-bold "to: "] (week-num e)]
+         [:div [:span.font-bold "problem: "] (week-num e)]
          [:div [:span.font-bold "updated: "] (:updated submit)]
          [:pre.border-1 (or (:comment submit) (:answer submit))]
          [:br]])))
+
+(defn- section [thing sym label target]
+  [:div
+   [:div.font-bold label]
+   [:div.mx-4 (score sym thing target)]
+   [:div.mx-4 {:id target}]])
+
+(defn- peep-section []
+  [:div
+   [:div.font-bold.my-4 "Peep other student's score"]
+   [:form
+    (h/raw (anti-forgery-field))
+    [:input.border-1.px-1.rounded {:name "user" :value "hkimura"}]
+    [:buttn {:class btn
+             :hx-post    "/k/scores/peep"
+             :hx-target "#peep"
+             :hx-swap   "innerHTML"} "peep"]]
+   [:div#peep]])
+
+(defn hx-peep [{{:keys [user]} :params}]
+  (t/log! {:level :info :id "hx-peep" :data user})
+  (let [ans (sort (ds/qq answered user))
+        coms (sort (ds/qq sent user))]
+    (hx [:div
+         (section ans  "💪" (str user " answered") "answered")
+         (section coms "😃" (str user " comments") "sent")])))
 
 (defn scores [request]
   (let [author   (user request)
@@ -81,18 +105,15 @@
     (page
      [:div.m-4
       [:div.text-2xl (format "Scores (%s)" author)]
-      [:p "平常点は平常につく。日頃から取り組まないと平常点がなくなる。失った平常点は取り返せない。"]
+      [:p "失った平常点は取り返せない。日頃から取り組まないと平常点がなくなる。"]
       [:p "konpy の出題は週平均6つの予定。一題解いたら3個は他の回答読んでコメントしなさい。"]
-      [:p "平常点はコメント重視。"]
       [:br]
-      [:div.font-bold "Your Answers"]
-      [:div.mx-4 (score "💪" answered "answered")]
-      [:div#answered.mx-4]
-      [:div.font-bold.my-4 "Comments Sent"]
-      [:div.mx-4 (score "😃" sent "sent")]
-      [:div#sent.mx-4]
+      (section answered "💪" "Your Answers" "answered")
+      (section sent "😃" "Comments Sent" "sent")
       [:div.font-bold.my-4 "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]
-         (div-score sc received))]])))
+         (div-score sc received))]
+      ; peep section, 0.3.13
+      (peep-section)])))
 
