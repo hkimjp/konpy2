@@ -2,6 +2,7 @@
   (:require
    [nextjournal.markdown :as md]
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [hx redirect page]]
    [hkimjp.konpy2.restrictions :as r]
@@ -34,9 +35,15 @@
           [:div.text-2xl "Error"]
           [:p.text-red-600  (.getMessage ex)]])))))
 
-(defn hx-comment [{{:keys [e]} :path-params}]
-  (t/log! {:level :info :id "hx-comment"})
+(defn hx-comment [{{:keys [e]} :path-params :as request}]
+  (t/log! {:level :info :id "hx-comment" :msg (user request)})
+  (c/incr (r/key-comment-read (user request)))
   (hx [:div (-> (:comment (ds/pl (parse-long e)))
                 md/parse
                 md/->hiccup)]))
 
+(comment
+  (let [key (r/key-comment-read "hkimura")]
+    (c/get key)
+    (c/incr key))
+  :rcf)

@@ -14,7 +14,7 @@
     :in $ ?owner
     :where
     [?e :stock/status "yes"]
-    [?e :owner ?owener]
+    [?e :owner ?owner]
     [?e :stock ?stock]
     [?e :updated ?updated]])
 

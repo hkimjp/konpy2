@@ -6,13 +6,30 @@
 * pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
-* sdmin can see his/her answers/comments
+* admin can see his/her answers/comments
 * restrict comments to themselves
 * test deployment to eq.local
 * require reading comments before submit answers - what to do the first answerer?
   no comments available. not the first answerer only. before his first answer/comment,
   he has not yet sent any comments.
+* restrictions: when no answers (so also no comments), no way to solve restrictions.
 
+
+# 0.3.14 (2025-09-26)
+
+- improved `bump-version-local.sh`
+- fixed bug in stocks - other one's stocks were browsable
+- clojrue 1.12.3
+
+# 0.3.13 (2025-09-25)
+
+- peep other student's points
+- changed scores.clj - `to:` -> `problem:`
+- updated jetty
+
+| :file    | :name                   | :current | :latest |
+|----------|-------------------------|----------|---------|
+| deps.edn | ring/ring-jetty-adapter | 1.15.2   | 1.15.3  |
 
 # 0.3.12 (2025-09-24)
 

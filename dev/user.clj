@@ -125,7 +125,16 @@
     assert set(eqn2(1,-2,1)) == {1}
     assert set(eqn2(1,-1,-6)) == {-2, 3}
     assert set(eqn2(1, -6, 13)) == {(3 + 2j), (3 - 2j)}
-    assert set(eqn2(3, -6, 6)) == {(1 + 1j), (1 - 1j)}"]])
+    assert set(eqn2(3, -6, 6)) == {(1 + 1j), (1 - 1j)}"]
+    ["整数 x を整数 y で割った時の整数商を返す div(x, y). y==0 の時のテストをどう書くか?"
+     ""]
+    ["正の整数nの階乗n!を戻り値とする関数 fa(n)." ""]
+    ["引数nは3ですか？ is_three(n)" ""]
+    ["引数xは文字列ですか？is_string(x)" "def test_is_string():
+    assert is_string('x') is True
+    assert is_string(3) is False
+    assert is_string([3.14]) is False
+                                "]])
 
   (c/ping)
   :rcf)

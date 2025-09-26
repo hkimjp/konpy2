@@ -1,7 +1,7 @@
 {:paths ["src" "resources"]
 
  :deps
- {org.clojure/clojure            {:mvn/version "1.12.2"}
+ {org.clojure/clojure            {:mvn/version "1.12.3"}
   babashka/fs                    {:mvn/version "0.5.27"}
   buddy/buddy-hashers            {:mvn/version "2.0.167"}
   clojure.java-time/clojure.java-time {:mvn/version "1.4.3"}
@@ -13,7 +13,7 @@
   metosin/reitit-ring            {:mvn/version "0.9.1"}
   org.slf4j/slf4j-nop            {:mvn/version "2.0.17"}
   ring/ring-defaults             {:mvn/version "0.7.0"}
-  ring/ring-jetty-adapter        {:mvn/version "1.15.2"}
+  ring/ring-jetty-adapter        {:mvn/version "1.15.3"}
   timeout-shell/timeout-shell    {:mvn/version "1.0.0"}
   ;;
   io.github.hkimjp/carmine-farm  {:git/tag "0.2.9" :git/sha "5fcacc1"}
