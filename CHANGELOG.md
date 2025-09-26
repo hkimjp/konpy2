@@ -9,14 +9,11 @@
 * admin can see his/her answers/comments
 * restrict comments to themselves
 * test deployment to eq.local
-* require reading comments before submit answers - what to do the first answerer?
-  no comments available. not the first answerer only. before his first answer/comment,
-  he has not yet sent any comments.
-* restrictions: when no answers (so also no comments), no way to solve restrictions.
 
 
 # 0.3.15-SNAPSHOT
 
+- reconsidered `restrictions.clj`
 
 # 0.3.14 (2025-09-26)
 
