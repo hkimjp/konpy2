@@ -15,8 +15,6 @@
   ([s n] (let [pat (re-pattern (str "(^.{" n "}).*"))]
            (str/replace-first s pat "$1..."))))
 
-;; (abbrev "012345678901234567890" 10)
-
 (defn user [request]
   (get-in request [:session :identity]))
 
@@ -32,12 +30,6 @@
 
 (defn now []
   (jt/local-date-time))
-
-;; use in restriction.clj
-(defn local-time []
-  (-> (jt/local-time)
-      str
-      (subs 0 8)))
 
 ; awkward
 (defn iso

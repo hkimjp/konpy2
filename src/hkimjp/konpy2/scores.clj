@@ -1,6 +1,6 @@
 (ns hkimjp.konpy2.scores
   (:require
-   [clojure.string :as str]
+   ; [clojure.string :as str]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
@@ -93,8 +93,8 @@
   (let [ans (sort (ds/qq answered user))
         coms (sort (ds/qq sent user))]
     (hx [:div
-         (section ans  "💪" (str user " answered") "answered")
-         (section coms "😃" (str user " comments") "sent")])))
+         (section ans  "💪" (str user " answered") "peep-answer")
+         (section coms "😃" (str user " comments") "peep-sent")])))
 
 (defn scores [request]
   (let [author   (user request)
@@ -114,6 +114,4 @@
       [:div.mx-4
        (for [sc ["A" "B" "C"]]
          (div-score sc received))]
-      ; peep section, 0.3.13
       (peep-section)])))
-

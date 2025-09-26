@@ -50,7 +50,7 @@
            [:div#comment.mx-4 "[comment]"]]
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "] "chatgpt"]
-           [:div [:span.font-bold "updated: "] "yyyy-mm-dd"]
+           [:div [:span.font-bold "updated: "] ""]
            [:pre.border-1.p-2 gpt-ans]
            [:br]
            [:div.font-bold "your comment"]

@@ -4,13 +4,13 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.3.13")
+(def version "0.3.15")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
 (defn navbar []
   [:div.flex.bg-red-600.items-baseline.gap-x-4
-   [:div.text-2xl.font-medium.text-white "KONPY2"]
+   [:div.text-2xl.font-medium.text-white " KONPY "]
    [:div {:class menu} [:a {:href "/k/tasks"}  "tasks"]]
    [:div {:class menu} [:a {:href "/k/scores"} "scores"]]
    [:div {:class menu} [:a {:href "/k/stocks"} "stocks"]]
@@ -52,8 +52,6 @@
       resp/response
       (resp/header "Content-Type" "text/html")))
 
-(defn error-page
-  [s])
 (defn redirect [uri]
   (resp/redirect uri))
 

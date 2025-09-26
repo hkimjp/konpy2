@@ -34,7 +34,7 @@
                       "/usr/bin/pytest"])]
     (if (some? pytest)
       pytest
-      (throw "did not find pytest"))))
+      (throw (Exception. "did not find pytest")))))
 
 ; (ruff-path)
 ; (python-path)
@@ -151,4 +151,3 @@
                  :data  {:author author
                          :error (.getMessage e)}})
         (throw (Exception. (.getMessage e)))))))
-

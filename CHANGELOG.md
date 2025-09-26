@@ -6,12 +6,25 @@
 * pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
-* sdmin can see his/her answers/comments
+* admin can see his/her answers/comments
 * restrict comments to themselves
 * test deployment to eq.local
-* require reading comments before submit answers - what to do the first answerer?
-  no comments available. not the first answerer only. before his first answer/comment,
-  he has not yet sent any comments.
+
+
+# 0.3.15 (2025-09-27)
+
+- reconsidered `restrictions.clj`
+
+# 0.3.14 (2025-09-26)
+
+- improved `bump-version-local.sh`
+- fixed bug in stocks - other one's stocks were browsable
+- updated clojure
+
+| :file    | :name               | :current | :latest |
+|----------|---------------------|----------|---------|
+| deps.edn | org.clojure/clojure | 1.12.2   | 1.12.3  |
+
 
 # 0.3.13 (2025-09-25)
 
