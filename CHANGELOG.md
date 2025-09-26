@@ -12,11 +12,13 @@
 * require reading comments before submit answers - what to do the first answerer?
   no comments available. not the first answerer only. before his first answer/comment,
   he has not yet sent any comments.
+* restrictions: when no answers (so also no comments), no way to solve restrictions.
 
 
 # 0.3.14-SNAPSHOT
 
-* when no answers (so also no comments), no way to solve restrictions.
+- improved `bump-version-local.sh`
+- fixed bug in stocks - other one's stocks were browsable
 
 # 0.3.13 (2025-09-25)
 
