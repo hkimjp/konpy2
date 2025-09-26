@@ -11,7 +11,7 @@
 * test deployment to eq.local
 
 
-# 0.3.15-SNAPSHOT
+# 0.3.15 (2025-09-27)
 
 - reconsidered `restrictions.clj`
 
