@@ -77,13 +77,14 @@
             (format "アップロードは %d 秒以内にはできない。一題ずつ自力でな。最終アップロード %s"
                     min-interval-uploads last-submission))))
   ;FIXME:
-  #_(when (and (< (-> (c/get (key-comment-read user)) parse-long)
-                  must-read-before-upload)
-               (< (-> (c/get (key-comment-write user)) parse-long)
-                  must-write-before-upload))
-      (throw (Exception.
-              (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書く必要ある。"
-                      must-read-before-upload must-write-before-upload)))))
+  (when (and (c/exist? (key-upload user))
+             (< (-> (c/get (key-comment-read user)) parse-long)
+                must-read-before-upload)
+             (< (-> (c/get (key-comment-write user)) parse-long)
+                must-write-before-upload))
+    (throw (Exception.
+            (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書く必要ある。"
+                    must-read-before-upload must-write-before-upload)))))
 
 (defn before-comment [user]
   (when-let [last-comment-at (c/get (key-comment user))]

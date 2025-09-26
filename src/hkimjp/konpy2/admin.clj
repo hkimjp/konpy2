@@ -97,9 +97,12 @@
     [:div.m-4
      [:p "min-interval-comments: " r/min-interval-comments]
      [:p "min-interval-uploads: " r/min-interval-uploads]
-     [:p "max-comments:" r/max-comments]
-     [:p "max-uploads:"  r/max-uploads]
-     [:p "kp2-flash:" r/kp2-flash]]]))
+     [:p "max-comments: " r/max-comments]
+     [:p "max-uploads: "  r/max-uploads]
+     [:p "kp2-flash: " r/kp2-flash]]]))
+
+; MUST_READ_BEFORE_SEND = 3
+; MUST_SEND_BEFORE_SEND = 1
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})
