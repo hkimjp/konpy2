@@ -163,4 +163,3 @@
     (hx [:ul.list-disc.mx-4
          (for [{:keys [updated owner]} (sort-by :e stocks)]
            [:li (jt/format "HH:mm:ss " updated) owner])])))
-

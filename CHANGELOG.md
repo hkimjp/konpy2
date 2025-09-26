@@ -19,6 +19,7 @@
 
 - improved `bump-version-local.sh`
 - fixed bug in stocks - other one's stocks were browsable
+- clojrue 1.12.3
 
 # 0.3.13 (2025-09-25)
 
