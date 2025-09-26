@@ -19,6 +19,12 @@
 
 - improved `bump-version-local.sh`
 - fixed bug in stocks - other one's stocks were browsable
+- updated clojure
+
+| :file    | :name               | :current | :latest |
+|----------|---------------------|----------|---------|
+| deps.edn | org.clojure/clojure | 1.12.2   | 1.12.3  |
+
 
 # 0.3.13 (2025-09-25)
 
