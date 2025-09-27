@@ -8,8 +8,11 @@
 * flag skip-validation
 * admin can see his/her answers/comments
 * restrict comments to themselves
-* test deployment to eq.local
 
+
+# 0.3.16 (2025-09-27)
+
+- improved `admin` page
 
 # 0.3.15 (2025-09-27)
 
