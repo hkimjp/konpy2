@@ -1,6 +1,7 @@
 (ns hkimjp.konpy2.admin
   (:require
    [clojure.string :as str]
+   [environ.core :refer [env]]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
@@ -95,14 +96,21 @@
            [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]
     [:div.text-2xl.font-bold "Vars"]
     [:div.m-4
-     [:p "min-interval-comments: " r/min-interval-comments]
-     [:p "min-interval-uploads: " r/min-interval-uploads]
+     [:p "develop: " (env :develop)]
+     [:p "auth: " (env :auth)]
+     [:p "port: " (env :port)]
+     [:p "admin: " (env :admin)]
+     [:p "datascript: " (env :datascript)]
+     [:p "redis: " (env :redis)]
+     [:p]
      [:p "max-comments: " r/max-comments]
      [:p "max-uploads: "  r/max-uploads]
+     [:p "min-interval-comments: " r/min-interval-comments]
+     [:p "min-interval-uploads: " r/min-interval-uploads]
+     [:p "must-read-before-upload: " r/must-read-before-upload]
+     [:p "must-write-berfore-upload: " r/must-write-before-upload]
+     [:p]
      [:p "kp2-flash: " r/kp2-flash]]]))
-
-; MUST_READ_BEFORE_SEND = 3
-; MUST_SEND_BEFORE_SEND = 1
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})
