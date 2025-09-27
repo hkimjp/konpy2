@@ -10,6 +10,11 @@
 * restrict comments to themselves
 
 
+# 0.3.17-SNAPSHOT
+
+- improved `util/start-day`
+- added env var `START_DAY`
+
 # 0.3.16 (2025-09-27)
 
 - improved `admin` page

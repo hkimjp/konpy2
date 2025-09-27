@@ -97,6 +97,7 @@
     [:div.text-2xl.font-bold "Vars"]
     [:div.m-4
      [:p "develop: " (env :develop)]
+     [:p "start-day:" (env :start-day)]
      [:p "auth: " (env :auth)]
      [:p "port: " (env :port)]
      [:p "admin: " (env :admin)]
