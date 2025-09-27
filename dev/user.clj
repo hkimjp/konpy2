@@ -3,7 +3,7 @@
    ; [babashka.fs :as fs]
    ; [clojure.java.io :as io]
    [clj-reload.core :as reload]
-   [java-time.api :as jt]
+   ; [java-time.api :as jt]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
@@ -13,59 +13,6 @@
 ;------------------------------------
 (t/set-min-level! :debug)
 (start-system)
-; (c/ping)
-;------------------------------------
-(comment
-  (ds/pl 115)
-  (ds/pl 6)
-  :rcf)
-(comment
-  (ds/qq '[:find (max ?e)
-           :where
-           [?e :answer/status "yes"]])
-
-  (ds/pl 111)
-
-  (ds/qq '[:find ?same
-           :where
-           [?e :same ?same]])
-  (jt/local-date-time)
-  (str (jt/local-date))
-
-  (str jt/local-date-time)
-  (jt/local-date-time 2025 9 18)
-  (now)
-
-  (jt/truncate-to (jt/local-date-time) :days)
-  (jt/= (jt/truncate-to (jt/local-date-time) :days)
-        (jt/truncate-to (jt/local-date-time) :days))
-
-  (jt/adjust (jt/local-date-time 2015 9 28 10 15) (jt/local-time 6))
-  (jt/adjust (jt/local-date-time) (jt/local-time 0))
-
-  (-> (ds/qq '[:find ?author ?to ?updated
-               :in $ ?now
-               :keys author to updated
-               :where
-               [?e :answer/status "yes"]
-               [?e :updated ?updated]
-               [(jt/before? ?now ?updated)]
-               [?e :to ?to]
-               [?e :author ?author]]
-             (jt/adjust (jt/local-date-time) (jt/local-time 0)))
-      count)
-  :rcf)
-
-;------------------------------------
-
-(defn restart-system
-  []
-  (stop-system)
-  (start-system))
-
-;; (restart-system)
-
-;------------------------------------
 
 (reload/init
  {:dirs ["src" "dev" "test"]
@@ -82,6 +29,7 @@
 ;; (reload/reload)
 
 ;------------------------------------
+
 (defn problem! [w n problem testcode]
   (ds/puts! [{:db/id -1
               :problem/status "yes"
