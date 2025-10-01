@@ -10,7 +10,7 @@
 * restrict comments to themselves
 
 
-# 0.3.17-SNAPSHOT
+# 0.3.17 (2025-10-01)
 
 - improved `util/start-day`
 - added env var `START_DAY`
