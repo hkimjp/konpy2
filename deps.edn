@@ -21,7 +21,8 @@
   {:git/tag "0.7.4" :git/sha "f5c3196"}}
 
  :aliases
- {:run-m {:main-opts ["-m" "hkimjp.konpy2.main"]}
+ {:run-m {:main-opts ["-m" "hkimjp.konpy2.main"]
+          :jvm-opts  ["--enable-native-access=ALL-UNNAMED"]}
 
   ;; should not remove. build uses.
   :test

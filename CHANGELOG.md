@@ -14,6 +14,8 @@
 
 - improved `util/start-day`
 - added env var `START_DAY`
+- added `compose.yml`
+- added `:jvm-opts  ["--enable-native-access=ALL-UNNAMED"` to alias `run-m`
 
 # 0.3.16 (2025-09-27)
 
