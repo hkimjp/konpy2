@@ -36,3 +36,4 @@ resources/public/assets/css/output.css
 /storage/*
 !/storage/.keep
 /systemd
+__pycache__
