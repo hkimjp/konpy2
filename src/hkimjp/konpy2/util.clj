@@ -17,8 +17,6 @@
 (defn user [request]
   (get-in request [:session :identity]))
 
-(def start-day (jt/local-date 2025 10 7))
-
 (def start-day
   (if-let [d (env :start-day)]
     (let [[_ year month date] (re-find #"(\d{4})-(\d{2})-(\d{2})" d)]

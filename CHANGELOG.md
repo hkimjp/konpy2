@@ -11,6 +11,9 @@
 * ruff version - should be copied to /usr/local/bin/ruff?
 * current container lacks python and ruff.
 
+# 0.3.19-SNAPSHOT
+* path of ruff
+
 # 0.3.18 (2025-10-04)
 
 - added - dislay paths of python, pytest ruff in the admin page.
