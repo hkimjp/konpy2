@@ -99,7 +99,6 @@
     (t/log! {:level :debug :data {:key (key-upload user) :min-inverval-uploads min-interval-uploads}})
     (c/setex (key-upload user) min-interval-uploads lt)
     (c/lpush (key-uploads user) lt)
-    ; (c/expire (key-uploads user) (* 24 60 60))
     (c/set (key-comment-read user) 0)
     (c/set (key-comment-write user) 0)))
 
@@ -107,5 +106,4 @@
   (let [lt (local-time)]
     (c/setex (key-comment user) min-interval-comments lt)
     (c/lpush (key-comments user) lt)
-    ; (c/expire (key-comments user) (* 24 60 60))
     (c/incr (key-comment-write user))))

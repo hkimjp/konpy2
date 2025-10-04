@@ -94,7 +94,7 @@
             [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]]))
 
 (defn- env-vars-section []
-  [:div {:class "w-1/2"}
+  [:div
    [:div.text-2xl.font-bold "Env Vars"]
    [:div.m-4
     [:p "develop: " (env :develop)]
@@ -114,17 +114,16 @@
     [:p]
     [:p "kp2-flash: " r/kp2-flash]]])
 
+; FIXME: user as an argument?
 (defn- redis-vars-section
   []
-  [:div {:class "w-1/2"}
+  [:div
    [:div.text-2xl.font-bold "Redis Vars"]
    [:div.m-4
-    (for [key ((juxt
-                r/key-comment-read
-                r/key-comment-write
-                r/key-comment
-                r/key-upload) "hkimura")]
+    (for [key ((juxt r/key-comment-read r/key-comment-write) "hkimura")]
       [:div.flex.gap-4 [:div key] [:div (c/get key)]])
+    (for [key ((juxt r/key-comment r/key-upload) "hkimura")]
+      [:div.flex.gap-4 [:div key] [:div (c/ttl key)]])
     (for [key ((juxt r/key-comments r/key-uploads) "hkimura")]
       [:div.flex.gap-4
        [:div key]
