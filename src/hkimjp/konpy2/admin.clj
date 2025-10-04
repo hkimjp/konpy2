@@ -114,7 +114,8 @@
     [:p]
     [:p "kp2-flash: " r/kp2-flash]]])
 
-(defn- redis-vars-section []
+(defn- redis-vars-section
+  []
   [:div {:class "w-1/2"}
    [:div.text-2xl.font-bold "Redis Vars"]
    [:div.m-4
@@ -125,7 +126,9 @@
                 r/key-upload) "hkimura")]
       [:div.flex.gap-4 [:div key] [:div (c/get key)]])
     (for [key ((juxt r/key-comments r/key-uploads) "hkimura")]
-      [:div.flex.gap-4 [:div key] [:div (c/lrange key)]])]])
+      [:div.flex.gap-4
+       [:div key]
+       [:div (pr-str (interpose " " (c/lrange key)))]])]])
 
 (defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
