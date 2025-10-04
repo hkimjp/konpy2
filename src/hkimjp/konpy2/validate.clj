@@ -7,7 +7,7 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]))
 
-(defn- ruff-path []
+(defn ruff-path []
   (let [ruff (some #(when (fs/exists? %) %)
                    ["/opt/homebrew/bin/ruff"
                     "/home/ubuntu/.local/bin/ruff"
@@ -17,7 +17,7 @@
       ruff
       (throw (Exception. "did not find ruff")))))
 
-(defn- python-path []
+(defn python-path []
   (let [python (some #(when (fs/exists? %) %)
                      [(str (env :home) "/workspace/konpy2/.venv/bin/python3")
                       "/opt/homebrew/bin/python3"
@@ -27,7 +27,7 @@
       python
       (throw (Exception. "did not find python3")))))
 
-(defn- pytest-path []
+(defn pytest-path []
   (let [pytest (some #(when (fs/exists? %) %)
                      [(str (env :home) "/workspace/konpy2/.venv/bin/pytest")
                       "/opt/homebrew/bin/pytest"

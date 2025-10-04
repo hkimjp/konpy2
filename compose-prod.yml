@@ -1,0 +1,26 @@
+services:
+  jre:
+    image: eclipse-temurin:25_36-jre-jammy
+    env_file: ".env"
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3082:3000"
+    entrypoint: >
+      sh -c "java -jar --enable-native-access=ALL-UNNAMED konpy2.jar"
+
+  redis:
+    image: redis:7
+    environment:
+      TZ: Asia/Toky
+    volumes:
+      - redis:/data
+
+volumes:
+  m2:
+    external: true
+  gitlibs:
+    external: true
+  redis:
+    driver: local
