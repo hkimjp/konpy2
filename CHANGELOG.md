@@ -14,8 +14,16 @@
 
 # 0.3.18-SNAPSHOT
 
-- divided admin page into problems-section, env-vars section, redis-vars section.
-- updated library
+- changed: introduced new redis list variables
+    - wil2:<user>:comments:<today>
+    - wil2:<user>:uploads:<today>
+  which never expires,
+  and which replaced `wil2:<user>:comments` and `wil2:<user>:uploads`
+- divided admin page into three sections,
+    - problems-section
+    - env-vars section
+    - redis-vars section
+- updated library - following datascript update (1.7.5 -> 1.7.6).
 
 | :file    | :name                                        | :current | :latest |
 |----------|----------------------------------------------|----------|---------|

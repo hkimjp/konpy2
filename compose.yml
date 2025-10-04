@@ -14,11 +14,9 @@ services:
       # sh -c "clojure -M:run-m"
       # sh -c "clojure -X:dev:plus"
       # sh -c "lein repl :headless :host 0.0.0.0 :port 5555"
-
   redis:
     image: redis:7
-    environment:
-      TZ: Asia/Toky
+    env_file: "env"
     volumes:
       - redis:/data
 
