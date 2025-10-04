@@ -8,17 +8,18 @@
 * flag skip-validation
 * admin can see his/her answers/comments
 * restrict comments to themselves
-* redis-vars in the admin page
 * ruff version - should be copied to /usr/local/bin/ruff?
 * current container lacks python and ruff.
 
 # 0.3.18-SNAPSHOT
 
+- added - dislay paths of python, pytest ruff in the admin page.
 - changed: introduced new redis list variables
     - wil2:<user>:comments:<today>
     - wil2:<user>:uploads:<today>
   which never expires,
   and which replaced `wil2:<user>:comments` and `wil2:<user>:uploads`
+- display redis vars in the admin page.
 - divided admin page into three sections,
     - problems-section
     - env-vars section

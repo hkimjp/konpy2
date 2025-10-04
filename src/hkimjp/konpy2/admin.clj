@@ -9,7 +9,8 @@
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page redirect]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [btn user now abbrev]]))
+   [hkimjp.konpy2.util :refer [btn user now abbrev]]
+   [hkimjp.konpy2.validate :refer [ruff-path python-path pytest-path]]))
 
 (defn- section [title]
   [:div.font-bold title])
@@ -127,7 +128,16 @@
     (for [key ((juxt r/key-comments r/key-uploads) "hkimura")]
       [:div.flex.gap-4
        [:div key]
-       [:div (pr-str (interpose " " (c/lrange key)))]])]])
+       [:div (pr-str (interpose " " (c/lrange key)))]])]
+   ;
+   [:div.text-2xl.font-bold "Paths"]
+   [:div.m-4
+    [:div.flex.gap-4
+     [:div "ruff"] [:div (ruff-path)]]
+    [:div.flex.gap-4
+     [:div "python"] [:div (python-path)]]
+    [:div.flex.gap-4
+     [:div "pytest"] [:div (pytest-path)]]]])
 
 (defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
