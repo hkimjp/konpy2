@@ -3,13 +3,8 @@
    [environ.core :refer [env]]
    [java-time.api :as jt]
    [taoensso.telemere :as t]
-   [hkimjp.carmine :as c]))
-
-; name                       expire        value
-; kp2:upload:<user>          min-interval  last submission time
-; kp2:upload:<user>:<time>   24            local-time of uploading
-; kp2:comment:<user>         min-interval  last comment time
-; kp2:comment:<user>:<time>  24 hour       local-time of commenting
+   [hkimjp.carmine :as c]
+   [hkimjp.konpy2.util :refer [local-date]]))
 
 (defn- local-time []
   (jt/format "HHmmss" (jt/local-time)))
@@ -30,7 +25,7 @@
   "max number of uploads in a day"
   (-> (or (env :max-uploads)  "6") parse-long))
 
-(def kp2-flash (-> (or (env :flash) "3") parse-long))
+(def kp2-flash (-> (or (env :flash) "1") parse-long))
 
 (def must-read-before-upload
   "min number of reading comments before uploading one's answer"
@@ -42,48 +37,43 @@
 
 ;-----------------------
 
-;; keys will be exipred
-(defn- key- [what user]
-  (format "kp2:%s:%s" what user))
-
-(defn- key-comment [user]
-  (key- "comment" user))
-
-(defn- key-comment-time [user]
-  (str (key-comment user) ":" (local-time)))
-
-(defn- key-upload [user]
-  (key- "upload" user))
-
-(defn- key-upload-time [user]
-  (str (key-upload user) ":" (local-time)))
-
-;; keys not expired
-; must be export to the `comments` namespace. must be public.
 (defn key-comment-read [user]
-  (str (key-comment user) ":read"))
+  (format "kp2:%s:read" user))
 
-(defn- key-comment-write [user]
-  (str (key-comment user) ":write"))
+(defn key-comment-write [user]
+  (format "kp2:%s:write" user))
+
+(defn key-comment [user]
+  (format "kp2:%s:comment" user))
+
+(defn key-upload [user]
+  (format "kp2:%s:upload" user))
+
+;lists
+(defn key-comments [user]
+  (format "kp2:%s:comments:%s" user (local-date)))
+
+(defn key-uploads [user]
+  (format "kp2:%s:uploads:%s" user (local-date)))
 
 ;-------------------------
 
 (defn before-upload [user]
-  (when (<= max-uploads (count (c/keys (str (key-upload user) "-*"))))
+  (when (<= max-uploads (c/llen (key-uploads user)))
     (throw (Exception.
             (format "一日の最大アップロード数 %d を超えました。" max-uploads))))
   (when-let [last-submission (c/get (key-upload user))]
     (throw (Exception.
             (format "アップロードは %d 秒以内にはできない。一題ずつ自力でな。最終アップロード %s"
                     min-interval-uploads last-submission))))
-  ;FIXME:
-  #_(when (and (< (-> (c/get (key-comment-read user)) parse-long)
-                  must-read-before-upload)
-               (< (-> (c/get (key-comment-write user)) parse-long)
-                  must-write-before-upload))
-      (throw (Exception.
-              (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書く必要ある。"
-                      must-read-before-upload must-write-before-upload)))))
+  (when (and (pos? (c/llen (key-uploads user))) ;
+             (< (-> (c/get (key-comment-read user)) parse-long)
+                must-read-before-upload)
+             (< (-> (c/get (key-comment-write user)) parse-long)
+                must-write-before-upload))
+    (throw (Exception.
+            (format "回答アップロードの前にコメントを %d 以上読むか、%d 以上書く必要ある。"
+                    must-read-before-upload must-write-before-upload)))))
 
 (defn before-comment [user]
   (when-let [last-comment-at (c/get (key-comment user))]
@@ -91,7 +81,7 @@
             (format "しっかりコメント読み書きするのに %d 秒は短いだろ。最終コメント時間 %s"
                     min-interval-comments
                     last-comment-at))))
-  (when (<= max-comments (count (c/keys (str (key-comment user) "-*"))))
+  (when (<= max-comments (c/llen (key-comments user)))
     (throw (Exception.
             (format "一日の最大コメント数 %d を超えました。" max-comments)))))
 
@@ -99,12 +89,12 @@
   (let [lt (local-time)]
     (t/log! {:level :debug :data {:key (key-upload user) :min-inverval-uploads min-interval-uploads}})
     (c/setex (key-upload user) min-interval-uploads lt)
-    (c/setex (key-upload-time user) (* 24 60 60) lt)
+    (c/lpush (key-uploads user) lt)
     (c/set (key-comment-read user) 0)
     (c/set (key-comment-write user) 0)))
 
 (defn after-comment [user]
   (let [lt (local-time)]
     (c/setex (key-comment user) min-interval-comments lt)
-    (c/setex (key-comment-time user) (* 24 60 60) lt)
+    (c/lpush (key-comments user) lt)
     (c/incr (key-comment-write user))))

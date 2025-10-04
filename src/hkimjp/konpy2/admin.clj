@@ -1,13 +1,16 @@
 (ns hkimjp.konpy2.admin
   (:require
    [clojure.string :as str]
+   [environ.core :refer [env]]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page redirect]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [btn user now abbrev]]))
+   [hkimjp.konpy2.util :refer [btn user now abbrev]]
+   [hkimjp.konpy2.validate :refer [ruff-path python-path pytest-path]]))
 
 (defn- section [title]
   [:div.font-bold title])
@@ -61,45 +64,90 @@
       (catch Exception e
         (t/log! {:level :error :msg e})))))
 
-(def ^:private get-problems
-  '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
-    :keys e  status  week  num  problem  testcode  updated
-    :where
-    [?e :problem/status ?status]
-    [?e :week ?week]
-    [?e :num ?num]
-    [?e :problem ?problem]
-    [?e :testcode ?testcode]
-    [?e :updated ?updated]])
-
 (defn- first-n [s n]
   (-> (str/split-lines s)
       first
       (abbrev n)))
 
-(defn problems [request]
+(defn- problems-section []
+  (let [get-problems
+        '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
+          :keys e  status  week  num  problem  testcode  updated
+          :where
+          [?e :problem/status ?status]
+          [?e :week ?week]
+          [?e :num ?num]
+          [?e :problem ?problem]
+          [?e :testcode ?testcode]
+          [?e :updated ?updated]]]
+    [:div
+     [:div.text-2xl.font-bold "Problems"]
+     [:div.m-4
+      [:div [:a {:class btn :href "/admin/new"} "new"]]
+      [:div
+       (for [p (->> (ds/qq get-problems)
+                    (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
+         [:div
+          [:a.hover:underline {:href (str "/admin/update/" (:e p))}
+           [:div.flex.gap-4
+            [:div (:week p) "-" (:num p)]
+            [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
+            [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]]))
+
+(defn- env-vars-section []
+  [:div
+   [:div.text-2xl.font-bold "Env Vars"]
+   [:div.m-4
+    [:p "develop: " (env :develop)]
+    [:p "start-day:" (env :start-day)]
+    [:p "auth: " (env :auth)]
+    [:p "port: " (env :port)]
+    [:p "admin: " (env :admin)]
+    [:p "datascript: " (env :datascript)]
+    [:p "redis: " (env :redis)]
+    [:p]
+    [:p "max-comments: " r/max-comments]
+    [:p "max-uploads: "  r/max-uploads]
+    [:p "min-interval-comments: " r/min-interval-comments]
+    [:p "min-interval-uploads: " r/min-interval-uploads]
+    [:p "must-read-before-upload: " r/must-read-before-upload]
+    [:p "must-write-berfore-upload: " r/must-write-before-upload]
+    [:p]
+    [:p "kp2-flash: " r/kp2-flash]]])
+
+; FIXME: user as an argument?
+(defn- redis-vars-section
+  []
+  [:div
+   [:div.text-2xl.font-bold "Redis Vars"]
+   [:div.m-4
+    (for [key ((juxt r/key-comment-read r/key-comment-write) "hkimura")]
+      [:div.flex.gap-4 [:div key] [:div (c/get key)]])
+    (for [key ((juxt r/key-comment r/key-upload) "hkimura")]
+      [:div.flex.gap-4 [:div key] [:div (c/ttl key)]])
+    (for [key ((juxt r/key-comments r/key-uploads) "hkimura")]
+      [:div.flex.gap-4
+       [:div key]
+       [:div (pr-str (interpose " " (c/lrange key)))]])]
+   ;
+   [:div.text-2xl.font-bold "Paths"]
+   [:div.m-4
+    [:div.flex.gap-4
+     [:div "ruff"] [:div (ruff-path)]]
+    [:div.flex.gap-4
+     [:div "python"] [:div (python-path)]]
+    [:div.flex.gap-4
+     [:div "pytest"] [:div (pytest-path)]]]])
+
+(defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
   (page
    [:div.m-4
-    [:div.text-2xl.font-bold "Problems"]
-    [:div.m-4
-     [:div [:a {:class btn :href "/admin/new"} "new"]]
-     [:div
-      (for [p (->> (ds/qq get-problems)
-                   (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
-        [:div
-         [:a.hover:underline {:href (str "/admin/update/" (:e p))}
-          [:div.flex.gap-4
-           [:div (:week p) "-" (:num p)]
-           [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
-           [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]
-    [:div.text-2xl.font-bold "Vars"]
-    [:div.m-4
-     [:p "min-interval-comments: " r/min-interval-comments]
-     [:p "min-interval-uploads: " r/min-interval-uploads]
-     [:p "max-comments:" r/max-comments]
-     [:p "max-uploads:"  r/max-uploads]
-     [:p "kp2-flash:" r/kp2-flash]]]))
+    (problems-section)
+    [:br]
+    [:div.flex
+     (env-vars-section)
+     (redis-vars-section)]]))
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})

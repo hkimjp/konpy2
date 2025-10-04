@@ -2,24 +2,66 @@
 
 * problems/test-codes for production from `py99`
 * admin/toggle-status
-* effective upsert
+* effective upsert. update only changed elements
 * pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
 * restrict comments to themselves
-* test deployment to eq.local
-* require reading comments before submit answers - what to do the first answerer?
-  no comments available. not the first answerer only. before his first answer/comment,
-  he has not yet sent any comments.
-* restrictions: when no answers (so also no comments), no way to solve restrictions.
 
+
+# 0.3.19 (2025-10-04)
+
+- made a python included container `hkim0331/konpy2:0.3.19`,
+  which can be downloaded?
+- path of ruff
+- copied Dockerfile, Makefile from `docker/hkim0331-clojure`
+- container created, but did not show the admin page.
+
+# 0.3.18 (2025-10-04)
+
+- added - dislay paths of python, pytest ruff in the admin page.
+- changed: introduced new redis list variables
+    - wil2:<user>:comments:<today>
+    - wil2:<user>:uploads:<today>
+  which never expires,
+  and which replaced `wil2:<user>:comments` and `wil2:<user>:uploads`
+- display redis vars in the admin page.
+- divided admin page into three sections,
+    - problems-section
+    - env-vars section
+    - redis-vars section
+- updated library - following datascript update (1.7.5 -> 1.7.6).
+
+| :file    | :name                                        | :current | :latest |
+|----------|----------------------------------------------|----------|---------|
+| deps.edn | io.github.hkimjp/datascript-storage-javatime | 0.7.4    | 0.7.5   |
+
+# 0.3.17 (2025-10-01)
+
+- improved `util/start-day`
+- added env var `START_DAY`
+- added `compose.yml`
+- added `:jvm-opts  ["--enable-native-access=ALL-UNNAMED"` to alias `run-m`
+
+# 0.3.16 (2025-09-27)
+
+- improved `admin` page
+
+# 0.3.15 (2025-09-27)
+
+- reconsidered `restrictions.clj`
 
 # 0.3.14 (2025-09-26)
 
 - improved `bump-version-local.sh`
 - fixed bug in stocks - other one's stocks were browsable
-- clojrue 1.12.3
+- updated clojure
+
+| :file    | :name               | :current | :latest |
+|----------|---------------------|----------|---------|
+| deps.edn | org.clojure/clojure | 1.12.2   | 1.12.3  |
+
 
 # 0.3.13 (2025-09-25)
 

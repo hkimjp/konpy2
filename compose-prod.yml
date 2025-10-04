@@ -1,0 +1,26 @@
+services:
+  konpy2:
+    image: hkim0331/konpy2:0.3.19
+    env_file: ".env"
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3082:3000"
+    entrypoint: >
+      sh -c "clojure -J--enable-native-access=ALL-UNNAMED -M:run-m"
+
+  redis:
+    image: redis:7
+    environment:
+      TZ: Asia/Toky
+    volumes:
+      - redis:/data
+
+volumes:
+  m2:
+    external: true
+  gitlibs:
+    external: true
+  redis:
+    driver: local
