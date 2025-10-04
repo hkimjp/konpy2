@@ -5,6 +5,7 @@
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]))
 
+;; ???
 ; name                 expire                 value
 ; kp2:<user>:comment   min-interval-comments  last comment time
 ; kp2:<user>:upload    min-interval-uploads   last upload time
@@ -44,6 +45,12 @@
 
 ;-----------------------
 
+(defn key-comment-read [user]
+  (format "kp2:%s:read" user))
+
+(defn- key-comment-write [user]
+  (format "kp2:%s:write" user))
+
 (defn- key-comment [user]
   (format "kp2:%s:comment" user))
 
@@ -56,7 +63,6 @@
 (defn- key-uploads [user]
   (format "kp2:%s:uploads" user))
 
-;; reset to zero after an upload.
 (defn key-comment-read [user]
   (format "kp2:%s:read" user))
 

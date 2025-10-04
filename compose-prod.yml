@@ -10,7 +10,6 @@ services:
     entrypoint: >
       sh -c "java -jar --enable-native-access=ALL-UNNAMED konpy2.jar"
 
-
   redis:
     image: redis:7
     environment:

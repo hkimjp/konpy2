@@ -19,8 +19,7 @@
     ["logout" logout!]]
    ["/help"   {:get help}]
    ["/admin/" {:middleware [m/wrap-admin]}
-    [""           {:get admin/problems}]
-    ["problems"   {:get admin/problems}]
+    [""           {:get admin/admin}]
     ["new"        {:get admin/new  :post admin/upsert!}]
     ["update/:e"  {:get admin/edit :post admin/upsert!}]]
    ["/k/" {:middleware [m/wrap-users]}
