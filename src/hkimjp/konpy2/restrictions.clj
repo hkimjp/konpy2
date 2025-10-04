@@ -48,26 +48,20 @@
 (defn key-comment-read [user]
   (format "kp2:%s:read" user))
 
-(defn- key-comment-write [user]
+(defn key-comment-write [user]
   (format "kp2:%s:write" user))
 
-(defn- key-comment [user]
+(defn key-comment [user]
   (format "kp2:%s:comment" user))
 
-(defn- key-comments [user]
+(defn key-comments [user]
   (format "kp2:%s:comments" user))
 
-(defn- key-upload [user]
+(defn key-upload [user]
   (format "kp2:%s:upload" user))
 
-(defn- key-uploads [user]
+(defn key-uploads [user]
   (format "kp2:%s:uploads" user))
-
-(defn key-comment-read [user]
-  (format "kp2:%s:read" user))
-
-(defn- key-comment-write [user]
-  (format "kp2:%s:write" user))
 
 ;-------------------------
 

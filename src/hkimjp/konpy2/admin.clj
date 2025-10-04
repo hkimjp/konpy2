@@ -5,6 +5,7 @@
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page redirect]]
    [hkimjp.konpy2.restrictions :as r]
@@ -62,39 +63,38 @@
       (catch Exception e
         (t/log! {:level :error :msg e})))))
 
-(def ^:private get-problems
-  '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
-    :keys e  status  week  num  problem  testcode  updated
-    :where
-    [?e :problem/status ?status]
-    [?e :week ?week]
-    [?e :num ?num]
-    [?e :problem ?problem]
-    [?e :testcode ?testcode]
-    [?e :updated ?updated]])
-
 (defn- first-n [s n]
   (-> (str/split-lines s)
       first
       (abbrev n)))
 
 (defn- problems-section []
-  [:div
-   [:div.text-2xl.font-bold "Problems"]
-   [:div.m-4
-    [:div [:a {:class btn :href "/admin/new"} "new"]]
+  (let [get-problems
+        '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
+          :keys e  status  week  num  problem  testcode  updated
+          :where
+          [?e :problem/status ?status]
+          [?e :week ?week]
+          [?e :num ?num]
+          [?e :problem ?problem]
+          [?e :testcode ?testcode]
+          [?e :updated ?updated]]]
     [:div
-     (for [p (->> (ds/qq get-problems)
-                  (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
-       [:div
-        [:a.hover:underline {:href (str "/admin/update/" (:e p))}
-         [:div.flex.gap-4
-          [:div (:week p) "-" (:num p)]
-          [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
-          [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]])
+     [:div.text-2xl.font-bold "Problems"]
+     [:div.m-4
+      [:div [:a {:class btn :href "/admin/new"} "new"]]
+      [:div
+       (for [p (->> (ds/qq get-problems)
+                    (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
+         [:div
+          [:a.hover:underline {:href (str "/admin/update/" (:e p))}
+           [:div.flex.gap-4
+            [:div (:week p) "-" (:num p)]
+            [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
+            [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]]))
 
 (defn- env-vars-section []
-  [:div
+  [:div {:class "w-1/2"}
    [:div.text-2xl.font-bold "Env Vars"]
    [:div.m-4
     [:p "develop: " (env :develop)]
@@ -115,15 +115,25 @@
     [:p "kp2-flash: " r/kp2-flash]]])
 
 (defn- redis-vars-section []
-  [:div
-   [:div.text-2xl.font-bold "Redis Vars"]])
+  [:div {:class "w-1/2"}
+   [:div.text-2xl.font-bold "Redis Vars"]
+   [:div.m-4
+    (for [key ((juxt
+                r/key-comment-read
+                r/key-comment-write
+                r/key-comment
+                r/key-upload) "hkimura")]
+      [:div.flex.gap-4 [:div key] [:div (c/get key)]])
+    (for [key ((juxt r/key-comments r/key-uploads) "hkimura")]
+      [:div.flex.gap-4 [:div key] [:div (c/lrange key)]])]])
 
 (defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
   (page
    [:div.m-4
     (problems-section)
-    [:div.flex.gap-4
+    [:br]
+    [:div.flex
      (env-vars-section)
      (redis-vars-section)]]))
 
