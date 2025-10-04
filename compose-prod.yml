@@ -1,6 +1,6 @@
 services:
-  jre:
-    image: eclipse-temurin:25_36-jre-jammy
+  konpy2:
+    image: hkim0331/konpy2:0.3.19
     env_file: ".env"
     working_dir: /usr/src/app
     volumes:
@@ -8,7 +8,7 @@ services:
     ports:
       - "3082:3000"
     entrypoint: >
-      sh -c "java -jar --enable-native-access=ALL-UNNAMED konpy2.jar"
+      sh -c "clojure -J--enable-native-access=ALL-UNNAMED -M:run-m"
 
   redis:
     image: redis:7

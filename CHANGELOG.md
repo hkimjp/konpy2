@@ -8,8 +8,15 @@
 * flag skip-validation
 * admin can see his/her answers/comments
 * restrict comments to themselves
-* ruff version - should be copied to /usr/local/bin/ruff?
-* current container lacks python and ruff.
+
+
+# 0.3.19 (2025-10-04)
+
+- made a python included container `hkim0331/konpy2:0.3.19`,
+  which can be downloaded?
+- path of ruff
+- copied Dockerfile, Makefile from `docker/hkim0331-clojure`
+- container created, but did not show the admin page.
 
 # 0.3.18 (2025-10-04)
 
