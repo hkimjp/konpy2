@@ -10,7 +10,7 @@
 * restrict comments to themselves
 
 
-# 0.3.19-SNAPSHOT
+# 0.3.19 (2025-10-04)
 
 - made a python included container `hkim0331/konpy2:0.3.19`,
   which can be downloaded?
