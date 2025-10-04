@@ -18,7 +18,7 @@
   ;;
   io.github.hkimjp/carmine-farm  {:git/tag "0.2.9" :git/sha "5fcacc1"}
   io.github.hkimjp/datascript-storage-javatime
-  {:git/tag "0.7.4" :git/sha "f5c3196"}}
+  {:git/tag "0.7.5" :git/sha "37bde3b"}}
 
  :aliases
  {:run-m {:main-opts ["-m" "hkimjp.konpy2.main"]

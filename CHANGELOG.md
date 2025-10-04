@@ -2,13 +2,24 @@
 
 * problems/test-codes for production from `py99`
 * admin/toggle-status
-* effective upsert
+* effective upsert. update only changed elements
 * pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
 * restrict comments to themselves
+* redis-vars in the admin page
+* ruff version - should be copied to /usr/local/bin/ruff?
+* current container lacks python and ruff.
 
+# 0.3.18-SNAPSHOT
+
+- divided admin page into problems-section, env-vars section, redis-vars section.
+- updated library
+
+| :file    | :name                                        | :current | :latest |
+|----------|----------------------------------------------|----------|---------|
+| deps.edn | io.github.hkimjp/datascript-storage-javatime | 0.7.4    | 0.7.5   |
 
 # 0.3.17 (2025-10-01)
 

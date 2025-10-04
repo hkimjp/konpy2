@@ -78,40 +78,54 @@
       first
       (abbrev n)))
 
-(defn problems [request]
+(defn- problems-section []
+  [:div
+   [:div.text-2xl.font-bold "Problems"]
+   [:div.m-4
+    [:div [:a {:class btn :href "/admin/new"} "new"]]
+    [:div
+     (for [p (->> (ds/qq get-problems)
+                  (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
+       [:div
+        [:a.hover:underline {:href (str "/admin/update/" (:e p))}
+         [:div.flex.gap-4
+          [:div (:week p) "-" (:num p)]
+          [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
+          [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]])
+
+(defn- env-vars-section []
+  [:div
+   [:div.text-2xl.font-bold "Env Vars"]
+   [:div.m-4
+    [:p "develop: " (env :develop)]
+    [:p "start-day:" (env :start-day)]
+    [:p "auth: " (env :auth)]
+    [:p "port: " (env :port)]
+    [:p "admin: " (env :admin)]
+    [:p "datascript: " (env :datascript)]
+    [:p "redis: " (env :redis)]
+    [:p]
+    [:p "max-comments: " r/max-comments]
+    [:p "max-uploads: "  r/max-uploads]
+    [:p "min-interval-comments: " r/min-interval-comments]
+    [:p "min-interval-uploads: " r/min-interval-uploads]
+    [:p "must-read-before-upload: " r/must-read-before-upload]
+    [:p "must-write-berfore-upload: " r/must-write-before-upload]
+    [:p]
+    [:p "kp2-flash: " r/kp2-flash]]])
+
+(defn- redis-vars-section []
+  [:div
+   [:div.text-2xl.font-bold "Redis Vars"]])
+
+(defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
   (page
    [:div.m-4
-    [:div.text-2xl.font-bold "Problems"]
-    [:div.m-4
-     [:div [:a {:class btn :href "/admin/new"} "new"]]
-     [:div
-      (for [p (->> (ds/qq get-problems)
-                   (sort-by (juxt (fn [x] (* -1 (:week x))) :num)))]
-        [:div
-         [:a.hover:underline {:href (str "/admin/update/" (:e p))}
-          [:div.flex.gap-4
-           [:div (:week p) "-" (:num p)]
-           [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
-           [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]
-    [:div.text-2xl.font-bold "Vars"]
-    [:div.m-4
-     [:p "develop: " (env :develop)]
-     [:p "start-day:" (env :start-day)]
-     [:p "auth: " (env :auth)]
-     [:p "port: " (env :port)]
-     [:p "admin: " (env :admin)]
-     [:p "datascript: " (env :datascript)]
-     [:p "redis: " (env :redis)]
-     [:p]
-     [:p "max-comments: " r/max-comments]
-     [:p "max-uploads: "  r/max-uploads]
-     [:p "min-interval-comments: " r/min-interval-comments]
-     [:p "min-interval-uploads: " r/min-interval-uploads]
-     [:p "must-read-before-upload: " r/must-read-before-upload]
-     [:p "must-write-berfore-upload: " r/must-write-before-upload]
-     [:p]
-     [:p "kp2-flash: " r/kp2-flash]]]))
+    (problems-section)
+    [:div.flex.gap-4
+     (env-vars-section)
+     (redis-vars-section)]]))
 
 (defn new [request]
   (t/log! {:lelvel :info :id (user request)})
