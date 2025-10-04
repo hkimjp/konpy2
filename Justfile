@@ -45,7 +45,18 @@ clean:
   rm -rf target
   fd -I bak --exec rm
 
+#
+# test on eq.local
+#
+
+eq: build
+  scp compose-prod.yml eq.local:konpy2/compose.yml
+  scp target/io.github.hkimjp/konpy2-*.jar eq.local:konpy2/konpy2.jar
+  ssh eq.local 'cd konpy2 && docker compose restart'
+
+#
 # docker container
+#
 
 TAG := 'hkim0331/konpy2'
 VER := '0.3.19'
@@ -72,9 +83,3 @@ docker-build:
 docker-push:
   docker push {{TAG}}
   docker push {{TAG}}:{{VER}}
-
-eq: build
-  scp compose-prod.yml eq.local:konpy2/compose.yml
-  scp target/io.github.hkimjp/konpy2-*.jar eq.local:konpy2/konpy2.jar
-  ssh eq.local 'cd konpy2 && docker compose restart'
-
