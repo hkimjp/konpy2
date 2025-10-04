@@ -45,7 +45,6 @@ clean:
   rm -rf target
   fd -I bak --exec rm
 
-# this does not go well for konpy2.jar does not have python etc.
 eq: build
   scp target/io.github.hkimjp/konpy2-*.jar eq.local:konpy2/konpy2.jar
   ssh eq.local 'cd wil2 && docker compose restart'

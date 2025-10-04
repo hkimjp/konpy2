@@ -12,9 +12,9 @@
 (defn ruff-path []
   (let [ruff (some #(when (fs/exists? %) %)
                    ["/opt/homebrew/bin/ruff"
-                    "/home/ubuntu/.local/bin/ruff"
-                    "/snap/bin/ruff"]
-                   (str (env :home) "/.local/bin/ruff"))]
+                    "/usr/local/bin/ruff"
+                    "/snap/bin/ruff"
+                    (str (env :home) "/.local/bin/ruff")])]
     (if (some? ruff)
       ruff
       (throw (Exception. "did not find ruff")))))

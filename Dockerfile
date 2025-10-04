@@ -12,5 +12,6 @@ RUN set -ex; \
 # don't forget in production
 RUN set -ex; apt-get -y autoremove; apt-get -y clean; rm -rf /var/lib/apt/lists/*
 
+# Ruff
 RUN set -ex; curl -LsSf https://astral.sh/ruff/install.sh | sh
-
+RUN set -ex; cp /root/.local/bin/ruff /usr/local/bin/ruff
