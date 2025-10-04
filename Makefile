@@ -13,8 +13,8 @@ push:
 	docker push ${TAG}
 	docker push ${TAG}:${VER}
 
-#zip:
-#	zip -r clojure.zip Dockerfile Makefile docker-compose.yml .devcontainer
+# zip:
+#	 zip -r clojure.zip Dockerfile Makefile docker-compose.yml .devcontainer
 
 clean:
 	${RM} *~ clojure.zip
