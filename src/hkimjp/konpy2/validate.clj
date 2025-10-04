@@ -7,66 +7,61 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]))
 
+(def ^:private timeout 10)
+
 (defn ruff-path []
   (let [ruff (some #(when (fs/exists? %) %)
                    ["/opt/homebrew/bin/ruff"
                     "/home/ubuntu/.local/bin/ruff"
-                    (str (env :home) "/.local/bin/ruff")
-                    "/snap/bin/ruff"])]
+                    "/snap/bin/ruff"]
+                   (str (env :home) "/.local/bin/ruff"))]
     (if (some? ruff)
       ruff
       (throw (Exception. "did not find ruff")))))
 
 (defn python-path []
   (let [python (some #(when (fs/exists? %) %)
-                     [(str (env :home) "/workspace/konpy2/.venv/bin/python3")
-                      "/opt/homebrew/bin/python3"
+                     ["/opt/homebrew/bin/python3"
                       "/usr/local/bin/python3"
-                      "/usr/bin/python3"])]
+                      "/usr/bin/python3"
+                      (str (env :home) "/workspace/konpy2/.venv/bin/python3")])]
     (if (some? python)
       python
       (throw (Exception. "did not find python3")))))
 
 (defn pytest-path []
   (let [pytest (some #(when (fs/exists? %) %)
-                     [(str (env :home) "/workspace/konpy2/.venv/bin/pytest")
-                      "/opt/homebrew/bin/pytest"
-                      "/usr/bin/pytest"])]
+                     ["/opt/homebrew/bin/pytest"
+                      "/usr/bin/pytest"
+                      (str (env :home) "/workspace/konpy2/.venv/bin/pytest")])]
     (if (some? pytest)
       pytest
       (throw (Exception. "did not find pytest")))))
-
-; (ruff-path)
-; (python-path)
-; (pytest-path)
-
-(def ^:private timeout 10)
-
-(def ^:private fetch-answer
-  '[:find ?a ?answer
-    :in $ ?author ?week ?num
-    :where
-    [?e :problem/status _]
-    [?e :week ?week]
-    [?e :num ?num]
-    [?a :answer/status "yes"]
-    [?a :author ?author]
-    [?a :answer ?answer]
-    [?a :to ?e]])
 
 (defn- get-last-answer [author week num]
   (t/log! {:level :debug
            :id "get-last-answer"
            :data {:author author :week week :num num}})
-  (try
-    (->> (ds/qq fetch-answer author week num)
-         (sort-by first)
-         last
-         second)
-    (catch Exception e
-      (t/log! {:level :error
-               :id "get-last-answer"
-               :msg (.getMessage e)}))))
+  (let [fetch-answers
+        '[:find ?a ?answer
+          :in $ ?author ?week ?num
+          :where
+          [?e :problem/status _]
+          [?e :week ?week]
+          [?e :num ?num]
+          [?a :answer/status "yes"]
+          [?a :author ?author]
+          [?a :answer ?answer]
+          [?a :to ?e]]]
+    (try
+      (->> (ds/qq fetch-answers author week num)
+           (sort-by first)
+           last
+           second)
+      (catch Exception e
+        (t/log! {:level :error
+                 :id "get-last-answer"
+                 :msg (.getMessage e)})))))
 
 (defn- expand-includes
   "expand `#include` recursively."

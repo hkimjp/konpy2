@@ -12,7 +12,9 @@
 * current container lacks python and ruff.
 
 # 0.3.19-SNAPSHOT
-* path of ruff
+
+- path of ruff
+- copied Dockerfile, Makefile from `docker/hkim0331-clojure`
 
 # 0.3.18 (2025-10-04)
 

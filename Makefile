@@ -1,7 +1,7 @@
 # https://zenn.dev/yyu/articles/3f900eaa2aa860
 
-TAG=hkim0331/clojure
-VER=0.5.0
+TAG=hkim0331/konpy2
+VER=0.3.19
 
 .PHONY: build zip clean hub security manifest amd64 arm64
 

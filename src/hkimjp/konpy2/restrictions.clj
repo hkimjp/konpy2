@@ -6,15 +6,6 @@
    [hkimjp.carmine :as c]
    [hkimjp.konpy2.util :refer [local-date]]))
 
-;; ???
-; name                 expire                 value
-; kp2:<user>:comment   min-interval-comments  last comment time
-; kp2:<user>:upload    min-interval-uploads   last upload time
-; kp2:<user>:comments  24hours                user's comment times
-; kp2:<user>:uploads   24hours                user's upload times
-; kp2:<user>:write     never                  reset by after-comment
-; kp2:<user>:read      never                  reset by comments/hx-coment
-
 (defn- local-time []
   (jt/format "HHmmss" (jt/local-time)))
 
