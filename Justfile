@@ -35,8 +35,11 @@ deploy: build
   ssh ${DEST} 'sudo systemctl restart konpy'
   ssh ${DEST} 'systemctl status konpy'
 
-container-nrepl:
-  clj -M:dev -m nrepl.cmdline -b 0.0.0.0 -p 5555
+up:
+  docker compose up
+
+down:
+  docker compose down
 
 upgrade:
   clojure -Tantq outdated :upgrade true
@@ -76,10 +79,10 @@ manifest: arm64 amd64
   docker manifest create --amend {{TAG}} {{TAG}}-amd64 {{TAG}}-arm64
   docker manifest push {{TAG}}
 
-docker-build:
-  docker build --pull -t {{TAG}} .
-  docker tag {{TAG}} {{TAG}}:{{VER}}
+# docker-build:
+#   docker build --pull -t {{TAG}} .
+#   docker tag {{TAG}} {{TAG}}:{{VER}}
 
-docker-push:
-  docker push {{TAG}}
-  docker push {{TAG}}:{{VER}}
+# docker-push:
+#   docker push {{TAG}}
+#   docker push {{TAG}}:{{VER}}

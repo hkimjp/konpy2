@@ -117,19 +117,20 @@
 
 ; FIXME: user as an argument?
 (defn- redis-vars-section
-  []
+  [user]
   [:div
    [:div.text-2xl.font-bold "Redis Vars"]
    [:div.m-4
-    (for [key ((juxt r/key-comment-read r/key-comment-write) "hkimura")]
+    (for [key ((juxt r/key-comment-read r/key-comment-write) user)]
       [:div.flex.gap-4 [:div key] [:div (c/get key)]])
-    (for [key ((juxt r/key-comment r/key-upload) "hkimura")]
+    (for [key ((juxt r/key-comment r/key-upload) user)]
       [:div.flex.gap-4 [:div key] [:div (c/ttl key)]])
-    (for [key ((juxt r/key-comments r/key-uploads) "hkimura")]
+    (for [key ((juxt r/key-comments r/key-uploads) user)]
       [:div.flex.gap-4
        [:div key]
-       [:div (pr-str (interpose " " (c/lrange key)))]])]
-   ;
+       [:div (if-let [uploads (c/lrange key)]
+               (->> uploads (interpose " ") pr-str)
+               "NIL")]])]
    [:div.text-2xl.font-bold "Paths"]
    [:div.m-4
     [:div.flex.gap-4
@@ -147,10 +148,10 @@
     [:br]
     [:div.flex
      (env-vars-section)
-     (redis-vars-section)]]))
+     (redis-vars-section (user request))]]))
 
 (defn new [request]
-  (t/log! {:lelvel :info :id (user request)})
+  (t/log! {:lelvel :info :id "new" :msg (user request)})
   (page
    (problem-form {:db/id -1
                   :problem/status "yes"

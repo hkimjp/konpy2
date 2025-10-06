@@ -1,1 +1,26 @@
-compose-prod.yml
+services:
+  konpy2:
+    image: hkim0331/konpy2:latest
+    env_file: ".env"
+    volumes:
+      - .:/usr/src/app
+      - m2:/root/.m2
+      - gitlibs:/root/.gitlibs
+    working_dir: /usr/src/app
+    ports:
+      - 3000:3000
+    entrypoint: >
+      sh -c "clojure -M:dev:nrepl -b '0.0.0.0' -p 5555"
+  redis:
+    image: redis:7
+    env_file: ".env"
+    volumes:
+      - redis:/data
+
+volumes:
+  m2:
+    external: true
+  gitlibs:
+    external: true
+  redis:
+    driver: local
