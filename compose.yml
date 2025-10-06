@@ -9,6 +9,7 @@ services:
       - gitlibs:/root/.gitlibs
     ports:
       - 3058:3000
+      - 5555:5555
     entrypoint: >
       sh -c "clojure -M:dev:nrepl -b '0.0.0.0' -p 5555"
   redis:
