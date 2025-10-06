@@ -44,3 +44,42 @@ upgrade:
 clean:
   rm -rf target
   fd -I bak --exec rm
+
+#
+# test on eq.local
+#
+
+eq: build
+  scp compose-prod.yml eq.local:konpy2/compose.yml
+  scp target/io.github.hkimjp/konpy2-*.jar eq.local:konpy2/konpy2.jar
+  ssh eq.local 'cd konpy2 && docker compose restart'
+
+#
+# docker container
+#
+
+TAG := 'hkim0331/konpy2'
+VER := '0.3.19'
+
+hub: security manifest
+
+security:
+  security -v unlock-keychain ~/Library/Keychains/login.keychain-db
+
+amd64:
+  docker buildx build --platform linux/amd64 --push -t {{TAG}}-amd64 .
+
+arm64:
+  docker buildx build --platform linux/arm64 --push -t {{TAG}}-arm64 .
+
+manifest: arm64 amd64
+  docker manifest create --amend {{TAG}} {{TAG}}-amd64 {{TAG}}-arm64
+  docker manifest push {{TAG}}
+
+docker-build:
+  docker build --pull -t {{TAG}} .
+  docker tag {{TAG}} {{TAG}}:{{VER}}
+
+docker-push:
+  docker push {{TAG}}
+  docker push {{TAG}}:{{VER}}

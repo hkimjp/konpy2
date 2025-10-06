@@ -34,11 +34,18 @@
   ([date]
    (quot (jt/time-between start-day date :days) 7)))
 
+; not orthogonal
 (defn today []
   (str (jt/local-date)))
 
 (defn now []
   (jt/local-date-time))
+
+(defn local-date []
+  (str (jt/local-date)))
+
+(defn local-date-time []
+  (str (jt/local-date-time)))
 
 ; awkward
 (defn iso

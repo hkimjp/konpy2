@@ -3,15 +3,8 @@
    [environ.core :refer [env]]
    [java-time.api :as jt]
    [taoensso.telemere :as t]
-   [hkimjp.carmine :as c]))
-
-; name                 expire                 value
-; kp2:<user>:comment   min-interval-comments  last comment time
-; kp2:<user>:upload    min-interval-uploads   last upload time
-; kp2:<user>:comments  24hours                user's comment times
-; kp2:<user>:uploads   24hours                user's upload times
-; kp2:<user>:write     never                  reset by after-comment
-; kp2:<user>:read      never                  reset by comments/hx-coment
+   [hkimjp.carmine :as c]
+   [hkimjp.konpy2.util :refer [local-date]]))
 
 (defn- local-time []
   (jt/format "HHmmss" (jt/local-time)))
@@ -44,24 +37,24 @@
 
 ;-----------------------
 
-(defn- key-comment [user]
-  (format "kp2:%s:comment" user))
-
-(defn- key-comments [user]
-  (format "kp2:%s:comments" user))
-
-(defn- key-upload [user]
-  (format "kp2:%s:upload" user))
-
-(defn- key-uploads [user]
-  (format "kp2:%s:uploads" user))
-
-;; reset to zero after an upload.
 (defn key-comment-read [user]
   (format "kp2:%s:read" user))
 
-(defn- key-comment-write [user]
+(defn key-comment-write [user]
   (format "kp2:%s:write" user))
+
+(defn key-comment [user]
+  (format "kp2:%s:comment" user))
+
+(defn key-upload [user]
+  (format "kp2:%s:upload" user))
+
+;lists
+(defn key-comments [user]
+  (format "kp2:%s:comments:%s" user (local-date)))
+
+(defn key-uploads [user]
+  (format "kp2:%s:uploads:%s" user (local-date)))
 
 ;-------------------------
 
@@ -97,7 +90,6 @@
     (t/log! {:level :debug :data {:key (key-upload user) :min-inverval-uploads min-interval-uploads}})
     (c/setex (key-upload user) min-interval-uploads lt)
     (c/lpush (key-uploads user) lt)
-    (c/expire (key-uploads user) (* 24 60 60))
     (c/set (key-comment-read user) 0)
     (c/set (key-comment-write user) 0)))
 
@@ -105,5 +97,4 @@
   (let [lt (local-time)]
     (c/setex (key-comment user) min-interval-comments lt)
     (c/lpush (key-comments user) lt)
-    (c/expire (key-comments user) (* 24 60 60))
     (c/incr (key-comment-write user))))
