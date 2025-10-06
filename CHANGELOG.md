@@ -12,12 +12,14 @@
 
 # 0.3.20-SNAPSHOT
 
-- htmx 2.0.7.
+- hkim0331/konpy2:0.3.19 is amd64 binary. use `konpy2:latest`
+- updated `deps.edn` for docker container - added aliases :dev and :nrepl
+- fixed: did not forward 5555 from container - hkimjp.konpy2.* was not found.
 
 # 0.3.19 (2025-10-04)
 
 - made a python included container `hkim0331/konpy2:0.3.19`,
-  which can be downloaded?
+  which can be downloaded.
 - path of ruff
 - copied Dockerfile, Makefile from `docker/hkim0331-clojure`
 - container created, but did not show the admin page.

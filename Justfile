@@ -35,8 +35,11 @@ deploy: build
   ssh ${DEST} 'sudo systemctl restart konpy'
   ssh ${DEST} 'systemctl status konpy'
 
-container-nrepl:
-  clj -M:dev -m nrepl.cmdline -b 0.0.0.0 -p 5555
+up:
+  docker compose up
+
+down:
+  docker compose down
 
 upgrade:
   clojure -Tantq outdated :upgrade true
