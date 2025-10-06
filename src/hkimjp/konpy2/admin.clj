@@ -115,7 +115,6 @@
     [:p]
     [:p "kp2-flash: " r/kp2-flash]]])
 
-; FIXME: user as an argument?
 (defn- redis-vars-section
   [user]
   [:div

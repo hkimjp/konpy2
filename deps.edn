@@ -26,8 +26,9 @@
    :extra-deps  {io.github.tonsky/clj-reload {:mvn/version "1.0.0"}}
    :jvm-opts    ["--add-opens=java.base/java.nio=ALL-UNNAMED"
                  "--add-opens=java.base/sun.nio.ch=ALL-UNNAMED"
-                 "--enable-native-access=ALL-UNNAMED"]} :run-m {:main-opts ["-m" "hkimjp.konpy2.main"]
-                                                                :jvm-opts  ["--enable-native-access=ALL-UNNAMED"]}
+                 "--enable-native-access=ALL-UNNAMED"]}
+  :run-m {:main-opts ["-m" "hkimjp.konpy2.main"]
+          :jvm-opts  ["--enable-native-access=ALL-UNNAMED"]}
   :nrepl
   {:extra-deps {nrepl/nrepl {:mvn/version "1.4.0"}}
    :main-opts  ["-m" "nrepl.cmdline"]}
