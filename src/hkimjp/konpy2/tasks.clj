@@ -32,20 +32,20 @@
               {:href (str "/k/problem/" e)}
               [:span.mr-4 week "-" num] [:span problem]]]))
     [:div.text-2xl "本日の回答・コメント・ストック"]
-    [:div.m-4.flex
-     [:div {:class "w-1/3"}
+    [:div.m-4.flex.gap-4
+     [:div
       [:div.hover:underline {:hx-get    "/k/hx-answers"
                              :hx-target "#answers"
                              :hx-swap   "innerHTML"}
        [:span.font-bold "回答"]]
       [:div#answers ""]]
-     [:div {:class "w-1/3"}
+     [:div
       [:div.hover:underline {:hx-get    "/k/hx-comments"
                              :hx-target "#comments"
                              :hx-swap   "innerHTML"}
        [:span.font-bold "コメント"]]
       [:div#comments ""]]
-     [:div {:class "w-1/3"}
+     [:div
       [:div.hover:underline {:hx-get    "/k/hx-stocks"
                              :hx-target "#stocks"
                              :hx-swap   "innerHTML"}
@@ -108,14 +108,18 @@
                       (jt/adjust date-time (jt/local-time 0)))))
 
 (defn hx-answers [request]
-  (t/log! {:level :info :id "hx-answers" :msg (user request)})
-  (try
-    (hx [:ul.list-disc.mx-4
-         (for [{:keys [week num author updated]} (sort-by :e (todays-answers))]
-           (let [updated (subs (str updated) 11 19)]
-             [:li (format "%d-%d %s %s" week num updated author)]))])
-    (catch Exception e
-      (t/log! :error (.getMessage e)))))
+  (let [user (user request)
+        answers (todays-answers)]
+    (t/log! {:level :info :id "hx-answers" :msg (user request)})
+    (hx [:div
+         [:div (format "(%d)" (count answers))]
+         [:ul.list-disc.mx-4
+          (for [{:keys [week num author updated]}
+                (->> answers
+                     (sort-by :e)
+                     reverse)]
+            (let [updated (subs (str updated) 11 19)]
+              [:li (format "%d-%d %s %s" week num updated author)]))]])))
 
 (defn- todays-comments
   "comments after `date-time`"
@@ -137,14 +141,19 @@
           (jt/adjust date-time (jt/local-time 0)))))
 
 (defn hx-comments [request]
-  (t/log! {:level :info :id "hx-comments" :msg (user request)})
-  (try
-    (hx [:ul.list-disc.mx-4
-         (for [{:keys [week num author updated commentee]} (sort-by :e (todays-comments))]
-           (let [updated (subs (str updated) 11 19)]
-             [:li (format "%d-%d %s %s → %s" week num updated author commentee)]))])
-    (catch Exception e
-      (t/log! :error (.getMessage e)))))
+  (let [user (user request)
+        comments (todays-comments)]
+    (t/log! {:level :info :id "hx-comments" :msg (user request)})
+    (hx
+     [:div
+      [:div (format "(%d)" (count comments))]
+      [:ul.list-disc.mx-4
+       (for [{:keys [week num author updated commentee]}
+             (->> comments
+                  (sort-by :e)
+                  reverse)]
+         (let [updated (subs (str updated) 11 19)]
+           [:li (format "%d-%d %s %s → %s" week num updated author commentee)]))]])))
 
 (def ^:private stocks
   '[:find ?e ?owner ?updated
@@ -160,6 +169,8 @@
   (let [owner (user request)
         stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
     (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
-    (hx [:ul.list-disc.mx-4
-         (for [{:keys [updated owner]} (sort-by :e stocks)]
-           [:li (jt/format "HH:mm:ss " updated) owner])])))
+    (hx [:div
+         [:div (format "(%d)" (count stocks))]
+         [:ul.list-disc.mx-4
+          (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
+            [:li (jt/format "HH:mm:ss " updated) owner])]])))
