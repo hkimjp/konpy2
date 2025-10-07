@@ -6,7 +6,7 @@
 
 (def btn "mx-1 px-1 text-white bg-sky-500 hover:bg-sky-700 active:bg-red-500 rounded")
 
-(def input-box "px-1 border-1 border-solid rounded")
+(def input-box "px-1 border-1 rounded")
 
 (defn abbrev
   "shorten string s for concise log."
@@ -23,7 +23,9 @@
       (jt/local-date (parse-long year)
                      (parse-long month)
                      (parse-long date)))
-    (jt/local-date 2025 10 1)))
+    (jt/local-date 2025 10 1))) ; production 2025 10 1
+
+; 2025 9 22
 
 (defn week
   "Returns how many weeks have passed since the argument `date`.
