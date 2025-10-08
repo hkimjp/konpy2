@@ -11,7 +11,7 @@
 * unnecessary to display who and when stocks. just number is enough.
 
 
-# 0.3.22-SNAPSHOT
+# 0.3.22 (2025-10-08)
 
 - stop displaying stocks,  who stocked when. just display number of stocks.
 
