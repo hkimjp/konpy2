@@ -90,6 +90,7 @@
     (spit (fs/file f) answer)
     f))
 
+;; break 0.14.0?
 (defn- ruff
   "ruff requires '\n' at the end of the code"
   [answer]
@@ -97,7 +98,9 @@
   (let [f (create-tempfile-with (str answer "\n"))
         ret (timeout-sh
              timeout
-             (ruff-path) "format" "--diff" (str (fs/file f)))]
+             ;; 0.13.*
+             ;; (ruff-path "format" "--diff" (str (fs/file f)))
+             (ruff-path) "-q" "format" (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "using VScode/Ruff?")))))
