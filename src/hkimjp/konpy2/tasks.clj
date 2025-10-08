@@ -119,7 +119,8 @@
                      (sort-by :e)
                      reverse)]
             (let [updated (subs (str updated) 11 19)]
-              [:li (format "%d-%d %s %s" week num updated author)]))]])))
+              [:li.font-mono
+               (format "%d-%d %s %s" week num updated author)]))]])))
 
 (defn- todays-comments
   "comments after `date-time`"
@@ -153,7 +154,8 @@
                   (sort-by :e)
                   reverse)]
          (let [updated (subs (str updated) 11 19)]
-           [:li (format "%d-%d %s %s → %s" week num updated author commentee)]))]])))
+           [:li.font-mono
+            (format "%d-%d %s %s → %s" week num updated author commentee)]))]])))
 
 (def ^:private stocks
   '[:find ?e ?owner ?updated
@@ -173,4 +175,4 @@
          [:div (format "(%d)" (count stocks))]
          [:ul.list-disc.mx-4
           (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
-            [:li (jt/format "HH:mm:ss " updated) owner])]])))
+            [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]])))
