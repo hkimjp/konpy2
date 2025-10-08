@@ -10,6 +10,10 @@
 * restrict comments to themselves
 
 
+# 0.3.21-SNAPSHOT
+
+- font-mono
+
 # 0.3.20 (2025-10-07)
 
 - adjustment width - stopped using `w-1/n`.
