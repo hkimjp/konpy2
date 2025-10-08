@@ -1,6 +1,6 @@
 [project]
 name = "konpy2"
-version = "0.3.20"
+version = "0.3.21"
 description = ""
 authors = [
     {name = "hkimjp",email = "hkim@hkim.jp"}

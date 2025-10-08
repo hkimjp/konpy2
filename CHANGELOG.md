@@ -10,7 +10,7 @@
 * restrict comments to themselves
 
 
-# 0.3.21-SNAPSHOT
+# 0.3.21 (2025-10-08)
 
 - font-mono
 
