@@ -10,7 +10,7 @@
 * restrict comments to themselves
 * unnecessary to display who and when stocks. just number is enough.
 
-# 0.3.23-SNAPSHOT
+# 0.3.23 (2025-10-08)
 
 # 0.3.22 (2025-10-08)
 
