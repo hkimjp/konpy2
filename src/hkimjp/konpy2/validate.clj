@@ -71,7 +71,7 @@
     (str/join
      "\n"
      (for [line (str/split-lines answer)]
-       (if-let [[_ w n] (re-matches #"#\s*include\s*(\d+)-(\d+).*" line)]
+       (if-let [[_ w n] (re-matches #"#\s*include\s*(\d+)_(\d+).*" line)]
          (expand-includes
           author
           (get-last-answer author (parse-long w) (parse-long n)))
@@ -134,8 +134,7 @@
 
 (defn validate [author answer testcode]
   (let [answer (expand-includes author answer)]
-    (t/log! :info "validate")
-    (t/log! {:level :info :data {:answer answer}})
+    (t/log! {:level :info :id "validate" :data {:answer answer}})
     (try
       (ruff answer)
       (doctest answer)

@@ -10,6 +10,15 @@
 * restrict comments to themselves
 * unnecessary to display who and when stocks. just number is enough.
 
+# 0.3.24 (2025-10-08)
+
+- fixed a bug: regexp. `-` and `_`.
+
+```
+    (re-matches #"#\s*include\s*(\d+)-(\d+).*" line)
+    (re-matches #"#\s*include\s*(\d+)_(\d+).*" line)
+```
+
 # 0.3.23 (2025-10-08)
 
 # 0.3.22 (2025-10-08)
