@@ -173,6 +173,9 @@
     (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
     (hx [:div
          [:div (format "(%d)" (count stocks))]
-         [:ul.list-disc.mx-4
-          (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
-            [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]])))
+         [:p "ストックは個人的なもの。"
+          "何個ストックされた以外の表示をやめる。"]
+         ; [:ul.list-disc.mx-4
+         ;    (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
+         ;      [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]
+         ])))

@@ -8,7 +8,12 @@
 * flag skip-validation
 * admin can see his/her answers/comments
 * restrict comments to themselves
+* unnecessary to display who and when stocks. just number is enough.
 
+
+# 0.3.22-SNAPSHOT
+
+- stop displaying stocks,  who stocked when. just display number of stocks.
 
 # 0.3.21 (2025-10-08)
 
