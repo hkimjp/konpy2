@@ -10,7 +10,7 @@
 * restrict comments to themselves
 * unnecessary to display who and when stocks. just number is enough.
 
-# 0.3.24-SNAPSHOT
+# 0.3.24 (2025-10-08)
 
 - fixed a bug: regexp. `-` and `_`.
 
