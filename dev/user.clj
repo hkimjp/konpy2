@@ -12,6 +12,7 @@
 
 ;------------------------------------
 (t/set-min-level! :debug)
+
 (start-system)
 
 (reload/init
@@ -27,6 +28,10 @@
   (start-system))
 
 ;; (reload/reload)
+
+(def line "# include 1_1")
+
+(re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line)
 
 ;------------------------------------
 

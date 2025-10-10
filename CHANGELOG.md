@@ -10,6 +10,14 @@
 * restrict comments to themselves
 * unnecessary to display who and when stocks. just number is enough.
 
+# 0.3.25-SNAPSHOT
+
+- allows include,
+    - `#include 1_1`
+    - `#include kp1_1`
+    - `# include 1_1`
+    - `#include kp1_1`
+
 # 0.3.24 (2025-10-08)
 
 - fixed a bug: regexp. `-` and `_`.
