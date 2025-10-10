@@ -9,7 +9,7 @@
 * admin can see his/her answers/comments
 
 
-# 0.3.26-SNAPSHOT (2025-10-11)
+# 0.3.26 (2025-10-11) (2025-10-11)
 
 - display todays number of comments and uploads
 - refactored tests.clj - move `def private`s into inside function's `let`
