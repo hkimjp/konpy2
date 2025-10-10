@@ -10,13 +10,17 @@
 * restrict comments to themselves
 * unnecessary to display who and when stocks. just number is enough.
 
+# 0.3.26-SNAPSHOT
+
+* display todays number of comments and uploads
+
 # 0.3.25 (2025-10-10)
 
-- allows include,
+- validate/expand-includes fires when finding folowing patterns.
     - `#include 1_1`
     - `#include kp1_1`
     - `# include 1_1`
-    - `#include kp1_1`
+    - `# include kp1_1`
 
 # 0.3.24 (2025-10-08)
 
