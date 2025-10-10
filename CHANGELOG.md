@@ -7,15 +7,17 @@
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
-* restrict comments to themselves
-* unnecessary to display who and when stocks. just number is enough.
 
-# 0.3.26-SNAPSHOT
 
-* display todays number of comments and uploads
+# 0.3.26-SNAPSHOT (2025-10-11)
+
+- display todays number of comments and uploads
+- refactored tests.clj - move `def private`s into inside function's `let`
+- interpret markdown in comment boxes in scores page
 
 # 0.3.25 (2025-10-10)
 
+- unnecessary to display who and when stocks. just number is enough.
 - validate/expand-includes fires when finding folowing patterns.
     - `#include 1_1`
     - `#include kp1_1`
