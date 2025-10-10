@@ -10,7 +10,7 @@
 * restrict comments to themselves
 * unnecessary to display who and when stocks. just number is enough.
 
-# 0.3.25-SNAPSHOT
+# 0.3.25 (2025-10-10)
 
 - allows include,
     - `#include 1_1`
