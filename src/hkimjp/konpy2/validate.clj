@@ -71,7 +71,9 @@
     (str/join
      "\n"
      (for [line (str/split-lines answer)]
-       (if-let [[_ _ w n] (re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line)]
+       (if-let [[_ _ w n]
+                (or (re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line)
+                    (re-matches #"from\s*(kp)*(\d+)_(\d+).*" line))]
          (expand-includes
           author
           (get-last-answer author (parse-long w) (parse-long n)))

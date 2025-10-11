@@ -29,10 +29,12 @@
 
 ;; (reload/reload)
 
-(def line "# include 1_1")
-
-(re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line)
-
+(comment
+  (def line1 "# include 1_1")
+  (def line2 "# from kp1_1")
+  (or (re-matches #"#\s*from\s*(kp)*(\d+)_(\d+).*" line2)
+      (re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line2))
+  :rcf)
 ;------------------------------------
 
 (defn problem! [w n problem testcode]
