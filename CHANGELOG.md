@@ -9,7 +9,14 @@
 * admin can see his/her answers/comments
 * spaces in admin/redis vars/kp2:<user>:comments:<today>
     ("085217" " " "084553" " " "074340")
+  only display function is wrong?
+* switch when find "from kpn-m"
+* checking looks in dark thema
 
+
+# 0.3.27-SNAPSHOT
+
+- CSS to color pre, code.
 
 # 0.3.26 (2025-10-11)
 
