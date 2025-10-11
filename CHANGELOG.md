@@ -13,7 +13,7 @@
 * checking looks in dark thema
 
 
-# 0.3.27-SNAPSHOT (2025-10-11)
+# 0.3.27 (2025-10-11) (2025-10-11)
 
 - update - when find "from kpn-m" line, treat it as "# include kpn-m".
 - CSS to color pre, code.
