@@ -11,11 +11,12 @@
     ("085217" " " "084553" " " "074340")
   only display function is wrong?
 * how to `pip install -r requirements.txt in container`
+* display login time from tasks/hx-logins
 
 
-# 0.3.29 (2025-10-12) (2025-10-12)
+# 0.3.29 (2025-10-12)
 
-* `today's logins` intead of `today's stocks`
+- replaced `today's stocks` by `today's logins`
 - added tasks/hx-commponent
 - added tasks/hx-logins
 
