@@ -52,13 +52,3 @@
   "(iso \"2025-09-17T21:32:01.360441\") -> \"2025-09-17 21:32:01\""
   [tm]
   (format "%s %s" (subs tm 0 10) (subs tm 11 19)))
-
-(defn last-col
-  "returns the last column of `line` seperated by spaces" []
-  [line]
-  (loop [line (read-line)]
-    (when (some? line)
-      (println (-> line
-                   (str/split #"\s+")
-                   last))
-      (recur (read-line)))))

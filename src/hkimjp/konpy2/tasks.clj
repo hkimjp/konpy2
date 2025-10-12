@@ -196,7 +196,7 @@
                     (map #(str/split % #"\s+"))
                     (map last))]
     (t/log! {:level :debug :id "hx-logins" :msg user})
-    (hx [:div "昨日からのログイン継続は見逃してしまう。"
+    (hx [:div "昨日からのログイン継続を除く。"
          (for [login logins]
            [:li login])])))
 
