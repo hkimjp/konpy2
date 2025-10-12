@@ -10,12 +10,26 @@
 * spaces in admin/redis vars/kp2:<user>:comments:<today>
     ("085217" " " "084553" " " "074340")
   only display function is wrong?
-* checking looks in dark thema
+* how to `pip install -r requirements.txt in container`
 
 
-# 0.3.27 (2025-10-11) (2025-10-11)
+# 0.3.29 (2025-10-12) (2025-10-12)
 
-- update - when find "from kpn-m" line, treat it as "# include kpn-m".
+* `today's logins` intead of `today's stocks`
+- added tasks/hx-commponent
+- added tasks/hx-logins
+
+# 0.3.28
+
+- app.melt:
+
+    for p in numpy matplotlib opencv pygame bottle tk; do
+      apt install python3-${p}
+    done
+
+# 0.3.27 (2025-10-11)
+
+- when find "from kpn-m" line, treat it as "# include kpn-m".
 - CSS to color pre, code.
 
 # 0.3.26 (2025-10-11)
