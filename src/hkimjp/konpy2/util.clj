@@ -53,4 +53,12 @@
   [tm]
   (format "%s %s" (subs tm 0 10) (subs tm 11 19)))
 
-
+(defn last-col
+  "returns the last column of `line` seperated by spaces" []
+  [line]
+  (loop [line (read-line)]
+    (when (some? line)
+      (println (-> line
+                   (str/split #"\s+")
+                   last))
+      (recur (read-line)))))

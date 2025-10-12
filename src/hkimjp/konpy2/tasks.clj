@@ -1,5 +1,6 @@
 (ns hkimjp.konpy2.tasks
   (:require
+   [clojure.string :as str]
    [hiccup2.core :as h]
    [java-time.api :as jt]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
@@ -154,18 +155,26 @@
            [:li.font-mono
             (format "%d-%d %s %s → %s" week num updated author commentee)]))]])))
 
-(def ^:private stocks
-  '[:find ?e ?owner ?updated
-    :keys e  owner  updated
-    :in $ ?now
-    :where
-    [?e :stock/status "yes"]
-    [?e :owner ?owner]
-    [?e :updated ?updated]
-    [(java-time.api/before? ?now ?updated)]])
+; (def ^:private stocks
+;   '[:find ?e ?owner ?updated
+;     :keys e  owner  updated
+;     :in $ ?now
+;     :where
+;     [?e :stock/status "yes"]
+;     [?e :owner ?owner]
+;     [?e :updated ?updated]
+;     [(java-time.api/before? ?now ?updated)]])
 
 (defn hx-stocks [request]
-  (let [owner (user request)
+  (let [stocks
+        '[:find ?e ?owner ?updated
+          :keys e  owner  updated
+          :in $ ?now
+          :where
+          [?e :stock/status "yes"]
+          [?e :owner ?owner]
+          [?e :updated ?updated]
+          [(java-time.api/before? ?now ?updated)]] owner (user request)
         stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
     (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
     (hx [:div
@@ -178,6 +187,17 @@
          ])))
 
 (defn hx-logins [request]
-  (let [user (user request)]
+  (let [user (user request)
+        today (local-date)
+        logins (->> (slurp "log/konpy.log")
+                    (str/split-lines)
+                    (filter  #(str/starts-with? % today))
+                    (filter #(re-find #"success" %))
+                    (map #(str/split % #"\s+"))
+                    (map last))]
     (t/log! {:level :debug :id "hx-logins" :msg user})
-    (hx [:div "under construction"])))
+    (hx [:div "昨日からのログイン継続は見逃してしまう。"
+         (for [login logins]
+           [:li login])])))
+
+; (hx-logins {:session {:identity "hkimura"}})
