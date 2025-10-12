@@ -13,7 +13,7 @@
 * how to `pip install -r requirements.txt in container`
 
 
-# 0.3.29-SNAPSHOT
+# 0.3.29-SNAPSHOT (2025-10-12)
 
 * `today's logins` intead of `today's stocks`
 

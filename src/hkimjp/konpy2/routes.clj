@@ -28,6 +28,7 @@
     ["hx-answers"   {:get tasks/hx-answers}]
     ["hx-comments"  {:get tasks/hx-comments}]
     ["hx-stocks"    {:get tasks/hx-stocks}]
+    ["hx-logins"    {:get tasks/hx-logins}]
     ["answer"       {:post answers/answer!}]
     ["answer/:e/:p" {:get  answers/hx-answer}]
     ["comment"      {:post comments/comment!}]
