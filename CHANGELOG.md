@@ -11,8 +11,14 @@
     ("085217" " " "084553" " " "074340")
   only display function is wrong?
 * log/konpy2.log inside container
-* selective validation
 * applied markdown
+
+
+# 0.3.31-SNAPSHOT (2025-10-13)
+
+- selective validation - can control doctest on/off in the admin page.
+  if `skip-doctest` is empty, doctest will be executed.
+  otherwise, for example "1", doctest will be skipped.
 
 # 0.3.30 (2025-10-13)
 

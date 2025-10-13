@@ -19,7 +19,7 @@
   [:input.text-center.size-6.outline {:name label :value val}])
 
 (defn- problem-form
-  [{:keys [db/id problem/status week num problem testcode updated] :as params}]
+  [{:keys [db/id problem/status week num problem testcode doctest updated] :as params}]
   (t/log! {:level :info :id "problem-form"})
   (t/log! {:level :debug :data params})
   (t/log! {:level :debug :data {:id id :status status}})
@@ -36,11 +36,11 @@
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section  "problem")
-    [:textarea.w-full.h-20.p-2.border-1
-     {:name "problem"} problem]
+    [:textarea.w-full.h-20.p-2.border-1 {:name "problem"} problem]
+    (section "skip-doctest")
+    (input-box "doctest" doctest) [:span.mx-4 "leave brank if want doctest)"]
     (section  "testcode")
-    [:textarea.w-full.h-40.p-2.border-1
-     {:name "testcode"} testcode]
+    [:textarea.w-full.h-40.p-2.border-1 {:name "testcode"} testcode]
     (section  "updated")
     [:div updated]
     [:br]
@@ -48,13 +48,14 @@
     [:br]]])
 
 (defn upsert! [{params :params}]
-  (let [{:keys [id status week num problem testcode]} params
+  (let [{:keys [id status week num problem doctest testcode]} params
         id (if (= -1 id) -1 (parse-long id))
         data {:db/id id
               :problem/status status
               :week (parse-long week)
               :num  (parse-long num)
               :problem problem
+              :doctest doctest
               :testcode testcode
               :updated (now)}]
     (t/log! {:level :debug :data data})

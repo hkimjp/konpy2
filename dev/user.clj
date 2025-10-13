@@ -57,6 +57,11 @@
     (problem! m n p t)))
 
 (comment
+  (nil? "1")
+  (nil? "")
+  (empty? "1")
+  (empty? "")
+  (ds/pl 146)
   [["y=f(x) ただし f(x)=2*x**2-3 を-2<=x<3の範囲でプロットする関数 "]
    ["f=f(x) ただし f(x)=3sin(2x)を 0<=x<2pi の範囲でプロットする関数。"]
    ["y=sin(x), y=sin(x+pi/3), y=sin(x+2*pi/3),y=sin(x+pi), y=sin(x+4*pi/3), y=sin(x+5*pi/3) の6つを一つのグラフに。(0<= x <=2Pi)"]
