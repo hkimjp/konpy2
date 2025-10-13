@@ -13,9 +13,15 @@
 * how to `pip install -r requirements.txt in container`
 
 
-# 0.3.29 (2025-10-12) (2025-10-12)
+# 0.3.30 (2025-10-13)
 
-* `today's logins` intead of `today's stocks`
+- more than 3 lines for commnets
+- refactored answers.clj - moved private `defs` into under `let`.
+
+# 0.3.29 (2025-10-12)
+
+- display login time from tasks/hx-logins
+- replaced `today's stocks` by `today's logins`
 - added tasks/hx-commponent
 - added tasks/hx-logins
 

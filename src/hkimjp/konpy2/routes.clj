@@ -27,7 +27,7 @@
     ["problem/:e"   {:get tasks/problem}]
     ["hx-answers"   {:get tasks/hx-answers}]
     ["hx-comments"  {:get tasks/hx-comments}]
-    ["hx-stocks"    {:get tasks/hx-stocks}]
+    ; ["hx-stocks"    {:get tasks/hx-stocks}]
     ["hx-logins"    {:get tasks/hx-logins}]
     ["answer"       {:post answers/answer!}]
     ["answer/:e/:p" {:get  answers/hx-answer}]
@@ -60,4 +60,3 @@
                          :body "not acceptable"})}))
          {:middleware [[wrap-defaults site-defaults]]})]
     (handler request)))
-

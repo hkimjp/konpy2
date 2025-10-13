@@ -155,36 +155,26 @@
            [:li.font-mono
             (format "%d-%d %s %s → %s" week num updated author commentee)]))]])))
 
-; (def ^:private stocks
-;   '[:find ?e ?owner ?updated
-;     :keys e  owner  updated
-;     :in $ ?now
-;     :where
-;     [?e :stock/status "yes"]
-;     [?e :owner ?owner]
-;     [?e :updated ?updated]
-;     [(java-time.api/before? ?now ?updated)]])
-
-(defn hx-stocks [request]
-  (let [stocks
-        '[:find ?e ?owner ?updated
-          :keys e  owner  updated
-          :in $ ?now
-          :where
-          [?e :stock/status "yes"]
-          [?e :owner ?owner]
-          [?e :updated ?updated]
-          [(java-time.api/before? ?now ?updated)]] owner (user request)
-        stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
-    (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
-    (hx [:div
-         [:div (format "(%d)" (count stocks))]
-         [:p "ストックは個人的なもの。"
-          "何個ストックされた以外の表示をやめる。"]
-         ; [:ul.list-disc.mx-4
-         ;    (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
-         ;      [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]
-         ])))
+; (defn hx-stocks [request]
+;   (let [stocks
+;         '[:find ?e ?owner ?updated
+;           :keys e  owner  updated
+;           :in $ ?now
+;           :where
+;           [?e :stock/status "yes"]
+;           [?e :owner ?owner]
+;           [?e :updated ?updated]
+;           [(java-time.api/before? ?now ?updated)]] owner (user request)
+;         stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
+;     (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
+;     (hx [:div
+;          [:div (format "(%d)" (count stocks))]
+;          [:p "ストックは個人的なもの。"
+;           "何個ストックされた以外の表示をやめる。"]
+;          ; [:ul.list-disc.mx-4
+;          ;    (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
+;          ;      [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]
+;          ])))
 
 (defn hx-logins [request]
   (let [user (user request)
@@ -194,10 +184,11 @@
                     (filter  #(str/starts-with? % today))
                     (filter #(re-find #"success" %))
                     (map #(str/split % #"\s+"))
-                    (map last))]
+                    (map last)
+                    reverse)]
     (t/log! {:level :debug :id "hx-logins" :msg user})
-    (hx [:div "昨日からのログイン継続を除く。"
-         (for [login logins]
-           [:li login])])))
+    (hx [:div "(昨日からのログイン継続を除く。)"
+         [:ul.list-disc.mx-4
+          (for [login logins]
+            [:li.font-mono login])]])))
 
-; (hx-logins {:session {:identity "hkimura"}})
