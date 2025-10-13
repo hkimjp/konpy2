@@ -13,12 +13,12 @@
 * log/konpy2.log inside container
 * applied markdown
 
-# 0.3.31
+# 0.3.31-SNAPSHOT
 
-- selective validation
-    (if (empty? admin/doctest)
-      (do doctest)
-      (do-not doctest))
+- selective validation - can control in the admin page.
+ if `skip-doctest` is empty, doctest will be executed.
+ otherwise, for example "1", doctest will be skipped.
+
 
 # 0.3.30 (2025-10-13)
 
