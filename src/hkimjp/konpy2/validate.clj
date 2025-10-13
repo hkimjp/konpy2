@@ -92,7 +92,6 @@
     (spit (fs/file f) answer)
     f))
 
-;; break 0.14.0?
 (defn- ruff
   "ruff requires '\n' at the end of the code"
   [answer]
@@ -141,8 +140,8 @@
       (ruff answer)
       (doctest answer)
       (when-not (empty? testcode)
-        (t/log! {:level :error :data {:testcode testcode
-                                      :empty? (empty? testcode)}})
+        (t/log! {:level :error
+                 :data {:testcode testcode :empty? (empty? testcode)}})
         (pytest answer testcode))
       (catch Exception e
         (t/log! {:level :warn

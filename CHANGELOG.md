@@ -10,13 +10,20 @@
 * spaces in admin/redis vars/kp2:<user>:comments:<today>
     ("085217" " " "084553" " " "074340")
   only display function is wrong?
-* how to `pip install -r requirements.txt in container`
-
+* log/konpy2.log inside container
+* selective validation
+* applied markdown
 
 # 0.3.30 (2025-10-13)
 
+- added  python3-bottle python3-numpy python3-matplotlib python3-opencv
+  python3-pygame python3-tk to Dockerfile.
+- bump-version-local.sh updates Justfile 'VER :='
+- `hkim0331/konpy2:0.3.30` - base image `clojure:latest` plus python3.13 and
+  required libraries for 2025 python class.
 - more than 3 lines for commnets
-- refactored answers.clj - moved private `defs` into under `let`.
+- refactored answers.clj - moved private `defs` into under `let`
+- `hkimjp/datascript-storage-javatime` 0.7.6
 
 # 0.3.29 (2025-10-12)
 

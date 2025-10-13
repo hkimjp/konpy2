@@ -18,7 +18,7 @@
   ;;
   io.github.hkimjp/carmine-farm  {:git/tag "0.2.9" :git/sha "5fcacc1"}
   io.github.hkimjp/datascript-storage-javatime
-  {:git/tag "0.7.5" :git/sha "37bde3b"}}
+  {:git/tag "0.7.6" :git/sha "815ae05"}}
 
  :aliases
  {:dev
