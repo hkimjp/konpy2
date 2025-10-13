@@ -187,8 +187,8 @@
                     (map last)
                     reverse)]
     (t/log! {:level :debug :id "hx-logins" :msg user})
-    (hx [:div "昨日からのログイン継続を除く。"
-         (for [login logins]
-           [:li login])])))
+    (hx [:div "(昨日からのログイン継続を除く。)"
+         [:ul.list-disc.mx-4
+          (for [login logins]
+            [:li.font-mono login])]])))
 
-; (hx-logins {:session {:identity "hkimura"}})

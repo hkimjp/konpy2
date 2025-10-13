@@ -10,7 +10,6 @@
    [hkimjp.konpy2.util :refer [now]]
    [hkimjp.konpy2.system :refer [start-system stop-system] :as sys]))
 
-;------------------------------------
 (t/set-min-level! :debug)
 
 (start-system)
@@ -29,7 +28,14 @@
 
 ;; (reload/reload)
 
+;------------------------------------
+
 (comment
+  (require '[clojure.string :as str])
+  (def line "abc\ndef\nxyz\n")
+
+  (count (str/split-lines line))
+
   (def line1 "# include 1_1")
   (def line2 "# from kp1_1")
   (or (re-matches #"#\s*from\s*(kp)*(\d+)_(\d+).*" line2)
