@@ -38,7 +38,7 @@
     (section  "problem")
     [:textarea.w-full.h-20.p-2.border-1 {:name "problem"} problem]
     (section "skip-doctest")
-    (input-box "no doctest" doctest) [:span.mx-4 "leave brank if want doctest)"]
+    (input-box "doctest" doctest) [:span.mx-4 "leave brank if want doctest)"]
     (section  "testcode")
     [:textarea.w-full.h-40.p-2.border-1 {:name "testcode"} testcode]
     (section  "updated")
