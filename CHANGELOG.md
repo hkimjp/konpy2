@@ -14,7 +14,7 @@
 * applied markdown
 
 
-# 0.3.31-SNAPSHOT (2025-10-13)
+# 0.3.3 (2025-10-14) (2025-10-13)
 
 - selective validation - can control doctest on/off in the admin page.
   if `skip-doctest` is empty, doctest will be executed.
