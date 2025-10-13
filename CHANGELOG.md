@@ -11,8 +11,14 @@
     ("085217" " " "084553" " " "074340")
   only display function is wrong?
 * log/konpy2.log inside container
-* selective validation
 * applied markdown
+
+# 0.3.31
+
+- selective validation
+    (if (empty? admin/doctest)
+      (do doctest)
+      (do-not doctest))
 
 # 0.3.30 (2025-10-13)
 
