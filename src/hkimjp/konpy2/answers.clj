@@ -95,14 +95,17 @@
     (let [author   (user request)
           answer   (slurp (:tempfile file))
           e        (parse-long e)
-          testcode (:testcode (ds/pl e))
+          entry    (ds/pl e)
+          testcode (:testcode entry)
+          doctest  (empty? (:doctest entry))
+          _        (t/log! :debug (str "doctest " doctest))
           dgst     (digest answer)
           same     (->> (ds/qq same-answers dgst)
                         (map first)
                         (interpose " ")
                         (apply str))]
       (r/before-upload author)
-      (validate author answer testcode)
+      (validate author answer testcode doctest)
       (ds/put! {:answer/status "yes"
                 :to      e
                 :author  author

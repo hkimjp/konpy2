@@ -92,7 +92,6 @@
     (spit (fs/file f) answer)
     f))
 
-;; break 0.14.0?
 (defn- ruff
   "ruff requires '\n' at the end of the code"
   [answer]
@@ -134,15 +133,17 @@
       (fs/delete f)
       (throw (Exception. "pytest failed")))))
 
-(defn validate [author answer testcode]
+(defn validate [author answer testcode doctest?]
   (let [answer (expand-includes author answer)]
     (t/log! {:level :info :id "validate" :data {:answer answer}})
+    (t/log! :debug (str "doctest? " doctest?))
     (try
       (ruff answer)
-      (doctest answer)
+      (when doctest?
+        (doctest answer))
       (when-not (empty? testcode)
-        (t/log! {:level :error :data {:testcode testcode
-                                      :empty? (empty? testcode)}})
+        (t/log! {:level :error
+                 :data {:testcode testcode :empty? (empty? testcode)}})
         (pytest answer testcode))
       (catch Exception e
         (t/log! {:level :warn
