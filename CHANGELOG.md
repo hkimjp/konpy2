@@ -13,7 +13,7 @@
 * how to `pip install -r requirements.txt in container`
 
 
-# 0.3.30-SNAPSHOT
+# 0.3.30 (2025-10-13)
 
 - more than 3 lines for commnets
 - refactored answers.clj - moved private `defs` into under `let`.
