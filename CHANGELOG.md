@@ -10,11 +10,15 @@
 * spaces in admin/redis vars/kp2:<user>:comments:<today>
     ("085217" " " "084553" " " "074340")
   only display function is wrong?
-* log/konpy2.log inside container
 * applied markdown
 
+# 0.3.32-SNAPSHOT
 
-# 0.3.3 (2025-10-14) (2025-10-13)
+- bug fixed - after (let [user (user request)]),
+  the local variable `user` shadowed global function `user`
+
+
+# 0.3.31 (2025-10-14)
 
 - selective validation - can control doctest on/off in the admin page.
   if `skip-doctest` is empty, doctest will be executed.

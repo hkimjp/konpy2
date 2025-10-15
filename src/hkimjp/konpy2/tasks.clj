@@ -108,7 +108,7 @@
 (defn hx-answers [request]
   (let [user (user request)
         answers (todays-answers)]
-    (t/log! {:level :info :id "hx-answers" :msg (user request)})
+    (t/log! {:level :info :id "hx-answers" :msg user})
     (hx [:div
          [:div (format "(%d)" (count answers))]
          [:ul.list-disc.mx-4
@@ -142,7 +142,7 @@
 (defn hx-comments [request]
   (let [user (user request)
         comments (todays-comments)]
-    (t/log! {:level :info :id "hx-comments" :msg (user request)})
+    (t/log! {:level :info :id "hx-comments" :msg user})
     (hx
      [:div
       [:div (format "(%d)" (count comments))]
