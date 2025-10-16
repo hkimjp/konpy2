@@ -13,7 +13,7 @@
 
 
 
-# 0.3.32-SNAPSHOT
+# 0.3.32 (2025-10-16)
 
 - bug fixed - after (let [user (user request)]),
   the local variable `user` shadowed global function `user`
