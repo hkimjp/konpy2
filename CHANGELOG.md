@@ -7,8 +7,95 @@
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
-* restrict comments to themselves
+* spaces in admin/redis vars/kp2:<user>:comments:<today>
+    ("085217" " " "084553" " " "074340")
+  only display function is wrong?
 
+
+
+# 0.3.32 (2025-10-16)
+
+- bug fixed - after (let [user (user request)]),
+  the local variable `user` shadowed global function `user`
+- changed `todays login` - use `redis` instead of `log/konpy2.log`
+- adaptive markdown
+
+```
+(defn- markdown? [s]
+  (let [lines (str/split-lines s)]
+    (or
+     (< 0 (count (filter #(re-find #"^#+\s" %)  lines)))
+     (< 0 (count (filter #(re-matches #"\s*" %) lines)))
+     (< 0 (count (filter #(re-find #"^*+\s" %)  lines)))
+     (< 0 (count (filter #(re-find #"^\d+\s" %) lines))))))
+```
+
+# 0.3.31 (2025-10-14)
+
+- selective validation - can control doctest on/off in the admin page.
+  if `skip-doctest` is empty, doctest will be executed.
+  otherwise, for example "1", doctest will be skipped.
+
+# 0.3.30 (2025-10-13)
+
+- added  python3-bottle python3-numpy python3-matplotlib python3-opencv
+  python3-pygame python3-tk to Dockerfile.
+- bump-version-local.sh updates Justfile 'VER :='
+- `hkim0331/konpy2:0.3.30` - base image `clojure:latest` plus python3.13 and
+  required libraries for 2025 python class.
+- more than 3 lines for commnets
+- refactored answers.clj - moved private `defs` into under `let`
+- `hkimjp/datascript-storage-javatime` 0.7.6
+
+# 0.3.29 (2025-10-12)
+
+- display login time from tasks/hx-logins
+- replaced `today's stocks` by `today's logins`
+- added tasks/hx-commponent
+- added tasks/hx-logins
+
+# 0.3.28
+
+- app.melt:
+
+    for p in numpy matplotlib opencv pygame bottle tk; do
+      apt install python3-${p}
+    done
+
+# 0.3.27 (2025-10-11)
+
+- when find "from kpn-m" line, treat it as "# include kpn-m".
+- CSS to color pre, code.
+
+# 0.3.26 (2025-10-11)
+
+- display todays number of comments and uploads
+- refactored tests.clj - move `def private`s into inside function's `let`
+- interpret markdown in comment boxes in scores page
+
+# 0.3.25 (2025-10-10)
+
+- unnecessary to display who and when stocks. just number is enough.
+- validate/expand-includes fires when finding folowing patterns.
+    - `#include 1_1`
+    - `#include kp1_1`
+    - `# include 1_1`
+    - `# include kp1_1`
+
+# 0.3.24 (2025-10-08)
+
+- fixed a bug: regexp. `-` and `_`.
+
+```
+    (re-matches #"#\s*include\s*(\d+)-(\d+).*" line)
+    (re-matches #"#\s*include\s*(\d+)_(\d+).*" line)
+```
+
+# 0.3.23 (2025-10-08)
+
+# 0.3.22 (2025-10-08)
+
+- stop displaying stocks,  who stocked when. just display number of stocks.
 
 # 0.3.21 (2025-10-08)
 

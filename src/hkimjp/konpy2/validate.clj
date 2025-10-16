@@ -71,7 +71,9 @@
     (str/join
      "\n"
      (for [line (str/split-lines answer)]
-       (if-let [[_ w n] (re-matches #"#\s*include\s*(\d+)-(\d+).*" line)]
+       (if-let [[_ _ w n]
+                (or (re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line)
+                    (re-matches #"from\s*(kp)*(\d+)_(\d+).*" line))]
          (expand-includes
           author
           (get-last-answer author (parse-long w) (parse-long n)))
@@ -97,7 +99,9 @@
   (let [f (create-tempfile-with (str answer "\n"))
         ret (timeout-sh
              timeout
-             (ruff-path) "format" "--diff" (str (fs/file f)))]
+             ;; 0.13.*
+             ;; (ruff-path "format" "--diff" (str (fs/file f)))
+             (ruff-path) "-q" "format" (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "using VScode/Ruff?")))))
@@ -129,16 +133,17 @@
       (fs/delete f)
       (throw (Exception. "pytest failed")))))
 
-(defn validate [author answer testcode]
+(defn validate [author answer testcode doctest?]
   (let [answer (expand-includes author answer)]
-    (t/log! :info "validate")
-    (t/log! {:level :info :data {:answer answer}})
+    (t/log! {:level :info :id "validate" :data {:answer answer}})
+    (t/log! :debug (str "doctest? " doctest?))
     (try
       (ruff answer)
-      (doctest answer)
+      (when doctest?
+        (doctest answer))
       (when-not (empty? testcode)
-        (t/log! {:level :error :data {:testcode testcode
-                                      :empty? (empty? testcode)}})
+        (t/log! {:level :error
+                 :data {:testcode testcode :empty? (empty? testcode)}})
         (pytest answer testcode))
       (catch Exception e
         (t/log! {:level :warn

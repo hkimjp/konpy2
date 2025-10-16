@@ -1,7 +1,9 @@
 (ns hkimjp.konpy2.stocks
   (:require
+   [clojure.string :as str]
    [hiccup2.core :as h]
    [java-time.api :as jt]
+   [nextjournal.markdown :as md]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
@@ -62,6 +64,19 @@
     ;; trick
     (hx [:p (summary (jt/local-date-time) text)])))
 
+(defn- markdown? [s]
+  (let [lines (str/split-lines s)]
+    (or
+     (< 0 (count (filter #(re-find #"^#+\s" %)  lines)))
+     (< 0 (count (filter #(re-matches #"\s*" %) lines)))
+     (< 0 (count (filter #(re-find #"^*+\s" %)  lines)))
+     (< 0 (count (filter #(re-find #"^\d+\s" %) lines))))))
+
+;; adaptive markdown
 (defn stock [{{:keys [e]} :path-params}]
-  (t/log! {:level :info :id "stock" :msg e})
-  (hx [:pre.p-2 (:stock (ds/pl (parse-long e)))]))
+  (let [doc (:stock (ds/pl (parse-long e)))]
+    (t/log! {:level :info :id "stock" :data {:e e :doc doc}})
+    (if (markdown? doc)
+      (hx (-> doc md/parse md/->hiccup))
+      (hx [:pre.m-4 doc]))))
+

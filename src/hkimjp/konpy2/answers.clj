@@ -10,28 +10,40 @@
    [hkimjp.konpy2.util :refer [user now btn iso]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
-(def ^:private comments-to '[:find ?e ?author
-                             :in $ ?to
-                             :where
-                             [?e :comment/status "yes"]
-                             [?e :to ?to]
-                             [?e :author ?author]])
+; (def ^:private comments-to '[:find ?e ?author
+;                              :in $ ?to
+;                              :where
+;                              [?e :comment/status "yes"]
+;                              [?e :to ?to]
+;                              [?e :author ?author]])
 
-(def ^:private gpt '[:find ?answer
-                     :in $ ?to
-                     :where
-                     [?e :answer/status "yes"]
-                     [?e :author "chatgpt"]
-                     [?e :answer ?answer]
-                     [?e :to ?to]])
+; (def ^:private gpt '[:find ?answer
+;                      :in $ ?to
+;                      :where
+;                      [?e :answer/status "yes"]
+;                      [?e :author "chatgpt"]
+;                      [?e :answer ?answer]
+;                      [?e :to ?to]])
 
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
   (t/log! {:level :debug :id "hx-answer" :msg (str "e " e)})
   (let [author (user request)
         e (parse-long e)
         ans (ds/pl e)
-        gpt-ans (-> (ds/qq gpt (parse-long p)) ffirst)
-        comments (ds/qq comments-to e)]
+        gpt-ans (-> (ds/qq '[:find ?answer
+                             :in $ ?to
+                             :where
+                             [?e :answer/status "yes"]
+                             [?e :author "chatgpt"]
+                             [?e :answer ?answer]
+                             [?e :to ?to]] (parse-long p)) ffirst)
+        comments (ds/qq '[:find ?e ?author
+                          :in $ ?to
+                          :where
+                          [?e :comment/status "yes"]
+                          [?e :to ?to]
+                          [?e :author ?author]]
+                        e)]
     (hx [:div
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
@@ -83,14 +95,17 @@
     (let [author   (user request)
           answer   (slurp (:tempfile file))
           e        (parse-long e)
-          testcode (:testcode (ds/pl e))
+          entry    (ds/pl e)
+          testcode (:testcode entry)
+          doctest  (empty? (:doctest entry))
+          _        (t/log! :debug (str "doctest " doctest))
           dgst     (digest answer)
           same     (->> (ds/qq same-answers dgst)
                         (map first)
                         (interpose " ")
                         (apply str))]
       (r/before-upload author)
-      (validate author answer testcode)
+      (validate author answer testcode doctest)
       (ds/put! {:answer/status "yes"
                 :to      e
                 :author  author

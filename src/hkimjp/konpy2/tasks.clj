@@ -1,85 +1,83 @@
 (ns hkimjp.konpy2.tasks
   (:require
+   [clojure.string :as str]
    [hiccup2.core :as h]
    [java-time.api :as jt]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx]]
-   [hkimjp.konpy2.util :refer [btn input-box user week now]]))
+   [hkimjp.konpy2.util :refer [btn input-box user week now local-date]]))
 
 (defn- wk [] (max 0 (week)))
 
-(def ^:private fetch-problems '[:find ?e ?week ?num ?problem
-                                :keys e  week num  problem
-                                :in $ ?week
-                                :where
-                                [?e :problem/status "yes"]
-                                [?e :week ?week]
-                                [?e :num ?num]
-                                [?e :problem ?problem]])
+(defn- hx-component [url target title]
+  [:div
+   [:div.hover:underline {:hx-get url
+                          :hx-target (str "#" target)
+                          :hx-swap "innerHTML"}
+    [:span.font-bold title]]
+   [:div {:id target}]])
 
 (defn konpy [request]
   (t/log! {:level :info :msg (str "tasks/konpy " (user request))})
-  (page
-   [:div.m-4
-    [:div.text-2xl (format "今週の Python (%s)" (user request))]
-    (into [:div.m-4]
-          (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems (wk))
-                                                  (sort-by :num))]
-            [:div
-             [:a.hover:underline
-              {:href (str "/k/problem/" e)}
-              [:span.mr-4 week "-" num] [:span problem]]]))
-    [:div.text-2xl "本日の回答・コメント・ストック"]
-    [:div.m-4.flex.gap-4
-     [:div
-      [:div.hover:underline {:hx-get    "/k/hx-answers"
-                             :hx-target "#answers"
-                             :hx-swap   "innerHTML"}
-       [:span.font-bold "回答"]]
-      [:div#answers ""]]
-     [:div
-      [:div.hover:underline {:hx-get    "/k/hx-comments"
-                             :hx-target "#comments"
-                             :hx-swap   "innerHTML"}
-       [:span.font-bold "コメント"]]
-      [:div#comments ""]]
-     [:div
-      [:div.hover:underline {:hx-get    "/k/hx-stocks"
-                             :hx-target "#stocks"
-                             :hx-swap   "innerHTML"}
-       [:span.font-bold "ストック"]]
-      [:div#stocks ""]]]]))
-
-(def ^:private fetch-answers '[:find ?e ?author
-                               :in $ ?id
-                               :where
-                               [?e :answer/status "yes"]
-                               [?e :to ?id]
-                               [?e :author ?author]])
+  (let [fetch-problems '[:find ?e ?week ?num ?problem
+                         :keys e  week num  problem
+                         :in $ ?week
+                         :where
+                         [?e :problem/status "yes"]
+                         [?e :week ?week]
+                         [?e :num ?num]
+                         [?e :problem ?problem]]]
+    (page
+     [:div.m-4
+      [:div.text-2xl (format "今週の Python (%s)" (user request))]
+      (into [:div.m-4]
+            (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems (wk))
+                                                    (sort-by :num))]
+              [:div
+               [:a.hover:underline
+                {:href (str "/k/problem/" e)}
+                [:span.mr-4 week "-" num] [:span problem]]]))
+      #_[:div.text-2xl "本日の回答・コメント・ログイン"]
+      [:div.m-4.flex.gap-4
+       (hx-component "/k/hx-answers" "answers" "回答")
+       (hx-component "/k/hx-comments" "comments" "コメント")
+       (hx-component "/k/hx-logins" "logins" "ログイン")]])))
 
 (defn- answerers [pid author]
   (t/log! {:level :debug :id "answerers" :msg (str "pid " pid)})
-  [:div
-   [:div.font-bold "answers"]
-   (into [:div.inline.my-4]
-         (for [[eid user] (ds/qq fetch-answers pid)]
-           [:button.pr-4
-            {:hx-get (str "/k/answer/" eid "/" pid)
-             :hx-target "#answer"
-             :hx-swap "innerHTML"}
-            [:span.hover:underline (if (= user author) user "******")]]))
-   [:div#answer "[answer]"]])
+  (let [fetch-answers '[:find ?e ?author
+                        :in $ ?id
+                        :where
+                        [?e :answer/status "yes"]
+                        [?e :to ?id]
+                        [?e :author ?author]]]
+    [:div
+     [:div.font-bold "answers"]
+     (into [:div.inline.my-4]
+           (for [[eid user] (ds/qq fetch-answers pid)]
+             [:button.pr-4
+              {:hx-get (str "/k/answer/" eid "/" pid)
+               :hx-target "#answer"
+               :hx-swap "innerHTML"}
+              [:span.hover:underline (if (= user author) user "******")]]))
+     [:div#answer "[answer]"]]))
 
 (defn problem [{{:keys [e]} :path-params :as request}]
   (let [eid (parse-long e)
         p (ds/pl eid)
-        author (user request)]
+        author (user request)
+        local-date (local-date)
+        answers (c/llen (format "kp2:%s:uploads:%s" author local-date))
+        comments (c/llen (format "kp2:%s:comments:%s" author local-date))]
     (t/log! {:level :info :id "problem" :msg author})
+    (t/log! {:level :debug :data {:answers answers :comments comments}})
     (page
      [:div.m-4
-      [:div.text-2xl (format "Problem %d-%d (%s)" (:week p) (:num p) author)]
+      [:div.text-2xl (format "Problem %d-%d, %s, answers: %s comments: %s"
+                             (:week p) (:num p) local-date answers comments)]
       [:div.m-4
        [:p (:problem p)]
        (answerers eid author)
@@ -110,7 +108,7 @@
 (defn hx-answers [request]
   (let [user (user request)
         answers (todays-answers)]
-    (t/log! {:level :info :id "hx-answers" :msg (user request)})
+    (t/log! {:level :info :id "hx-answers" :msg user})
     (hx [:div
          [:div (format "(%d)" (count answers))]
          [:ul.list-disc.mx-4
@@ -144,7 +142,7 @@
 (defn hx-comments [request]
   (let [user (user request)
         comments (todays-comments)]
-    (t/log! {:level :info :id "hx-comments" :msg (user request)})
+    (t/log! {:level :info :id "hx-comments" :msg user})
     (hx
      [:div
       [:div (format "(%d)" (count comments))]
@@ -157,22 +155,48 @@
            [:li.font-mono
             (format "%d-%d %s %s → %s" week num updated author commentee)]))]])))
 
-(def ^:private stocks
-  '[:find ?e ?owner ?updated
-    :keys e  owner  updated
-    :in $ ?now
-    :where
-    [?e :stock/status "yes"]
-    [?e :owner ?owner]
-    [?e :updated ?updated]
-    [(java-time.api/before? ?now ?updated)]])
+; (defn hx-stocks [request]
+;   (let [stocks
+;         '[:find ?e ?owner ?updated
+;           :keys e  owner  updated
+;           :in $ ?now
+;           :where
+;           [?e :stock/status "yes"]
+;           [?e :owner ?owner]
+;           [?e :updated ?updated]
+;           [(java-time.api/before? ?now ?updated)]] owner (user request)
+;         stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
+;     (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
+;     (hx [:div
+;          [:div (format "(%d)" (count stocks))]
+;          [:p "ストックは個人的なもの。"
+;           "何個ストックされた以外の表示をやめる。"]
+;          ; [:ul.list-disc.mx-4
+;          ;    (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
+;          ;      [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]
+;          ])))
 
-(defn hx-stocks [request]
-  (let [owner (user request)
-        stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
-    (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
-    (hx [:div
-         [:div (format "(%d)" (count stocks))]
-         [:ul.list-disc.mx-4
-          (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
-            [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]])))
+; (defn hx-logins [request]
+;   (let [user (user request)
+;         today (local-date)
+;         logins (->> (slurp "log/konpy.log")
+;                     (str/split-lines)
+;                     (filter  #(str/starts-with? % today))
+;                     (filter #(re-find #"success" %))
+;                     (map #(str/split % #"\s+"))
+;                     (map last)
+;                     reverse)]
+;     (t/log! {:level :debug :id "hx-logins" :msg user})
+;     (hx [:div "(昨日からのログイン継続を除く。)"
+;          [:ul.list-disc.mx-4
+;           (for [login logins]
+;             [:li.font-mono login])]])))
+
+; (def logins (c/lrange (format "kp2:login:%s" (local-date))))
+; logins
+
+(defn hx-logins [_request]
+  (hx [:div "(アルゴリズム変更)"
+       [:ul.list-disc.mx-4
+        (for [login (c/lrange (format "kp2:login:%s" (local-date)))]
+          [:li.font-mono login])]]))
