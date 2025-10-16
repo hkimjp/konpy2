@@ -25,8 +25,6 @@
                      (parse-long date)))
     (jt/local-date 2025 10 1))) ; production 2025 10 1
 
-; 2025 9 22
-
 (defn week
   "Returns how many weeks have passed since the argument `date`.
    If no argument given, the `start`day` defnied above is used."
@@ -41,6 +39,7 @@
 (defn now []
   (jt/local-date-time))
 
+; this willl prefer?
 (defn local-date []
   (str (jt/local-date)))
 

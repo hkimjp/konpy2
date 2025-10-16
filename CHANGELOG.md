@@ -7,14 +7,10 @@
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
-* spaces in admin/redis vars/kp2:<user>:comments:<today>
-    ("085217" " " "084553" " " "074340")
-  only display function is wrong?
 
+# 0.3.33 (2025-10-16)
 
-
-# 0.3.32 (2025-10-16)
-
+- hiccup2 interprets ["2025-10-16"]. so str.
 - bug fixed - after (let [user (user request)]),
   the local variable `user` shadowed global function `user`
 - changed `todays login` - use `redis` instead of `log/konpy2.log`

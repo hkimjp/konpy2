@@ -117,6 +117,7 @@
     [:p "kp2-flash: " r/kp2-flash]]])
 
 (defn- redis-vars-section
+  "also includes Paths section"
   [user]
   [:div
    [:div.text-2xl.font-bold "Redis Vars"]
@@ -129,7 +130,7 @@
       [:div.flex.gap-4
        [:div key]
        [:div (if-let [uploads (c/lrange key)]
-               (->> uploads (interpose " ") pr-str)
+               (str uploads)
                "NIL")]])]
    [:div.text-2xl.font-bold "Paths"]
    [:div.m-4
