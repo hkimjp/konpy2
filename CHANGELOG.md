@@ -8,7 +8,7 @@
 * flag skip-validation
 * admin can see his/her answers/comments
 
-# 0.3.32 (2025-10-16)
+# 0.3.33 (2025-10-16)
 
 - hiccup2 interprets ["2025-10-16"]. so str.
 - bug fixed - after (let [user (user request)]),
