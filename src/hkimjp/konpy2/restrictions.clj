@@ -7,7 +7,7 @@
    [hkimjp.konpy2.util :refer [local-date]]))
 
 (defn- local-time []
-  (jt/format "HHmmss" (jt/local-time)))
+  (jt/format "HH:mm:ss" (jt/local-time)))
 
 (def min-interval-comments
   "minimum interval between comments"

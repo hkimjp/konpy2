@@ -10,21 +10,6 @@
    [hkimjp.konpy2.util :refer [user now btn iso]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
-; (def ^:private comments-to '[:find ?e ?author
-;                              :in $ ?to
-;                              :where
-;                              [?e :comment/status "yes"]
-;                              [?e :to ?to]
-;                              [?e :author ?author]])
-
-; (def ^:private gpt '[:find ?answer
-;                      :in $ ?to
-;                      :where
-;                      [?e :answer/status "yes"]
-;                      [?e :author "chatgpt"]
-;                      [?e :answer ?answer]
-;                      [?e :to ?to]])
-
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
   (t/log! {:level :debug :id "hx-answer" :msg (str "e " e)})
   (let [author (user request)
