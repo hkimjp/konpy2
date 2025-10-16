@@ -16,7 +16,7 @@
 
 - bug fixed - after (let [user (user request)]),
   the local variable `user` shadowed global function `user`
-
+- changed `todays login` - use `redis` instead of `log/konpy2.log`
 
 # 0.3.31 (2025-10-14)
 
