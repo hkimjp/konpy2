@@ -55,7 +55,7 @@ clean:
 eq: build
   scp compose-prod.yml eq.local:konpy2/compose.yml
   scp target/io.github.hkimjp/konpy2-*.jar eq.local:konpy2/konpy2.jar
-  ssh eq.local 'cd konpy2 && docker compose down && docker compose up'
+  ssh eq.local 'cd konpy2 && docker compose down && docker compose up -d'
 
 #
 # docker container
