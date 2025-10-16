@@ -10,13 +10,25 @@
 * spaces in admin/redis vars/kp2:<user>:comments:<today>
     ("085217" " " "084553" " " "074340")
   only display function is wrong?
-* applied markdown
+
+
 
 # 0.3.32-SNAPSHOT
 
 - bug fixed - after (let [user (user request)]),
   the local variable `user` shadowed global function `user`
 - changed `todays login` - use `redis` instead of `log/konpy2.log`
+- adaptive markdown
+
+```
+(defn- markdown? [s]
+  (let [lines (str/split-lines s)]
+    (or
+     (< 0 (count (filter #(re-find #"^#+\s" %)  lines)))
+     (< 0 (count (filter #(re-matches #"\s*" %) lines)))
+     (< 0 (count (filter #(re-find #"^*+\s" %)  lines)))
+     (< 0 (count (filter #(re-find #"^\d+\s" %) lines))))))
+```
 
 # 0.3.31 (2025-10-14)
 
