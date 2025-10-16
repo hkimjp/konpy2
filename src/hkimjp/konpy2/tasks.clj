@@ -40,7 +40,7 @@
                [:a.hover:underline
                 {:href (str "/k/problem/" e)}
                 [:span.mr-4 week "-" num] [:span problem]]]))
-      [:div.text-2xl "本日の回答・コメント・ログイン"]
+      #_[:div.text-2xl "本日の回答・コメント・ログイン"]
       [:div.m-4.flex.gap-4
        (hx-component "/k/hx-answers" "answers" "回答")
        (hx-component "/k/hx-comments" "comments" "コメント")
@@ -176,19 +176,27 @@
 ;          ;      [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]
 ;          ])))
 
-(defn hx-logins [request]
-  (let [user (user request)
-        today (local-date)
-        logins (->> (slurp "log/konpy.log")
-                    (str/split-lines)
-                    (filter  #(str/starts-with? % today))
-                    (filter #(re-find #"success" %))
-                    (map #(str/split % #"\s+"))
-                    (map last)
-                    reverse)]
-    (t/log! {:level :debug :id "hx-logins" :msg user})
-    (hx [:div "(昨日からのログイン継続を除く。)"
-         [:ul.list-disc.mx-4
-          (for [login logins]
-            [:li.font-mono login])]])))
+; (defn hx-logins [request]
+;   (let [user (user request)
+;         today (local-date)
+;         logins (->> (slurp "log/konpy.log")
+;                     (str/split-lines)
+;                     (filter  #(str/starts-with? % today))
+;                     (filter #(re-find #"success" %))
+;                     (map #(str/split % #"\s+"))
+;                     (map last)
+;                     reverse)]
+;     (t/log! {:level :debug :id "hx-logins" :msg user})
+;     (hx [:div "(昨日からのログイン継続を除く。)"
+;          [:ul.list-disc.mx-4
+;           (for [login logins]
+;             [:li.font-mono login])]])))
 
+; (def logins (c/lrange (format "kp2:login:%s" (local-date))))
+; logins
+
+(defn hx-logins [_request]
+  (hx [:div "(アルゴリズム変更)"
+       [:ul.list-disc.mx-4
+        (for [login (c/lrange (format "kp2:login:%s" (local-date)))]
+          [:li.font-mono login])]]))
