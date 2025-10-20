@@ -30,6 +30,37 @@
 
 ;------------------------------------
 
+(require '[clojure.string :as str])
+(require '[java-time.api :as jt])
+
+(ds/qq '[:find ?e ?updated
+         :where
+         [?e :answer/status "yes"]
+         [?e :updated ?updated]])
+
+(def answers (ds/qq '[:find ?e ?updated
+                      :where
+                      [?e :answer/status "yes"]
+                      [?e :updated ?updated]
+                      ;; this bad
+                      #_[(java.time.api/=
+                          (java-time.api/local-date ?updated)
+                          (java-time.api/local-date))]]))
+
+(count answers)
+
+(count (filter (fn [[_ time]] (str/starts-with? (str time) "2025-10-20")) answers))
+
+(count (filter (fn [[_ time]] (java-time.api/=
+                               (java-time.api/local-date time)
+                               (java-time.api/local-date)))
+               answers))
+
+(count (filter (fn [[_ time]] (jt/=
+                               (jt/local-date time)
+                               (jt/local-date)))
+               answers))
+
 (comment
   (require '[clojure.string :as str])
   (def line "abc\ndef\nxyz\n")
