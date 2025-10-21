@@ -38,14 +38,22 @@
          [?e :answer/status "yes"]
          [?e :updated ?updated]])
 
+; (def answers (ds/qq '[:find ?e ?updated
+;                       :where
+;                       [?e :answer/status "yes"]
+;                       [?e :updated ?updated]
+;                       ;; this bad
+;                       #_[(java.time.api/=
+;                           (java-time.api/local-date ?updated)
+;                           (java-time.api/local-date))]]))
+
 (def answers (ds/qq '[:find ?e ?updated
                       :where
                       [?e :answer/status "yes"]
                       [?e :updated ?updated]
-                      ;; this bad
-                      #_[(java.time.api/=
-                          (java-time.api/local-date ?updated)
-                          (java-time.api/local-date))]]))
+                      [(java-time.api/local-date ?updated) ?up-date]
+                      [(java-time.api/local-date 2025 10 19) ?today]
+                      [(java-time.api/= ?up-date ?today)]]))
 
 (count answers)
 
