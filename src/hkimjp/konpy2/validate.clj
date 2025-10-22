@@ -31,7 +31,8 @@
 
 (defn pytest-path []
   (let [pytest (some #(when (fs/exists? %) %)
-                     ["/opt/homebrew/bin/pytest"
+                     ["/Users/hkim/.local/bin/pytest"
+                      "/opt/homebrew/bin/pytest"
                       "/usr/bin/pytest"
                       (str (env :home) "/workspace/konpy2/.venv/bin/pytest")])]
     (if (some? pytest)
