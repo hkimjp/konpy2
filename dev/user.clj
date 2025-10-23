@@ -4,6 +4,7 @@
    ; [clojure.java.io :as io]
    [clj-reload.core :as reload]
    ; [java-time.api :as jt]
+
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
@@ -28,6 +29,12 @@
 
 ;; (reload/reload)
 
+;------------------------------------
+
+(require '[hiccup2.core :as h])
+; (-> [:p [: "abc"]]
+;     h/html
+;     str)
 ;------------------------------------
 
 (require '[clojure.string :as str])

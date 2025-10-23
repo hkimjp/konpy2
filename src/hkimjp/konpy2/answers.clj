@@ -105,4 +105,4 @@
       (page
        [:div.m-4
         [:div.text-2xl "Error"]
-        [:p.text-red-600 (.getMessage e)]]))))
+        [:p.text-red-600 (h/raw (.getMessage e))]]))))

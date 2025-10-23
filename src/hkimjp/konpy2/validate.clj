@@ -31,8 +31,7 @@
 
 (defn pytest-path []
   (let [pytest (some #(when (fs/exists? %) %)
-                     ["/Users/hkim/.local/bin/pytest"
-                      "/opt/homebrew/bin/pytest"
+                     ["/opt/homebrew/bin/pytest"
                       "/usr/bin/pytest"
                       (str (env :home) "/workspace/konpy2/.venv/bin/pytest")])]
     (if (some? pytest)
@@ -122,6 +121,15 @@
       (fs/delete f)
       (throw (Exception. "doctest failed")))))
 
+(defn- retrieve [pat s]
+  (->> (str/split-lines s)
+       (filter #(re-find pat %))
+       (map #(str % "<br>"))
+       (apply str)))
+
+; (retrieve #"^E\s" "abc def\nE anc\nE 123\nxyz")
+; (str "abc" "<br>")
+
 (defn- pytest [answer testcode]
   (t/log! {:level :info :id "pytest"})
   (t/log! {:level :debug
@@ -132,7 +140,7 @@
              (pytest-path) (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
-      (throw (Exception. "pytest failed")))))
+      (throw (Exception. (str "pytest failed<br>" (retrieve #"^E\s" (:out ret))))))))
 
 (defn validate [author answer testcode doctest?]
   (let [answer (expand-includes author answer)]
