@@ -31,8 +31,7 @@
 
 (defn pytest-path []
   (let [pytest (some #(when (fs/exists? %) %)
-                     ["/Users/hkim/.local/bin/pytest"
-                      "/opt/homebrew/bin/pytest"
+                     ["/opt/homebrew/bin/pytest"
                       "/usr/bin/pytest"
                       (str (env :home) "/workspace/konpy2/.venv/bin/pytest")])]
     (if (some? pytest)
@@ -132,7 +131,7 @@
              (pytest-path) (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
-      (throw (Exception. "pytest failed")))))
+      (throw (Exception. "pytest failed<br>test<br>")))))
 
 (defn validate [author answer testcode doctest?]
   (let [answer (expand-includes author answer)]
