@@ -1,12 +1,17 @@
 # Unreleased
 
-* problems/test-codes for production from `py99`
 * admin/toggle-status
 * effective upsert. update only changed elements
 * pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
+* dialog to enter comments
+* confirm upload py files
+
+# 0.3.35 (2025-10-23)
+
+- show pytest errors
 
 # 0.3.33 (2025-10-16)
 
