@@ -9,7 +9,7 @@
 * dialog to enter comments
 * confirm upload py files
 
-# 0.3.35-SNAPSHOT
+# 0.3.35 (2025-10-23)
 
 - show pytest errors
 
