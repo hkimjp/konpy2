@@ -36,13 +36,25 @@
 ;     str)
 ;------------------------------------
 
-(require '[clojure.string :as str])
-(require '[java-time.api :as jt])
+(comment
+  (ds/qq '[:find ?e
+           :where
+           [?e :db/id ?n]
+           [(< ?n 10)]])
 
-(ds/qq '[:find (count ?e)
-         :where
-         [?e :updated ?updated]
-         [?e :answer/status "yes"]])
+  (ds/qq '[:find (sum ?n)
+           :with ?e
+           :where
+           [?e :db/id ?n]])
+
+  (require '[clojure.string :as str])
+  (require '[java-time.api :as jt])
+
+  (ds/qq '[:find (count ?e)
+           :where
+           [?e :updated ?updated]
+           [?e :answer/status "yes"]])
+  :rcf)
 
 ; (def answers (ds/qq '[:find ?e ?updated
 ;                       :where
@@ -53,27 +65,55 @@
 ;                           (java-time.api/local-date ?updated)
 ;                           (java-time.api/local-date))]]))
 
-(def answers (ds/qq '[:find ?e ?updated
-                      :where
-                      [?e :updated ?updated]
-                      [?e :answer/status "yes"]
-                      [(java-time.api/local-date ?updated) ?up-date]
-                      [(java-time.api/local-date 2025 10 19) ?today]
-                      [(java-time.api/= ?up-date ?today)]]))
+(comment
+  (def answers (ds/qq '[:find ?e ?updated
+                        :keys e updated
+                        :where
+                        [?e :updated ?updated]
+                        [?e :answer/status "yes"]
+                        [(java-time.api/local-date ?updated) ?up-date]
+                        [(java-time.api/local-date 2025 10 19) ?today]
+                        [(java-time.api/= ?up-date ?today)]]))
 
-(count answers)
+  answers
 
-(count (filter (fn [[_ time]] (str/starts-with? (str time) "2025-10-20")) answers))
+  (ds/pl 688)
 
-(count (filter (fn [[_ time]] (java-time.api/=
-                               (java-time.api/local-date time)
-                               (java-time.api/local-date)))
-               answers))
+  (ds/q '[:find ?e
+          :in $ ?user
+          :where
+          [?e :author ?user]]
+        @ds/conn "inu255-12")
 
-(count (filter (fn [[_ time]] (jt/=
-                               (jt/local-date time)
-                               (jt/local-date)))
-               answers))
+  (ds/pull @ds/conn '[*] 688)
+
+;; can not
+  (ds/q '[:find (ds/pull '[:answer] ?e)
+          :in $ ?user
+          :where
+          [?e :author ?user]]
+        @ds/conn "inu255-12")
+
+  (ds/qq '[:find (ds/pl ?e)
+           :in $ ?user
+           :where
+           [?e :author ?user]]
+         "inu255-12")
+
+  (count answers)
+
+  (count (filter (fn [[_ time]] (str/starts-with? (str time) "2025-10-20")) answers))
+
+  (count (filter (fn [[_ time]] (java-time.api/=
+                                 (java-time.api/local-date time)
+                                 (java-time.api/local-date)))
+                 answers))
+
+  (count (filter (fn [[_ time]] (jt/=
+                                 (jt/local-date time)
+                                 (jt/local-date)))
+                 answers))
+  :rcf)
 
 (comment
   (require '[clojure.string :as str])
@@ -88,18 +128,20 @@
   :rcf)
 ;------------------------------------
 
-(defn problem! [w n problem testcode]
-  (ds/puts! [{:db/id -1
-              :problem/status "yes"
-              :week w
-              :num n
-              :problem problem
-              :testcode testcode
-              :updated (now)}]))
+(comment
+  (defn problem! [w n problem testcode]
+    (ds/puts! [{:db/id -1
+                :problem/status "yes"
+                :week w
+                :num n
+                :problem problem
+                :testcode testcode
+                :updated (now)}]))
 
-(defn problems! [m p-t]
-  (doseq [[n [p t]] (map-indexed vector p-t)]
-    (problem! m n p t)))
+  (defn problems! [m p-t]
+    (doseq [[n [p t]] (map-indexed vector p-t)]
+      (problem! m n p t)))
+  :rcf)
 
 (comment
   (nil? "1")
