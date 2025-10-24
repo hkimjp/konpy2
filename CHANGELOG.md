@@ -9,6 +9,14 @@
 * dialog to enter comments
 * confirm upload py files
 
+# 0.3.37 (2025-10-24)
+
+- bug fixed  - fetched answers do not have :e
+
+    (->> (ds/qq fetch-answers pid)
+         (sort-by first) ;; was (sort-by :e)
+         reverse)
+
 # 0.3.36 (2025-10-24)
 
 - pytest-path, python-path, ruff-path was functions, but now constants
