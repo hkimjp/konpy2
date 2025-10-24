@@ -51,13 +51,15 @@
   (let [fetch-answers '[:find ?e ?author
                         :in $ ?id
                         :where
-                        [?e :answer/status "yes"]
                         [?e :to ?id]
+                        [?e :answer/status "yes"]
                         [?e :author ?author]]]
     [:div
      [:div.font-bold "answers"]
      (into [:div.inline.my-4]
-           (for [[eid user] (ds/qq fetch-answers pid)]
+           (for [[eid user] (->> (ds/qq fetch-answers pid)
+                                 (sort-by :e)
+                                 reverse)]
              [:button.pr-4
               {:hx-get (str "/k/answer/" eid "/" pid)
                :hx-target "#answer"

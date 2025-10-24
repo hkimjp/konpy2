@@ -135,11 +135,11 @@
    [:div.text-2xl.font-bold "Paths"]
    [:div.m-4
     [:div.flex.gap-4
-     [:div "ruff"] [:div (ruff-path)]]
+     [:div "python"] [:div python-path]]
     [:div.flex.gap-4
-     [:div "python"] [:div (python-path)]]
+     [:div "pytest"] [:div pytest-path]]
     [:div.flex.gap-4
-     [:div "pytest"] [:div (pytest-path)]]]])
+     [:div "ruff"] [:div ruff-path]]]])
 
 (defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
