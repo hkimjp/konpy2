@@ -9,7 +9,7 @@
 * dialog to enter comments
 * confirm upload py files
 
-# 0.3.37-SNAPSHOT
+# 0.3.37 (2025-10-24)
 
 - bug fixed  - fetched answers do not have :e
 
