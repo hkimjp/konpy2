@@ -9,7 +9,7 @@
 * dialog to enter comments
 * confirm upload py files
 
-# 0.3.36-SNAPSHOT
+# 0.3.36 (2025-10-24)
 
 - pytest-path, python-path, ruff-path was functions, but now constants
 - changed tasks/answers - sort by submission date
