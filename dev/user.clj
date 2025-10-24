@@ -30,8 +30,7 @@
 ;; (reload/reload)
 
 ;------------------------------------
-
-(require '[hiccup2.core :as h])
+; (require '[hiccup2.core :as h])
 ; (-> [:p [: "abc"]]
 ;     h/html
 ;     str)
@@ -40,10 +39,10 @@
 (require '[clojure.string :as str])
 (require '[java-time.api :as jt])
 
-(ds/qq '[:find ?e ?updated
+(ds/qq '[:find (count ?e)
          :where
-         [?e :answer/status "yes"]
-         [?e :updated ?updated]])
+         [?e :updated ?updated]
+         [?e :answer/status "yes"]])
 
 ; (def answers (ds/qq '[:find ?e ?updated
 ;                       :where
@@ -56,8 +55,8 @@
 
 (def answers (ds/qq '[:find ?e ?updated
                       :where
-                      [?e :answer/status "yes"]
                       [?e :updated ?updated]
+                      [?e :answer/status "yes"]
                       [(java-time.api/local-date ?updated) ?up-date]
                       [(java-time.api/local-date 2025 10 19) ?today]
                       [(java-time.api/= ?up-date ?today)]]))

@@ -26,10 +26,10 @@
                          :keys e  week num  problem
                          :in $ ?week
                          :where
-                         [?e :problem/status "yes"]
                          [?e :week ?week]
                          [?e :num ?num]
-                         [?e :problem ?problem]]]
+                         [?e :problem ?problem]
+                         [?e :problem/status "yes"]]]
     (page
      [:div.m-4
       [:div.text-2xl (format "今週の Python (%s)" (user request))]
@@ -52,8 +52,8 @@
                         :in $ ?id
                         :where
                         [?e :to ?id]
-                        [?e :answer/status "yes"]
-                        [?e :author ?author]]]
+                        [?e :author ?author]
+                        [?e :answer/status "yes"]]]
     [:div
      [:div.font-bold "answers"]
      (into [:div.inline.my-4]
@@ -198,7 +198,7 @@
 ; logins
 
 (defn hx-logins [_request]
-  (hx [:div "(アルゴリズム変更)"
+  (hx [:div "(00:00でリセット)"
        [:ul.list-disc.mx-4
         (for [login (c/lrange (format "kp2:login:%s" (local-date)))]
           [:li.font-mono login])]]))

@@ -15,10 +15,10 @@
     :keys e  stock  updated
     :in $ ?owner
     :where
-    [?e :stock/status "yes"]
     [?e :owner ?owner]
     [?e :stock ?stock]
-    [?e :updated ?updated]])
+    [?e :updated ?updated]
+    [?e :stock/status "yes"]])
 
 (defn- summary [date-time text]
   (str

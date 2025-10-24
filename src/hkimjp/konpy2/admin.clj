@@ -75,9 +75,9 @@
         '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
           :keys e  status  week  num  problem  testcode  updated
           :where
-          [?e :problem/status ?status]
           [?e :week ?week]
           [?e :num ?num]
+          [?e :problem/status ?status]
           [?e :problem ?problem]
           [?e :testcode ?testcode]
           [?e :updated ?updated]]]

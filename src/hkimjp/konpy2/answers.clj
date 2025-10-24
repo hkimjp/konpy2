@@ -18,16 +18,16 @@
         gpt-ans (-> (ds/qq '[:find ?answer
                              :in $ ?to
                              :where
-                             [?e :answer/status "yes"]
                              [?e :author "chatgpt"]
+                             [?e :answer/status "yes"]
                              [?e :answer ?answer]
                              [?e :to ?to]] (parse-long p)) ffirst)
         comments (ds/qq '[:find ?e ?author
                           :in $ ?to
                           :where
-                          [?e :comment/status "yes"]
                           [?e :to ?to]
-                          [?e :author ?author]]
+                          [?e :author ?author]
+                          [?e :comment/status "yes"]]
                         e)]
     (hx [:div
          [:div.flex.gap-4
@@ -67,9 +67,9 @@
   '[:find ?author
     :in $ ?digest
     :where
-    [?e :answer/status "yes"]
     [?e :digest ?digest]
-    [?e :author ?author]])
+    [?e :author ?author]
+    [?e :answer/status "yes"]])
 
 (defn answer! [{{:keys [file e]} :params :as request}]
   (t/log! {:level :info :id "answer!"})

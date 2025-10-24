@@ -12,24 +12,24 @@
   '[:find ?e
     :in $ ?author
     :where
-    [?e :answer/status "yes"]
-    [?e :author ?author]])
+    [?e :author ?author]
+    [?e :answer/status "yes"]])
 
 (def ^:private sent
   '[:find ?e
     :in $ ?author
     :where
-    [?e :comment/status "yes"]
-    [?e :author ?author]])
+    [?e :author ?author]
+    [?e :comment/status "yes"]])
 
 (def ^:private received
   '[:find ?e ?pt
     :in $ ?author
     :where
-    [?e :comment/status "yes"]
     [?e :to ?a]
     [?a :author ?author]
-    [?e :pt ?pt]])
+    [?e :pt ?pt]
+    [?e :comment/status "yes"]])
 
 (defn- score [sym coll target]
   [:div
