@@ -9,6 +9,9 @@
 * dialog to enter comments
 * confirm upload py files
 
+# 0.3.39-SNAPSHOT
+
+* stop reversing?
 
 # 0.3.38 (2025-10-24)
 

@@ -3,8 +3,7 @@
    ; [babashka.fs :as fs]
    ; [clojure.java.io :as io]
    [clj-reload.core :as reload]
-   ; [java-time.api :as jt]
-
+   [java-time.api :as jt]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
@@ -30,13 +29,53 @@
 ;; (reload/reload)
 
 ;------------------------------------
+
 ; (require '[hiccup2.core :as h])
 ; (-> [:p [: "abc"]]
 ;     h/html
 ;     str)
-;------------------------------------
+
+(defn authors [yyyy MM dd]
+  (let [query
+        '[:find ?author
+          :with ?e
+          :in $ ?yyyy ?MM ?dd
+          :where
+          [?e :answer/status "yes"]
+          [?e :updated ?jt]
+          [(java-time.api/local-date ?jt) ?updated]
+          [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
+          [(java-time.api/= ?updated ?date)]
+          [?e :author ?author]]]
+    (ds/qq query yyyy MM dd)))
+
+(defn comments [yyyy MM dd]
+  (let [query
+        '[:find ?author
+          :with ?e
+          :in $ ?yyyy ?MM ?dd
+          :where
+          [?e :comment/status "yes"]
+          [?e :updated ?jt]
+          [(java-time.api/local-date ?jt) ?updated]
+          [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
+          [(java-time.api/= ?updated ?date)]
+          [?e :author ?author]]]
+    (ds/qq query yyyy MM dd)))
+
+; (authors 2025 10 24)
+; (comments 2025 10 24)
 
 (comment
+  (ds/qq '[:find ?author
+           :where
+           [?e :answer/status "yes"]
+           [?e :updated ?jt]
+           [(java-time.api/local-date ?jt) ?update]
+           [(java-time.api/local-date 2025 10 24) ?today]
+           [(java-time.api/= ?update ?today)]
+           [?e :author ?author]])
+
   (ds/qq '[:find ?e
            :where
            [?e :db/id ?n]
@@ -55,15 +94,6 @@
            [?e :updated ?updated]
            [?e :answer/status "yes"]])
   :rcf)
-
-; (def answers (ds/qq '[:find ?e ?updated
-;                       :where
-;                       [?e :answer/status "yes"]
-;                       [?e :updated ?updated]
-;                       ;; this bad
-;                       #_[(java.time.api/=
-;                           (java-time.api/local-date ?updated)
-;                           (java-time.api/local-date))]]))
 
 (comment
   (def answers (ds/qq '[:find ?e ?updated
