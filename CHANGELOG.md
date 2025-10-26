@@ -11,7 +11,7 @@
 
 # 0.3.39-SNAPSHOT
 
-* stop reversing?
+- stop reversing
 
 # 0.3.38 (2025-10-24)
 

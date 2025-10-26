@@ -59,7 +59,7 @@
      (into [:div.inline.my-4]
            (for [[eid user] (->> (ds/qq fetch-answers pid)
                                  (sort-by first)
-                                 reverse)]
+                                 #_reverse)]
              [:button.pr-4
               {:hx-get (str "/k/answer/" eid "/" pid)
                :hx-target "#answer"
