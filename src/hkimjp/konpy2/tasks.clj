@@ -42,7 +42,7 @@
                 [:span.mr-4 week "-" num] [:span problem]]]))
       #_[:div.text-2xl "本日の回答・コメント・ログイン"]
       [:div.m-4.flex.gap-4
-       (hx-component "/k/hx-answers" "answers" "回答")
+       (hx-component "/k/hx-answers" "answers" "本日の回答")
        (hx-component "/k/hx-comments" "comments" "コメント")
        (hx-component "/k/hx-logins" "logins" "ログイン")]])))
 
@@ -59,7 +59,7 @@
      (into [:div.inline.my-4]
            (for [[eid user] (->> (ds/qq fetch-answers pid)
                                  (sort-by first)
-                                 reverse)]
+                                 #_reverse)]
              [:button.pr-4
               {:hx-get (str "/k/answer/" eid "/" pid)
                :hx-target "#answer"

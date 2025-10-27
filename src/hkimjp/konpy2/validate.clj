@@ -18,35 +18,6 @@
 (def pytest-path
   (or (env :konpy-pytest) "/usr/bin/pytest"))
 
-; (def ruff-path
-;   (let [ruff (some #(when (fs/exists? %) %)
-;                    ["/opt/homebrew/bin/ruff"
-;                     "/usr/local/bin/ruff"
-;                     "/snap/bin/ruff"
-;                     (str (env :home) "/.local/bin/ruff")])]
-;     (if (some? ruff)
-;       ruff
-;       (throw (Exception. "did not find ruff")))))
-
-; (def python-path
-;   (let [python (some #(when (fs/exists? %) %)
-;                      ["/opt/homebrew/bin/python3"
-;                       "/usr/local/bin/python3"
-;                       "/usr/bin/python3"
-;                       (str (env :home) "/workspace/konpy2/.venv/bin/python3")])]
-;     (if (some? python)
-;       python
-;       (throw (Exception. "did not find python3")))))
-
-; (def pytest-path
-;   (let [pytest (some #(when (fs/exists? %) %)
-;                      ["/opt/homebrew/bin/pytest"
-;                       "/usr/bin/pytest"
-;                       (str (env :home) "/workspace/konpy2/.venv/bin/pytest")])]
-;     (if (some? pytest)
-;       pytest
-;       (throw (Exception. "did not find pytest")))))
-
 (defn- get-last-answer [author week num]
   (t/log! {:level :debug
            :id "get-last-answer"

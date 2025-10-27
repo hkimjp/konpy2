@@ -3,8 +3,7 @@
    ; [babashka.fs :as fs]
    ; [clojure.java.io :as io]
    [clj-reload.core :as reload]
-   ; [java-time.api :as jt]
-
+   [java-time.api :as jt]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
@@ -30,50 +29,121 @@
 ;; (reload/reload)
 
 ;------------------------------------
+
 ; (require '[hiccup2.core :as h])
 ; (-> [:p [: "abc"]]
 ;     h/html
 ;     str)
-;------------------------------------
 
-(require '[clojure.string :as str])
-(require '[java-time.api :as jt])
+(defn authors [yyyy MM dd]
+  (let [query
+        '[:find ?author
+          :with ?e
+          :in $ ?yyyy ?MM ?dd
+          :where
+          [?e :answer/status "yes"]
+          [?e :updated ?jt]
+          [(java-time.api/local-date ?jt) ?updated]
+          [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
+          [(java-time.api/= ?updated ?date)]
+          [?e :author ?author]]]
+    (ds/qq query yyyy MM dd)))
 
-(ds/qq '[:find (count ?e)
-         :where
-         [?e :updated ?updated]
-         [?e :answer/status "yes"]])
+(defn comments [yyyy MM dd]
+  (let [query
+        '[:find ?author
+          :with ?e
+          :in $ ?yyyy ?MM ?dd
+          :where
+          [?e :comment/status "yes"]
+          [?e :updated ?jt]
+          [(java-time.api/local-date ?jt) ?updated]
+          [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
+          [(java-time.api/= ?updated ?date)]
+          [?e :author ?author]]]
+    (ds/qq query yyyy MM dd)))
 
-; (def answers (ds/qq '[:find ?e ?updated
-;                       :where
-;                       [?e :answer/status "yes"]
-;                       [?e :updated ?updated]
-;                       ;; this bad
-;                       #_[(java.time.api/=
-;                           (java-time.api/local-date ?updated)
-;                           (java-time.api/local-date))]]))
+; (authors 2025 10 24)
+; (comments 2025 10 24)
 
-(def answers (ds/qq '[:find ?e ?updated
-                      :where
-                      [?e :updated ?updated]
-                      [?e :answer/status "yes"]
-                      [(java-time.api/local-date ?updated) ?up-date]
-                      [(java-time.api/local-date 2025 10 19) ?today]
-                      [(java-time.api/= ?up-date ?today)]]))
+(comment
+  (ds/qq '[:find ?author
+           :where
+           [?e :answer/status "yes"]
+           [?e :updated ?jt]
+           [(java-time.api/local-date ?jt) ?update]
+           [(java-time.api/local-date 2025 10 24) ?today]
+           [(java-time.api/= ?update ?today)]
+           [?e :author ?author]])
 
-(count answers)
+  (ds/qq '[:find ?e
+           :where
+           [?e :db/id ?n]
+           [(< ?n 10)]])
 
-(count (filter (fn [[_ time]] (str/starts-with? (str time) "2025-10-20")) answers))
+  (ds/qq '[:find (sum ?n)
+           :with ?e
+           :where
+           [?e :db/id ?n]])
 
-(count (filter (fn [[_ time]] (java-time.api/=
-                               (java-time.api/local-date time)
-                               (java-time.api/local-date)))
-               answers))
+  (require '[clojure.string :as str])
+  (require '[java-time.api :as jt])
 
-(count (filter (fn [[_ time]] (jt/=
-                               (jt/local-date time)
-                               (jt/local-date)))
-               answers))
+  (ds/qq '[:find (count ?e)
+           :where
+           [?e :updated ?updated]
+           [?e :answer/status "yes"]])
+  :rcf)
+
+(comment
+  (def answers (ds/qq '[:find ?e ?updated
+                        :keys e updated
+                        :where
+                        [?e :updated ?updated]
+                        [?e :answer/status "yes"]
+                        [(java-time.api/local-date ?updated) ?up-date]
+                        [(java-time.api/local-date 2025 10 19) ?today]
+                        [(java-time.api/= ?up-date ?today)]]))
+
+  answers
+
+  (ds/pl 688)
+
+  (ds/q '[:find ?e
+          :in $ ?user
+          :where
+          [?e :author ?user]]
+        @ds/conn "inu255-12")
+
+  (ds/pull @ds/conn '[*] 688)
+
+;; can not
+  (ds/q '[:find (ds/pull '[:answer] ?e)
+          :in $ ?user
+          :where
+          [?e :author ?user]]
+        @ds/conn "inu255-12")
+
+  (ds/qq '[:find (ds/pl ?e)
+           :in $ ?user
+           :where
+           [?e :author ?user]]
+         "inu255-12")
+
+  (count answers)
+
+  (count (filter (fn [[_ time]] (str/starts-with? (str time) "2025-10-20")) answers))
+
+  (count (filter (fn [[_ time]] (java-time.api/=
+                                 (java-time.api/local-date time)
+                                 (java-time.api/local-date)))
+                 answers))
+
+  (count (filter (fn [[_ time]] (jt/=
+                                 (jt/local-date time)
+                                 (jt/local-date)))
+                 answers))
+  :rcf)
 
 (comment
   (require '[clojure.string :as str])
@@ -88,18 +158,20 @@
   :rcf)
 ;------------------------------------
 
-(defn problem! [w n problem testcode]
-  (ds/puts! [{:db/id -1
-              :problem/status "yes"
-              :week w
-              :num n
-              :problem problem
-              :testcode testcode
-              :updated (now)}]))
+(comment
+  (defn problem! [w n problem testcode]
+    (ds/puts! [{:db/id -1
+                :problem/status "yes"
+                :week w
+                :num n
+                :problem problem
+                :testcode testcode
+                :updated (now)}]))
 
-(defn problems! [m p-t]
-  (doseq [[n [p t]] (map-indexed vector p-t)]
-    (problem! m n p t)))
+  (defn problems! [m p-t]
+    (doseq [[n [p t]] (map-indexed vector p-t)]
+      (problem! m n p t)))
+  :rcf)
 
 (comment
   (nil? "1")
