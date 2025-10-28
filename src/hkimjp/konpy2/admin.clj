@@ -75,9 +75,9 @@
         '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
           :keys e  status  week  num  problem  testcode  updated
           :where
-          [?e :problem/status ?status]
           [?e :week ?week]
           [?e :num ?num]
+          [?e :problem/status ?status]
           [?e :problem ?problem]
           [?e :testcode ?testcode]
           [?e :updated ?updated]]]
@@ -135,11 +135,11 @@
    [:div.text-2xl.font-bold "Paths"]
    [:div.m-4
     [:div.flex.gap-4
-     [:div "ruff"] [:div (ruff-path)]]
+     [:div "python"] [:div python-path]]
     [:div.flex.gap-4
-     [:div "python"] [:div (python-path)]]
+     [:div "pytest"] [:div pytest-path]]
     [:div.flex.gap-4
-     [:div "pytest"] [:div (pytest-path)]]]])
+     [:div "ruff"] [:div ruff-path]]]])
 
 (defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})

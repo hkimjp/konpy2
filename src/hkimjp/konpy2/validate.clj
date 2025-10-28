@@ -9,34 +9,14 @@
 
 (def ^:private timeout 10)
 
-(defn ruff-path []
-  (let [ruff (some #(when (fs/exists? %) %)
-                   ["/opt/homebrew/bin/ruff"
-                    "/usr/local/bin/ruff"
-                    "/snap/bin/ruff"
-                    (str (env :home) "/.local/bin/ruff")])]
-    (if (some? ruff)
-      ruff
-      (throw (Exception. "did not find ruff")))))
+(def ruff-path
+  (or (env :konpy-ruff) "/usr/local/bin/ruff"))
 
-(defn python-path []
-  (let [python (some #(when (fs/exists? %) %)
-                     ["/opt/homebrew/bin/python3"
-                      "/usr/local/bin/python3"
-                      "/usr/bin/python3"
-                      (str (env :home) "/workspace/konpy2/.venv/bin/python3")])]
-    (if (some? python)
-      python
-      (throw (Exception. "did not find python3")))))
+(def python-path
+  (or (env :konpy-python) "/usr/bin/python3"))
 
-(defn pytest-path []
-  (let [pytest (some #(when (fs/exists? %) %)
-                     ["/opt/homebrew/bin/pytest"
-                      "/usr/bin/pytest"
-                      (str (env :home) "/workspace/konpy2/.venv/bin/pytest")])]
-    (if (some? pytest)
-      pytest
-      (throw (Exception. "did not find pytest")))))
+(def pytest-path
+  (or (env :konpy-pytest) "/usr/bin/pytest"))
 
 (defn- get-last-answer [author week num]
   (t/log! {:level :debug
@@ -101,7 +81,7 @@
              timeout
              ;; 0.13.*
              ;; (ruff-path "format" "--diff" (str (fs/file f)))
-             (ruff-path) "-q" "format" (str (fs/file f)))]
+             ruff-path "-q" "format" (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "using VScode/Ruff?")))))
@@ -116,7 +96,7 @@
   (let [f (create-tempfile-with answer)
         ret (timeout-sh
              timeout
-             (python-path) "-m" "doctest" (str (fs/file f)))]
+             python-path "-m" "doctest" (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "doctest failed")))))
@@ -127,9 +107,6 @@
        (map #(str % "<br>"))
        (apply str)))
 
-; (retrieve #"^E\s" "abc def\nE anc\nE 123\nxyz")
-; (str "abc" "<br>")
-
 (defn- pytest [answer testcode]
   (t/log! {:level :info :id "pytest"})
   (t/log! {:level :debug
@@ -137,7 +114,7 @@
   (let [f (create-tempfile-with (str/join [answer "\n" testcode]))
         ret (timeout-sh
              timeout
-             (pytest-path) (str (fs/file f)))]
+             pytest-path (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. (str "pytest failed<br>" (retrieve #"^E\s" (:out ret))))))))

@@ -26,10 +26,10 @@
                          :keys e  week num  problem
                          :in $ ?week
                          :where
-                         [?e :problem/status "yes"]
                          [?e :week ?week]
                          [?e :num ?num]
-                         [?e :problem ?problem]]]
+                         [?e :problem ?problem]
+                         [?e :problem/status "yes"]]]
     (page
      [:div.m-4
       [:div.text-2xl (format "今週の Python (%s)" (user request))]
@@ -42,7 +42,7 @@
                 [:span.mr-4 week "-" num] [:span problem]]]))
       #_[:div.text-2xl "本日の回答・コメント・ログイン"]
       [:div.m-4.flex.gap-4
-       (hx-component "/k/hx-answers" "answers" "回答")
+       (hx-component "/k/hx-answers" "answers" "本日の回答")
        (hx-component "/k/hx-comments" "comments" "コメント")
        (hx-component "/k/hx-logins" "logins" "ログイン")]])))
 
@@ -51,13 +51,15 @@
   (let [fetch-answers '[:find ?e ?author
                         :in $ ?id
                         :where
-                        [?e :answer/status "yes"]
                         [?e :to ?id]
-                        [?e :author ?author]]]
+                        [?e :author ?author]
+                        [?e :answer/status "yes"]]]
     [:div
      [:div.font-bold "answers"]
      (into [:div.inline.my-4]
-           (for [[eid user] (ds/qq fetch-answers pid)]
+           (for [[eid user] (->> (ds/qq fetch-answers pid)
+                                 (sort-by first)
+                                 #_reverse)]
              [:button.pr-4
               {:hx-get (str "/k/answer/" eid "/" pid)
                :hx-target "#answer"
@@ -196,7 +198,7 @@
 ; logins
 
 (defn hx-logins [_request]
-  (hx [:div "(アルゴリズム変更)"
+  (hx [:div "(00:00でリセット)"
        [:ul.list-disc.mx-4
         (for [login (c/lrange (format "kp2:login:%s" (local-date)))]
           [:li.font-mono login])]]))
