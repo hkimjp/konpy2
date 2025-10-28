@@ -30,7 +30,7 @@ run:
 build:
   clojure -T:build ci
 
-deploy: build
+deploy: # build
   scp target/io.github.hkimjp/konpy2-*.jar ${DEST}:konpy2/konpy.jar
   ssh ${DEST} 'sudo systemctl restart konpy'
   ssh ${DEST} 'systemctl status konpy'
