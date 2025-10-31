@@ -8,8 +8,11 @@
 * admin can see his/her answers/comments
 * dialog to enter comments
 * confirm upload py files
-* count login
+* gather carmine calls to `util` namespace, more abstraction
 
+# 0.3.40-SNAPSHOT
+
+- display number of logins, today
 
 # 0.3.39 (2025-10-28)
 

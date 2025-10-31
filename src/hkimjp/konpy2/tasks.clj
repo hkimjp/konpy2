@@ -10,7 +10,9 @@
    [hkimjp.konpy2.response :refer [page hx]]
    [hkimjp.konpy2.util :refer [btn input-box user week now local-date]]))
 
-(defn- wk [] (max 0 (week)))
+(defn- wk
+  "今週は授業開始後、第何週か？"
+  [] (max 0 (week)))
 
 (defn- hx-component [url target title]
   [:div
@@ -157,48 +159,9 @@
            [:li.font-mono
             (format "%d-%d %s %s → %s" week num updated author commentee)]))]])))
 
-; (defn hx-stocks [request]
-;   (let [stocks
-;         '[:find ?e ?owner ?updated
-;           :keys e  owner  updated
-;           :in $ ?now
-;           :where
-;           [?e :stock/status "yes"]
-;           [?e :owner ?owner]
-;           [?e :updated ?updated]
-;           [(java-time.api/before? ?now ?updated)]] owner (user request)
-;         stocks (ds/qq stocks (jt/adjust (now) (jt/local-time 0)))]
-;     (t/log! {:level :info :id "hx-stocks" :data {:owner owner :stocks stocks}})
-;     (hx [:div
-;          [:div (format "(%d)" (count stocks))]
-;          [:p "ストックは個人的なもの。"
-;           "何個ストックされた以外の表示をやめる。"]
-;          ; [:ul.list-disc.mx-4
-;          ;    (for [{:keys [updated owner]} (-> (sort-by :e stocks) reverse)]
-;          ;      [:li.font-mono (jt/format "HH:mm:ss " updated) owner])]
-;          ])))
-
-; (defn hx-logins [request]
-;   (let [user (user request)
-;         today (local-date)
-;         logins (->> (slurp "log/konpy.log")
-;                     (str/split-lines)
-;                     (filter  #(str/starts-with? % today))
-;                     (filter #(re-find #"success" %))
-;                     (map #(str/split % #"\s+"))
-;                     (map last)
-;                     reverse)]
-;     (t/log! {:level :debug :id "hx-logins" :msg user})
-;     (hx [:div "(昨日からのログイン継続を除く。)"
-;          [:ul.list-disc.mx-4
-;           (for [login logins]
-;             [:li.font-mono login])]])))
-
-; (def logins (c/lrange (format "kp2:login:%s" (local-date))))
-; logins
-
 (defn hx-logins [_request]
-  (hx [:div "(00:00でリセット)"
-       [:ul.list-disc.mx-4
-        (for [login (c/lrange (format "kp2:login:%s" (local-date)))]
-          [:li.font-mono login])]]))
+  (let [logins (c/lrange (format "kp2:login:%s" (local-date)))]
+    (hx [:div (format "(%d)" (count logins))
+         [:ul.list-disc.mx-4
+          (for [login logins]
+            [:li.font-mono login])]])))
