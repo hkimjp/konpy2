@@ -42,7 +42,6 @@
                [:a.hover:underline
                 {:href (str "/k/problem/" e)}
                 [:span.mr-4 week "-" num] [:span problem]]]))
-      #_[:div.text-2xl "本日の回答・コメント・ログイン"]
       [:div.m-4.flex.gap-4
        (hx-component "/k/hx-answers" "answers" "本日の回答")
        (hx-component "/k/hx-comments" "comments" "コメント")
@@ -65,8 +64,11 @@
              [:button.pr-4
               {:hx-get (str "/k/answer/" eid "/" pid)
                :hx-target "#answer"
-               :hx-swap "innerHTML"}
-              [:span.hover:underline (if (= user author) user "******")]]))
+               :hx-swap "innerHTML"};
+              [:span.hover:underline
+               (if (or (= user "chatgpt") (= user author))
+                 user
+                 "******")]]))
      [:div#answer "[answer]"]]))
 
 (defn problem [{{:keys [e]} :path-params :as request}]
@@ -80,19 +82,20 @@
     (t/log! {:level :debug :data {:answers answers :comments comments}})
     (page
      [:div.m-4
-      [:div.text-2xl (format "Problem %d-%d, %s, answers: %s comments: %s"
+      [:div.text-2xl (format "Problem %d-%d, %s, answers: %s, comments: %s"
                              (:week p) (:num p) local-date answers comments)]
       [:div.m-4
        [:p (:problem p)]
        (answerers eid author)
-       [:div.font-bold "your answer"]
-       [:form {:method "post"
-               :action "/k/answer"
-               :enctype "multipart/form-data"}
-        (h/raw (anti-forgery-field))
-        [:input {:type "hidden" :name "e" :value eid}]
-        [:input {:class input-box :type "file" :accept ".py" :name "file"}]
-        [:button {:class btn} "upload"]]]])))
+       [:div#answer
+        [:div.font-bold "your answer"]
+        [:form {:method "post"
+                :action "/k/answer"
+                :enctype "multipart/form-data"}
+         (h/raw (anti-forgery-field))
+         [:input {:type "hidden" :name "e" :value eid}]
+         [:input {:class input-box :type "file" :accept ".py" :name "file"}]
+         [:button {:class btn} "upload"]]]]])))
 
 (defn todays-answers
   ([] (todays-answers (now)))
