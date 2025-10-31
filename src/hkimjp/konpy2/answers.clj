@@ -33,9 +33,12 @@
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "]
-            (if (= author (:author ans)) author "******")]
+            (if (or (= "chatgpt" (:author ans)) (= author (:author ans)))
+              (:author ans)
+              "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-           [:pre.border-1.p-2 (:answer ans)]
+           [:pre.border-1.p-2 (:answer ans)]]
+          [:div {:class "w-1/2"}
            [:div [:span.font-bold "same: "] (:same ans)]
            [:div [:span.font-bold "comments: "]
             (for [[eid author] (sort-by first comments)]
@@ -44,12 +47,11 @@
                 :hx-target "#comment"
                 :hx-swap "innerHTML"}
                author])]
-           [:div#comment.mx-4 "[comment]"]]
-          [:div {:class "w-1/2"}
-           [:div [:span.font-bold "author: "] "chatgpt"]
-           [:div [:span.font-bold "updated: "] ""]
-           [:pre.border-1.p-2 gpt-ans]
-           [:br]
+           [:div#comment.mx-4 "[comment]"]
+           ; [:div [:span.font-bold "author: "] "chatgpt"]
+           ; [:div [:span.font-bold "updated: "] ""]
+           ; [:pre.border-1.p-2 gpt-ans]
+           ; [:br]
            [:div.font-bold "your comment"]
            [:form {:method "post" :action "/k/comment"}
             (h/raw (anti-forgery-field))

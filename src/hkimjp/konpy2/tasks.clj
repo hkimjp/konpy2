@@ -66,7 +66,10 @@
               {:hx-get (str "/k/answer/" eid "/" pid)
                :hx-target "#answer"
                :hx-swap "innerHTML"}
-              [:span.hover:underline (if (= user author) user "******")]]))
+              [:span.hover:underline
+               (if (or (= user "chatgpt") (= user author))
+                 user
+                 "******")]]))
      [:div#answer "[answer]"]]))
 
 (defn problem [{{:keys [e]} :path-params :as request}]

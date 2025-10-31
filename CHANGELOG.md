@@ -10,8 +10,10 @@
 * confirm upload py files
 * gather carmine calls to `util` namespace, more abstraction
 
-# 0.3.40-SNAPSHOT
 
+# 0.4.0 (2025-10-31)
+
+* refactor problem page
 - display number of logins, today
 
 # 0.3.39 (2025-10-28)
