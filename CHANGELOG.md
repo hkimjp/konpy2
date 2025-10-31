@@ -13,7 +13,11 @@
 
 # 0.4.0 (2025-10-31)
 
-* refactor problem page
+- refactor problem page
+- right half of problem page was a chatgpt's answer, now for comments.
+- show `chatgpt` link to chatgpt's answer.
+- if number of todays comments goes over the MAX_COMMENTS, show it.
+  do not prompt to enter comments.
 - display number of logins, today
 
 # 0.3.39 (2025-10-28)
