@@ -30,7 +30,7 @@ run:
 build:
   if ! test -f target/io.github.hkimjp/konpy2-*.jar; then clojure -T:build ci; fi
 
-deploy: build
+deploy: # build
   scp target/io.github.hkimjp/konpy2-*.jar ${DEST}:konpy2/konpy.jar
   ssh ${DEST} 'sudo systemctl restart konpy'
   ssh ${DEST} 'systemctl status konpy'
@@ -63,7 +63,7 @@ eq: build
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.3.39'
+VER := '0.4.0'
 
 hub: security manifest
 

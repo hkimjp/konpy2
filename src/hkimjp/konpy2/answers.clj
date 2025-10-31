@@ -1,13 +1,15 @@
 (ns hkimjp.konpy2.answers
   (:require
+   [environ.core :refer [env]]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
+   [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.digest :refer [digest]]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [user now btn iso]]
+   [hkimjp.konpy2.util :refer [user now btn iso local-date]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
@@ -29,13 +31,16 @@
                           [?e :author ?author]
                           [?e :comment/status "yes"]]
                         e)]
-    (hx [:div
+    (hx [:div#answer
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "]
-            (if (= author (:author ans)) author "******")]
+            (if (or (= "chatgpt" (:author ans)) (= author (:author ans)))
+              (:author ans)
+              "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-           [:pre.border-1.p-2 (:answer ans)]
+           [:pre.border-1.p-2 (:answer ans)]]
+          [:div {:class "w-1/2"}
            [:div [:span.font-bold "same: "] (:same ans)]
            [:div [:span.font-bold "comments: "]
             (for [[eid author] (sort-by first comments)]
@@ -44,24 +49,23 @@
                 :hx-target "#comment"
                 :hx-swap "innerHTML"}
                author])]
-           [:div#comment.mx-4 "[comment]"]]
-          [:div {:class "w-1/2"}
-           [:div [:span.font-bold "author: "] "chatgpt"]
-           [:div [:span.font-bold "updated: "] ""]
-           [:pre.border-1.p-2 gpt-ans]
-           [:br]
+           [:div#comment.mx-4 "[comment]"]
            [:div.font-bold "your comment"]
-           [:form {:method "post" :action "/k/comment"}
-            (h/raw (anti-forgery-field))
-            [:input {:type "hidden" :name "to" :value e}]
-            [:input {:type "hidden" :name "author" :value author}]
-            [:input {:type "hidden" :name "pid" :value p}]
-            [:textarea
-             {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
-              :name "comment"
-              :placeholder "markdown OK"}]
-            (for [pt ["A" "B" "C"]]
-              [:button {:class btn :name "pt" :value pt} pt])]]]])))
+           (t/log! :debug (c/llen (format "kp2:%s:comments:%s" author (local-date))))
+           (if (<= (parse-long (env :max-comments))
+                   (c/llen (format "kp2:%s:comments:%s" author (local-date))))
+             [:div.mx-4 (format "1日%sコメに達しました。" (env :max-comments))]
+             [:form {:method "post" :action "/k/comment"}
+              (h/raw (anti-forgery-field))
+              [:input {:type "hidden" :name "to" :value e}]
+              [:input {:type "hidden" :name "author" :value author}]
+              [:input {:type "hidden" :name "pid" :value p}]
+              [:textarea
+               {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
+                :name "comment"
+                :placeholder "markdown OK"}]
+              (for [pt ["A" "B" "C"]]
+                [:button {:class btn :name "pt" :value pt} pt])])]]])))
 
 (def ^:private same-answers
   '[:find ?author
