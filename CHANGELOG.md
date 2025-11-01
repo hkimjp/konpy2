@@ -11,6 +11,10 @@
 * gather carmine calls to `util` namespace, more abstraction
 
 
+# 0.4.1-SNAPSHOT
+
+- chaged /k/tasks - links to buttons
+
 # 0.4.0 (2025-10-31)
 
 - refactor problem page
