@@ -28,9 +28,9 @@ run:
   clojure -J--enable-native-access=ALL-UNNAMED -M:run-m
 
 build:
-  if ! test -f target/io.github.hkimjp/konpy2-*.jar; then clojure -T:build ci; fi
+ clojure -T:build ci
 
-deploy: # build
+deploy: build
   scp target/io.github.hkimjp/konpy2-*.jar ${DEST}:konpy2/konpy.jar
   ssh ${DEST} 'sudo systemctl restart konpy'
   ssh ${DEST} 'systemctl status konpy'
@@ -54,7 +54,6 @@ clean:
 
 eq: build
   # scp compose-prod.yml eq.local:konpy2/compose.yml
-
   scp target/io.github.hkimjp/konpy2-*.jar eq.local:konpy2/konpy2.jar
   ssh eq.local 'cd konpy2 && docker compose down && docker compose up -d'
 
@@ -63,7 +62,7 @@ eq: build
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.4.0'
+VER := '0.4.1'
 
 hub: security manifest
 

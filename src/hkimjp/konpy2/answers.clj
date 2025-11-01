@@ -17,13 +17,13 @@
   (let [author (user request)
         e (parse-long e)
         ans (ds/pl e)
-        gpt-ans (-> (ds/qq '[:find ?answer
-                             :in $ ?to
-                             :where
-                             [?e :author "chatgpt"]
-                             [?e :answer/status "yes"]
-                             [?e :answer ?answer]
-                             [?e :to ?to]] (parse-long p)) ffirst)
+        ; gpt-ans (-> (ds/qq '[:find ?answer
+        ;                      :in $ ?to
+        ;                      :where
+        ;                      [?e :author "chatgpt"]
+        ;                      [?e :answer/status "yes"]
+        ;                      [?e :answer ?answer]
+        ;                      [?e :to ?to]] (parse-long p)) ffirst)
         comments (ds/qq '[:find ?e ?author
                           :in $ ?to
                           :where
@@ -31,7 +31,7 @@
                           [?e :author ?author]
                           [?e :comment/status "yes"]]
                         e)]
-    (hx [:div#answer
+    (hx [:div#answer.my-4
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "]
@@ -40,9 +40,9 @@
               "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]]
-          [:div {:class "w-1/2"}
-           [:div [:span.font-bold "same: "] (:same ans)]
-           [:div [:span.font-bold "comments: "]
+          [:div.py-4 {:class "w-1/2"}
+           [:div.py-4 [:span.font-bold "same: "] (:same ans)]
+           [:div.py-2 [:span.font-bold "comments: "]
             (for [[eid author] (sort-by first comments)]
               [:button.pr-4.hover:underline
                {:hx-get (str "/k/comment/" eid)
@@ -50,7 +50,8 @@
                 :hx-swap "innerHTML"}
                author])]
            [:div#comment.mx-4 "[comment]"]
-           [:div.font-bold "your comment"]
+           [:br]
+           [:div.font-bold "your comment:"]
            (t/log! :debug (c/llen (format "kp2:%s:comments:%s" author (local-date))))
            (if (<= (parse-long (env :max-comments))
                    (c/llen (format "kp2:%s:comments:%s" author (local-date))))

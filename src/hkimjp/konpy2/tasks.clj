@@ -16,9 +16,10 @@
 
 (defn- hx-component [url target title]
   [:div
-   [:div.hover:underline {:hx-get url
-                          :hx-target (str "#" target)
-                          :hx-swap "innerHTML"}
+   [:button {:class btn
+             :hx-get url
+             :hx-target (str "#" target)
+             :hx-swap "innerHTML"}
     [:span.font-bold title]]
    [:div {:id target}]])
 
