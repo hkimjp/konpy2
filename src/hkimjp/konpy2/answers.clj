@@ -1,6 +1,6 @@
 (ns hkimjp.konpy2.answers
   (:require
-   [environ.core :refer [env]]
+   ; [environ.core :refer [env]]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
@@ -12,6 +12,12 @@
    [hkimjp.konpy2.util :refer [user now btn iso local-date]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
+; (env :max-comments)
+; (parse-long (env :max-comments))
+; r/max-comments
+
+(ds/pl '[:week :num] 2180)
+
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
   (t/log! {:level :debug :id "hx-answer" :msg (str "e " e)})
   (let [author (user request)
@@ -22,8 +28,8 @@
                           :where
                           [?e :to ?to]
                           [?e :author ?author]
-                          [?e :comment/status "yes"]]
-                        e)]
+                          [?e :comment/status "yes"]])
+        {:keys [week num]} (ds/pl '[:week :num] p)]
     (hx [:div#answer.my-4
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
@@ -32,7 +38,9 @@
               (:author ans)
               "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-           [:pre.border-1.p-2 (:answer ans)]]
+           [:pre.border-1.p-2 (:answer ans)]
+           [:a {:href (format "/download/%s/%d/%d.py" author week num)}
+            "download"]]
           [:div.py-4 {:class "w-1/2"}
            [:div.py-4 [:span.font-bold "same: "] (:same ans)]
            [:div.py-2 [:span.font-bold "comments: "]
@@ -46,9 +54,8 @@
            [:br]
            [:div.font-bold "your comment:"]
            (t/log! :debug (c/llen (format "kp2:%s:comments:%s" author (local-date))))
-           (if (<= (parse-long (env :max-comments))
-                   (c/llen (format "kp2:%s:comments:%s" author (local-date))))
-             [:div.mx-4 (format "1日%sコメに達しました。" (env :max-comments))]
+           (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
+             [:div.mx-4 (format "1日%sコメに達しました。" r/max-comments)]
              [:form {:method "post" :action "/k/comment"}
               (h/raw (anti-forgery-field))
               [:input {:type "hidden" :name "to" :value e}]
@@ -105,8 +112,8 @@
         [:div.text-2xl "Error"]
         [:p.text-red-600 (h/raw (.getMessage e))]]))))
 
-(def q
-  '[:find ?answer
+(def download-q
+  '[:find [?answer]
     :in $ ?author ?week ?num
     :where
     [?e :author ?author]
@@ -116,12 +123,15 @@
     [?e :answer ?answer]
     [?e :answer/status "yes"]])
 
+(ds/qq download-q "axvo5145" 4 1)
+
 (defn download [{{:keys [author week num]} :path-params :as request}]
   (t/log! {:level :info :data (:path-params request)})
-  {:status 200
-   :headers {"Content-Type" "application/edn"}
-   :body (str {:author author
-               :week week
-               :num num})})
-
+  (let [week (parse-long week)
+        num (parse-long num)
+        [answer] (ds/qq download-q author week num)
+        filename (format "%s-%d-%d.py" author week num)]
+    {:status 200
+     :headers {"Content-disposition" (str "attachment; filename=" filename)}
+     :body answer}))
 
