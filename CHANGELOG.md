@@ -10,6 +10,9 @@
 * confirm upload py files
 * gather carmine calls to `util` namespace, more abstraction
 
+# 0.4.2 (2025-11-05)
+
+- `!/storage/fetch.sh` in .gitignore
 
 # 0.4.1 (2025-11-01)
 
