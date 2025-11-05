@@ -1,6 +1,5 @@
 (ns hkimjp.konpy2.answers
   (:require
-   ; [environ.core :refer [env]]
    [hiccup2.core :as h]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
@@ -12,24 +11,29 @@
    [hkimjp.konpy2.util :refer [user now btn iso local-date]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
-; (env :max-comments)
-; (parse-long (env :max-comments))
-; r/max-comments
-
-(ds/pl '[:week :num] 2180)
+(def comments-q '[:find ?e ?author
+                  :in $ ?to
+                  :where
+                  [?e :to ?to]
+                  [?e :author ?author]
+                  [?e :comment/status "yes"]])
 
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
-  (t/log! {:level :debug :id "hx-answer" :msg (str "e " e)})
+  (t/log! {:level :debug :id "hx-answer" :data {:e e :p p}})
   (let [author (user request)
         e (parse-long e)
+        comments (ds/qq comments-q e)
         ans (ds/pl e)
-        comments (ds/qq '[:find ?e ?author
-                          :in $ ?to
-                          :where
-                          [?e :to ?to]
-                          [?e :author ?author]
-                          [?e :comment/status "yes"]])
+        p (parse-long p)
         {:keys [week num]} (ds/pl '[:week :num] p)]
+    (t/log! {:level :debug
+             :data {;:author author
+                    :e e
+                    :comments comments
+                    :ans ans
+                    :p p
+                    :week week
+                    :num num}})
     (hx [:div#answer.my-4
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
@@ -39,9 +43,9 @@
               "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]
-           [:a {:href (format "/download/%s/%d/%d.py" author week num)}
+           [:a {:href (format "/download/%s/%d/%d" author week num)}
             "download"]]
-          [:div.py-4 {:class "w-1/2"}
+          [:div {:class "w-1/2"}
            [:div.py-4 [:span.font-bold "same: "] (:same ans)]
            [:div.py-2 [:span.font-bold "comments: "]
             (for [[eid author] (sort-by first comments)]
@@ -67,6 +71,10 @@
                 :placeholder "markdown OK"}]
               (for [pt ["A" "B" "C"]]
                 [:button {:class btn :name "pt" :value pt} pt])])]]])))
+
+; (hx-answer {:path-params {:e "2210" :p "2180"}})
+; (let [{:keys [num week]} (ds/pl '[:week :num] 2180)]
+  ; [week num])
 
 (def ^:private same-answers
   '[:find ?author
@@ -122,8 +130,6 @@
     [?to :num ?num]
     [?e :answer ?answer]
     [?e :answer/status "yes"]])
-
-(ds/qq download-q "axvo5145" 4 1)
 
 (defn download [{{:keys [author week num]} :path-params :as request}]
   (t/log! {:level :info :data (:path-params request)})
