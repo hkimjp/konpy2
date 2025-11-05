@@ -20,10 +20,11 @@
 
 (defn hx-answer [{{:keys [e p]} :path-params :as request}]
   (t/log! {:level :debug :id "hx-answer" :data {:e e :p p}})
-  (let [author (user request)
+  (let [user (user request)
         e (parse-long e)
         comments (ds/qq comments-q e)
         ans (ds/pl e)
+        author (:author ans)
         p (parse-long p)
         {:keys [week num]} (ds/pl '[:week :num] p)]
     (t/log! {:level :debug
@@ -38,12 +39,12 @@
          [:div.flex.gap-4
           [:div {:class "w-1/2"}
            [:div [:span.font-bold "author: "]
-            (if (or (= "chatgpt" (:author ans)) (= author (:author ans)))
-              (:author ans)
+            (if (or (= "chatgpt" author) (= user author))
+              author
               "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]
-           [:a {:href (format "/download/%s/%d/%d" author week num)}
+           [:a {:class btn :href (format "/download/%s/%d/%d" (:author ans) week num)}
             "download"]]
           [:div {:class "w-1/2"}
            [:div.py-4 [:span.font-bold "same: "] (:same ans)]
@@ -72,9 +73,11 @@
               (for [pt ["A" "B" "C"]]
                 [:button {:class btn :name "pt" :value pt} pt])])]]])))
 
-; (hx-answer {:path-params {:e "2210" :p "2180"}})
-; (let [{:keys [num week]} (ds/pl '[:week :num] 2180)]
-  ; [week num])
+(comment
+  (hx-answer {:path-params {:e "2210" :p "2180"}})
+  (let [{:keys [num week]} (ds/pl '[:week :num] 2180)]
+    [week num])
+  :rcf)
 
 (def ^:private same-answers
   '[:find ?author
@@ -136,8 +139,7 @@
   (let [week (parse-long week)
         num (parse-long num)
         [answer] (ds/qq download-q author week num)
-        filename (format "%s-%d-%d.py" author week num)]
+        filename (format "%s_%d_%d.py" author week num)]
     {:status 200
      :headers {"Content-disposition" (str "attachment; filename=" filename)}
      :body answer}))
-
