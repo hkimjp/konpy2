@@ -28,7 +28,7 @@
         p (parse-long p)
         {:keys [week num]} (ds/pl '[:week :num] p)]
     (t/log! {:level :debug
-             :data {;:author author
+             :data {:author author
                     :e e
                     :comments comments
                     :ans ans
@@ -44,7 +44,9 @@
               "******")]
            [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
            [:pre.border-1.p-2 (:answer ans)]
-           [:a {:class btn :href (format "/download/%s/%d/%d" (:author ans) week num)}
+           [:a {:class btn
+                :href (format "/download/%s/%d/%d" (:author ans) week num)
+                :hx-boost "false"}
             "download"]]
           [:div {:class "w-1/2"}
            [:div.py-4 [:span.font-bold "same: "] (:same ans)]
@@ -134,6 +136,11 @@
     [?e :answer ?answer]
     [?e :answer/status "yes"]])
 
+(comment
+  (let [[answer] (ds/qq download-q "hkimura" 5 1)]
+    answer)
+  :rcf)
+
 (defn download [{{:keys [author week num]} :path-params :as request}]
   (t/log! {:level :info :data (:path-params request)})
   (let [week (parse-long week)
@@ -141,5 +148,6 @@
         [answer] (ds/qq download-q author week num)
         filename (format "%s_%d_%d.py" author week num)]
     {:status 200
-     :headers {"Content-disposition" (str "attachment; filename=" filename)}
+     :headers {"Content-Disposition"
+               (format "attachment; filename=\"%s\"" filename)}
      :body answer}))
