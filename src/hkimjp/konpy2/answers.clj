@@ -17,13 +17,6 @@
   (let [author (user request)
         e (parse-long e)
         ans (ds/pl e)
-        ; gpt-ans (-> (ds/qq '[:find ?answer
-        ;                      :in $ ?to
-        ;                      :where
-        ;                      [?e :author "chatgpt"]
-        ;                      [?e :answer/status "yes"]
-        ;                      [?e :answer ?answer]
-        ;                      [?e :to ?to]] (parse-long p)) ffirst)
         comments (ds/qq '[:find ?e ?author
                           :in $ ?to
                           :where
@@ -111,3 +104,24 @@
        [:div.m-4
         [:div.text-2xl "Error"]
         [:p.text-red-600 (h/raw (.getMessage e))]]))))
+
+(def q
+  '[:find ?answer
+    :in $ ?author ?week ?num
+    :where
+    [?e :author ?author]
+    [?e :to ?to]
+    [?to :week ?week]
+    [?to :num ?num]
+    [?e :answer ?answer]
+    [?e :answer/status "yes"]])
+
+(defn download [{{:keys [author week num]} :path-params :as request}]
+  (t/log! {:level :info :data (:path-params request)})
+  {:status 200
+   :headers {"Content-Type" "application/edn"}
+   :body (str {:author author
+               :week week
+               :num num})})
+
+
