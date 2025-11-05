@@ -105,6 +105,17 @@
         [:div.text-2xl "Error"]
         [:p.text-red-600 (h/raw (.getMessage e))]]))))
 
+(def q
+  '[:find ?answer
+    :in $ ?author ?week ?num
+    :where
+    [?e :author ?author]
+    [?e :to ?to]
+    [?to :week ?week]
+    [?to :num ?num]
+    [?e :answer ?answer]
+    [?e :answer/status "yes"]])
+
 (defn download [{{:keys [author week num]} :path-params :as request}]
   (t/log! {:level :info :data (:path-params request)})
   {:status 200
