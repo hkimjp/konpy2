@@ -10,13 +10,13 @@
 (def ^:private timeout 10)
 
 (def ruff-path
-  (or (env :konpy-ruff) "/usr/local/bin/ruff"))
+  (or (env :ruff-path) "/usr/local/bin/ruff"))
 
 (def python-path
-  (or (env :konpy-python) "/usr/bin/python3"))
+  (or (env :python-path) "/usr/bin/python3"))
 
 (def pytest-path
-  (or (env :konpy-pytest) "/usr/bin/pytest"))
+  (or (env :pytest-path) "/usr/bin/pytest"))
 
 (defn- get-last-answer [author week num]
   (t/log! {:level :debug

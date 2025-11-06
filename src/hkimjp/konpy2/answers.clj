@@ -27,59 +27,46 @@
         author (:author ans)
         p (parse-long p)
         {:keys [week num]} (ds/pl '[:week :num] p)]
-    (t/log! {:level :debug
-             :data {:author author
-                    :e e
-                    :comments comments
-                    :ans ans
-                    :p p
-                    :week week
-                    :num num}})
-    (hx [:div#answer.my-4
-         [:div.flex.gap-4
-          [:div {:class "w-1/2"}
-           [:div [:span.font-bold "author: "]
-            (if (or (= "chatgpt" author) (= user author))
-              author
-              "******")]
-           [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-           [:pre.border-1.p-2 (:answer ans)]
-           [:a {:class btn
-                :href (format "/download/%s/%d/%d" (:author ans) week num)
-                :hx-boost "false"}
-            "download"]]
-          [:div {:class "w-1/2"}
-           [:div.py-4 [:span.font-bold "same: "] (:same ans)]
-           [:div.py-2 [:span.font-bold "comments: "]
-            (for [[eid author] (sort-by first comments)]
-              [:button.pr-4.hover:underline
-               {:hx-get (str "/k/comment/" eid)
-                :hx-target "#comment"
-                :hx-swap "innerHTML"}
-               author])]
-           [:div#comment.mx-4 "[comment]"]
-           [:br]
-           [:div.font-bold "your comment:"]
-           (t/log! :debug (c/llen (format "kp2:%s:comments:%s" author (local-date))))
-           (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
-             [:div.mx-4 (format "1日%sコメに達しました。" r/max-comments)]
-             [:form {:method "post" :action "/k/comment"}
-              (h/raw (anti-forgery-field))
-              [:input {:type "hidden" :name "to" :value e}]
-              [:input {:type "hidden" :name "author" :value author}]
-              [:input {:type "hidden" :name "pid" :value p}]
-              [:textarea
-               {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
-                :name "comment"
-                :placeholder "markdown OK"}]
-              (for [pt ["A" "B" "C"]]
-                [:button {:class btn :name "pt" :value pt} pt])])]]])))
-
-(comment
-  (hx-answer {:path-params {:e "2210" :p "2180"}})
-  (let [{:keys [num week]} (ds/pl '[:week :num] 2180)]
-    [week num])
-  :rcf)
+    (hx
+     [:div#answer.my-4.flex.gap-4
+      ; left half, answer
+      [:div {:class "w-1/2"}
+       [:div [:span.font-bold "author: "]
+        (if (or (= "chatgpt" author) (= user author))
+          author
+          "******")]
+       [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
+       [:pre.border-1.p-2 (:answer ans)]
+       [:div [:a {:class btn
+                  :href (format "/download/%s/%d/%d" author week num)
+                  :hx-boost "false"}
+              "download"]]]
+      ; right half, comments
+      [:div {:class "w-1/2"}
+       [:div.py-4 [:span.font-bold "same: "] (:same ans)]
+       [:div.py-2 [:span.font-bold "comments: "]
+        (for [[eid author] (sort-by first comments)]
+          [:button.pr-4.hover:underline
+           {:hx-get (str "/k/comment/" eid)
+            :hx-target "#comment"
+            :hx-swap "innerHTML"}
+           author])]
+       [:div#comment.mx-4 "[comment]"]
+       [:br]
+       [:div.font-bold "your comment:"]
+       (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
+         [:div.mx-4 (format "1日%sコメに達しました。" r/max-comments)]
+         [:form {:method "post" :action "/k/comment"}
+          (h/raw (anti-forgery-field))
+          [:input {:type "hidden" :name "to" :value e}]
+          [:input {:type "hidden" :name "author" :value author}]
+          [:input {:type "hidden" :name "pid" :value p}]
+          [:textarea
+           {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
+            :name "comment"
+            :placeholder "markdown OK"}]
+          (for [pt ["A" "B" "C"]]
+            [:button {:class btn :name "pt" :value pt} pt])])]])))
 
 (def ^:private same-answers
   '[:find ?author
@@ -135,11 +122,6 @@
     [?to :num ?num]
     [?e :answer ?answer]
     [?e :answer/status "yes"]])
-
-(comment
-  (let [[answer] (ds/qq download-q "hkimura" 5 1)]
-    answer)
-  :rcf)
 
 (defn download [{{:keys [author week num]} :path-params :as request}]
   (t/log! {:level :info :data (:path-params request)})
