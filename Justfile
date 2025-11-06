@@ -28,15 +28,18 @@ run:
   clojure -J--enable-native-access=ALL-UNNAMED -M:run-m
 
 build:
-  clojure -T:build ci
+ clojure -T:build ci
 
 deploy: build
   scp target/io.github.hkimjp/konpy2-*.jar ${DEST}:konpy2/konpy.jar
   ssh ${DEST} 'sudo systemctl restart konpy'
   ssh ${DEST} 'systemctl status konpy'
 
-container-nrepl:
-  clj -M:dev -m nrepl.cmdline -b 0.0.0.0 -p 5555
+up:
+  docker compose up
+
+down:
+  docker compose down
 
 upgrade:
   clojure -Tantq outdated :upgrade true
@@ -45,6 +48,41 @@ clean:
   rm -rf target
   fd -I bak --exec rm
 
+#
+# test on eq.local
+#
+
 eq: build
+  # scp compose-prod.yml eq.local:konpy2/compose.yml
   scp target/io.github.hkimjp/konpy2-*.jar eq.local:konpy2/konpy2.jar
-  ssh eq.local 'cd wil2 && docker compose restart'
+  ssh eq.local 'cd konpy2 && docker compose down && docker compose up -d'
+
+#
+# docker container
+#
+
+TAG := 'hkim0331/konpy2'
+VER := '0.4.4'
+
+hub: security manifest
+
+security:
+  security -v unlock-keychain ~/Library/Keychains/login.keychain-db
+
+amd64:
+  docker buildx build --platform linux/amd64 --push -t {{TAG}}-amd64 .
+
+arm64:
+  docker buildx build --platform linux/arm64 --push -t {{TAG}}-arm64 .
+
+manifest: arm64 amd64
+  docker manifest create --amend {{TAG}} {{TAG}}-amd64 {{TAG}}-arm64
+  docker manifest push {{TAG}}
+
+docker-build:
+  docker build --pull -t {{TAG}} .
+  docker tag {{TAG}} {{TAG}}:{{VER}}
+
+docker-push:
+  docker push {{TAG}}
+  docker push {{TAG}}:{{VER}}

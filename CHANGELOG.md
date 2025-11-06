@@ -1,19 +1,172 @@
 # Unreleased
 
-* problems/test-codes for production from `py99`
 * admin/toggle-status
 * effective upsert. update only changed elements
-* pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
-* restrict comments to themselves
+* dialog to enter comments
+* confirm upload py files
+* more abstraction
+* gather carmine calls to `util` namespace,
 
+# 0.4.4 (2025-11-06)
+
+- `/dl/:eid` downloads the answer to problem `eid`
+
+# 0.4.3 (2025-11-06)
+
+- refactor
+- .env
+- essential vars, optional vars
+* gather carmine calls to `util` namespace, more abstraction
+* delete facility
+* FIXME: when two or more answers to one question,
+  `download` fetch the last answer.
+
+# 0.4.2 (2025-11-05)
+
+- gitignore '!/storage/fetch.sh`
+
+# 0.4.1 (2025-11-01)
+
+- chaged /k/tasks - links to buttons
+
+# 0.4.0 (2025-10-31)
+
+- refactor problem page
+- right half of problem page was a chatgpt's answer, now for comments.
+- show `chatgpt` link to chatgpt's answer.
+- if number of todays comments goes over the MAX_COMMENTS, show it.
+  do not prompt to enter comments.
+- display number of logins, today
+
+# 0.3.39 (2025-10-28)
+
+- stop reversing
+
+# 0.3.38 (2025-10-24)
+
+- conscious about query plan
+
+# 0.3.37 (2025-10-24)
+
+- bug fixed  - fetched answers do not have :e
+
+    (->> (ds/qq fetch-answers pid)
+         (sort-by first) ;; was (sort-by :e)
+         reverse)
+
+# 0.3.36 (2025-10-24)
+
+- pytest-path, python-path, ruff-path was functions, but now constants
+- changed tasks/answers - sort by submission date
+
+# 0.3.35 (2025-10-23)
+
+- show pytest errors
+
+# 0.3.33 (2025-10-16)
+
+- hiccup2 interprets ["2025-10-16"]. so str.
+- bug fixed - after (let [user (user request)]),
+  the local variable `user` shadowed global function `user`
+- changed `todays login` - use `redis` instead of `log/konpy2.log`
+- adaptive markdown
+
+```
+(defn- markdown? [s]
+  (let [lines (str/split-lines s)]
+    (or
+     (< 0 (count (filter #(re-find #"^#+\s" %)  lines)))
+     (< 0 (count (filter #(re-matches #"\s*" %) lines)))
+     (< 0 (count (filter #(re-find #"^*+\s" %)  lines)))
+     (< 0 (count (filter #(re-find #"^\d+\s" %) lines))))))
+```
+
+# 0.3.31 (2025-10-14)
+
+- selective validation - can control doctest on/off in the admin page.
+  if `skip-doctest` is empty, doctest will be executed.
+  otherwise, for example "1", doctest will be skipped.
+
+# 0.3.30 (2025-10-13)
+
+- added  python3-bottle python3-numpy python3-matplotlib python3-opencv
+  python3-pygame python3-tk to Dockerfile.
+- bump-version-local.sh updates Justfile 'VER :='
+- `hkim0331/konpy2:0.3.30` - base image `clojure:latest` plus python3.13 and
+  required libraries for 2025 python class.
+- more than 3 lines for commnets
+- refactored answers.clj - moved private `defs` into under `let`
+- `hkimjp/datascript-storage-javatime` 0.7.6
+
+# 0.3.29 (2025-10-12)
+
+- display login time from tasks/hx-logins
+- replaced `today's stocks` by `today's logins`
+- added tasks/hx-commponent
+- added tasks/hx-logins
+
+# 0.3.28
+
+- app.melt:
+
+    for p in numpy matplotlib opencv pygame bottle tk; do
+      apt install python3-${p}
+    done
+
+# 0.3.27 (2025-10-11)
+
+- when find "from kpn-m" line, treat it as "# include kpn-m".
+- CSS to color pre, code.
+
+# 0.3.26 (2025-10-11)
+
+- display todays number of comments and uploads
+- refactored tests.clj - move `def private`s into inside function's `let`
+- interpret markdown in comment boxes in scores page
+
+# 0.3.25 (2025-10-10)
+
+- unnecessary to display who and when stocks. just number is enough.
+- validate/expand-includes fires when finding folowing patterns.
+    - `#include 1_1`
+    - `#include kp1_1`
+    - `# include 1_1`
+    - `# include kp1_1`
+
+# 0.3.24 (2025-10-08)
+
+- fixed a bug: regexp. `-` and `_`.
+
+```
+    (re-matches #"#\s*include\s*(\d+)-(\d+).*" line)
+    (re-matches #"#\s*include\s*(\d+)_(\d+).*" line)
+```
+
+# 0.3.23 (2025-10-08)
+
+# 0.3.22 (2025-10-08)
+
+- stop displaying stocks,  who stocked when. just display number of stocks.
+
+# 0.3.21 (2025-10-08)
+
+- font-mono
+
+# 0.3.20 (2025-10-07)
+
+- adjustment width - stopped using `w-1/n`.
+- reverse order tasks/answers, comments, stocks.
+- hkim0331/konpy2:0.3.19 is amd64 binary. use `konpy2:latest`
+- updated `deps.edn` for docker container - added aliases :dev and :nrepl
+- fixed: did not forward 5555 from container - hkimjp.konpy2.* was not found.
 
 # 0.3.19 (2025-10-04)
 
 - made a python included container `hkim0331/konpy2:0.3.19`,
-  which can be downloaded?
+  which can be downloaded.
 - path of ruff
 - copied Dockerfile, Makefile from `docker/hkim0331-clojure`
 - container created, but did not show the admin page.

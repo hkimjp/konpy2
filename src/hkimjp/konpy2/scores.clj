@@ -1,7 +1,7 @@
 (ns hkimjp.konpy2.scores
   (:require
-   ; [clojure.string :as str]
    [hiccup2.core :as h]
+   [nextjournal.markdown :as md]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]
@@ -12,24 +12,24 @@
   '[:find ?e
     :in $ ?author
     :where
-    [?e :answer/status "yes"]
-    [?e :author ?author]])
+    [?e :author ?author]
+    [?e :answer/status "yes"]])
 
 (def ^:private sent
   '[:find ?e
     :in $ ?author
     :where
-    [?e :comment/status "yes"]
-    [?e :author ?author]])
+    [?e :author ?author]
+    [?e :comment/status "yes"]])
 
 (def ^:private received
   '[:find ?e ?pt
     :in $ ?author
     :where
-    [?e :comment/status "yes"]
     [?e :to ?a]
     [?a :author ?author]
-    [?e :pt ?pt]])
+    [?e :pt ?pt]
+    [?e :comment/status "yes"]])
 
 (defn- score [sym coll target]
   [:div
@@ -37,7 +37,8 @@
      [:span.hover:underline
       {:hx-get    (str "/k/score/" e)
        :hx-target (str "#" target)
-       :hx-swap   "innerHTML"} sym])])
+       :hx-swap   "innerHTML"}
+      sym])])
 
 ; ☀️🌥️⛅️🌧️💧☂️☁️❤️💛🔴💚🩵🩶🟢🔸◾️
 
@@ -60,14 +61,20 @@
         (t/log! :error (.getMessage ex))
         nil))))
 
-(defn hx-show [{{:keys [e]} :path-params}]
+(defn hx-show
+  "returns answer week-num in pre"
+  [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
   (let [e (parse-long e)
         submit (ds/pl e)]
     (hx [:div
          [:div [:span.font-bold "problem: "] (week-num e)]
          [:div [:span.font-bold "updated: "] (:updated submit)]
-         [:pre.border-1 (or (:comment submit) (:answer submit))]
+         (if-let [answer (:answer submit)]
+           [:pre.border-1 answer]
+           [:div.border-1 (-> (:comment submit)
+                              md/parse
+                              md/->hiccup)])
          [:br]])))
 
 (defn- section [thing sym label target]
@@ -82,10 +89,10 @@
    [:form
     (h/raw (anti-forgery-field))
     [:input.border-1.px-1.rounded {:name "user" :value "hkimura"}]
-    [:buttn {:class btn
-             :hx-post    "/k/scores/peep"
-             :hx-target "#peep"
-             :hx-swap   "innerHTML"} "peep"]]
+    [:button {:class btn
+              :hx-post    "/k/scores/peep"
+              :hx-target "#peep"
+              :hx-swap   "innerHTML"} "peep"]]
    [:div#peep]])
 
 (defn hx-peep [{{:keys [user]} :params}]

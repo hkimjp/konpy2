@@ -3,15 +3,15 @@
    ; [babashka.fs :as fs]
    ; [clojure.java.io :as io]
    [clj-reload.core :as reload]
-   ; [java-time.api :as jt]
+   [java-time.api :as jt]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.util :refer [now]]
    [hkimjp.konpy2.system :refer [start-system stop-system] :as sys]))
 
-;------------------------------------
 (t/set-min-level! :debug)
+
 (start-system)
 
 (reload/init
@@ -29,20 +29,179 @@
 ;; (reload/reload)
 
 ;------------------------------------
+(comment
+  (def q '[:find ?e
+           :where
+           [?e :author "hkimura"]
+           [?e :to ?p]
+           [?p :week 5]
+           [?p :num 1]])
 
-(defn problem! [w n problem testcode]
-  (ds/puts! [{:db/id -1
-              :problem/status "yes"
-              :week w
-              :num n
-              :problem problem
-              :testcode testcode
-              :updated (now)}]))
+  (ds/q q @ds/conn)
 
-(defn problems! [m p-t]
-  (doseq [[n [p t]] (map-indexed vector p-t)]
-    (problem! m n p t)))
+  (:answer/status (ds/pull @ds/conn '[*] 2211))
 
+  (ds/put! {:db/id 2211 :answer/status "deleted"})
+; (require '[hiccup2.core :as h])
+; (-> [:p [: "abc"]]
+;     h/html
+;     str)
+
+  (defn authors [yyyy MM dd]
+    (let [query
+          '[:find ?author
+            :with ?e
+            :in $ ?yyyy ?MM ?dd
+            :where
+            [?e :answer/status "yes"]
+            [?e :updated ?jt]
+            [(java-time.api/local-date ?jt) ?updated]
+            [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
+            [(java-time.api/= ?updated ?date)]
+            [?e :author ?author]]]
+      (ds/qq query yyyy MM dd)))
+
+  (defn comments [yyyy MM dd]
+    (let [query
+          '[:find ?author
+            :with ?e
+            :in $ ?yyyy ?MM ?dd
+            :where
+            [?e :comment/status "yes"]
+            [?e :updated ?jt]
+            [(java-time.api/local-date ?jt) ?updated]
+            [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
+            [(java-time.api/= ?updated ?date)]
+            [?e :author ?author]]]
+      (ds/qq query yyyy MM dd)))
+
+; (authors 2025 10 24)
+; (comments 2025 10 24)
+
+  (ds/qq '[:find ?author
+           :where
+           [?e :answer/status "yes"]
+           [?e :updated ?jt]
+           [(java-time.api/local-date ?jt) ?update]
+           [(java-time.api/local-date 2025 10 24) ?today]
+           [(java-time.api/= ?update ?today)]
+           [?e :author ?author]])
+
+  (ds/qq '[:find ?e
+           :where
+           [?e :db/id ?n]
+           [(< ?n 10)]])
+
+  (ds/qq '[:find (sum ?n)
+           :with ?e
+           :where
+           [?e :db/id ?n]])
+
+  (require '[clojure.string :as str])
+  (require '[java-time.api :as jt])
+
+  (ds/qq '[:find (count ?e)
+           :where
+           [?e :updated ?updated]
+           [?e :answer/status "yes"]])
+  :rcf)
+
+(comment
+  (def answers (ds/qq '[:find ?e ?updated
+                        :keys e updated
+                        :where
+                        [?e :updated ?updated]
+                        [?e :answer/status "yes"]
+                        [(java-time.api/local-date ?updated) ?up-date]
+                        [(java-time.api/local-date 2025 10 19) ?today]
+                        [(java-time.api/= ?up-date ?today)]]))
+
+  answers
+
+  (ds/pl 688)
+
+  (ds/q '[:find ?e
+          :in $ ?user
+          :where
+          [?e :author ?user]]
+        @ds/conn "inu255-12")
+
+  (ds/pull @ds/conn '[*] 688)
+
+;; can not
+  (ds/q '[:find (ds/pull '[:answer] ?e)
+          :in $ ?user
+          :where
+          [?e :author ?user]]
+        @ds/conn "inu255-12")
+
+  (ds/qq '[:find (ds/pl ?e)
+           :in $ ?user
+           :where
+           [?e :author ?user]]
+         "inu255-12")
+
+  (count answers)
+
+  (count (filter (fn [[_ time]] (str/starts-with? (str time) "2025-10-20")) answers))
+
+  (count (filter (fn [[_ time]] (java-time.api/=
+                                 (java-time.api/local-date time)
+                                 (java-time.api/local-date)))
+                 answers))
+
+  (count (filter (fn [[_ time]] (jt/=
+                                 (jt/local-date time)
+                                 (jt/local-date)))
+                 answers))
+  :rcf)
+
+(comment
+  (require '[clojure.string :as str])
+  (def line "abc\ndef\nxyz\n")
+
+  (count (str/split-lines line))
+
+  (def line1 "# include 1_1")
+  (def line2 "# from kp1_1")
+  (or (re-matches #"#\s*from\s*(kp)*(\d+)_(\d+).*" line2)
+      (re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line2))
+  :rcf)
+;------------------------------------
+
+(comment
+  (defn problem! [w n problem testcode]
+    (ds/puts! [{:db/id -1
+                :problem/status "yes"
+                :week w
+                :num n
+                :problem problem
+                :testcode testcode
+                :updated (now)}]))
+
+  (defn problems! [m p-t]
+    (doseq [[n [p t]] (map-indexed vector p-t)]
+      (problem! m n p t)))
+  :rcf)
+
+(comment
+  (nil? "1")
+  (nil? "")
+  (empty? "1")
+  (empty? "")
+  (ds/pl 146)
+  [["y=f(x) ただし f(x)=2*x**2-3 を-2<=x<3の範囲でプロットする関数 "]
+   ["f=f(x) ただし f(x)=3sin(2x)を 0<=x<2pi の範囲でプロットする関数。"]
+   ["y=sin(x), y=sin(x+pi/3), y=sin(x+2*pi/3),y=sin(x+pi), y=sin(x+4*pi/3), y=sin(x+5*pi/3) の6つを一つのグラフに。(0<= x <=2Pi)"]
+   ["y=2x**2-1 と y=x+2 の交点をグラフから求めよ。もとまった交点の座標を関数コメント内に。"]
+   ["plot()を利用し円のグラフをかく関数。楕円になっちゃうかもだが。"]
+   ["色々な半径、色の円で画面を埋め尽くす関数。"]]
+  [["0より大きい乱数整数n個のリストを返す関数。"]
+   ["1 で作ったリストから偶数だけのリストを作る関数。"]
+   ["1 で作ったリストから 3 の倍数を除いたリストを作る関数。"]
+   ["1 で作ったリストから 5 または 7 の倍数を除いたリストを作る関数。"]
+   ["1 で作ったリストから 5 の倍数のリスト、7の倍数のリストの二つを返す関数。"]
+   ["1 で作ったリスト中に最も多く含まれる整数はいくつか？"]])
 (comment
   (problems!
    0

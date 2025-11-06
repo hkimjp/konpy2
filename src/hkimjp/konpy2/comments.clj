@@ -1,5 +1,6 @@
 (ns hkimjp.konpy2.comments
   (:require
+   [clojure.string :as str]
    [nextjournal.markdown :as md]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
@@ -19,6 +20,8 @@
     (try
       (when-not (re-find #"\S" comment)
         (throw (Exception. "empty comment")))
+      (when (< (count (str/split-lines comment)) 3)
+        (throw (Exception. "need at least 3 lines")))
       (r/before-comment author)
       (ds/put! {:comment/status "yes"
                 :author author
@@ -41,9 +44,3 @@
   (hx [:div (-> (:comment (ds/pl (parse-long e)))
                 md/parse
                 md/->hiccup)]))
-
-(comment
-  (let [key (r/key-comment-read "hkimura")]
-    (c/get key)
-    (c/incr key))
-  :rcf)

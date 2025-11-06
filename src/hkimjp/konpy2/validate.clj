@@ -9,34 +9,14 @@
 
 (def ^:private timeout 10)
 
-(defn ruff-path []
-  (let [ruff (some #(when (fs/exists? %) %)
-                   ["/opt/homebrew/bin/ruff"
-                    "/usr/local/bin/ruff"
-                    "/snap/bin/ruff"
-                    (str (env :home) "/.local/bin/ruff")])]
-    (if (some? ruff)
-      ruff
-      (throw (Exception. "did not find ruff")))))
+(def ruff-path
+  (or (env :ruff-path) "/usr/local/bin/ruff"))
 
-(defn python-path []
-  (let [python (some #(when (fs/exists? %) %)
-                     ["/opt/homebrew/bin/python3"
-                      "/usr/local/bin/python3"
-                      "/usr/bin/python3"
-                      (str (env :home) "/workspace/konpy2/.venv/bin/python3")])]
-    (if (some? python)
-      python
-      (throw (Exception. "did not find python3")))))
+(def python-path
+  (or (env :python-path) "/usr/bin/python3"))
 
-(defn pytest-path []
-  (let [pytest (some #(when (fs/exists? %) %)
-                     ["/opt/homebrew/bin/pytest"
-                      "/usr/bin/pytest"
-                      (str (env :home) "/workspace/konpy2/.venv/bin/pytest")])]
-    (if (some? pytest)
-      pytest
-      (throw (Exception. "did not find pytest")))))
+(def pytest-path
+  (or (env :pytest-path) "/usr/bin/pytest"))
 
 (defn- get-last-answer [author week num]
   (t/log! {:level :debug
@@ -71,7 +51,9 @@
     (str/join
      "\n"
      (for [line (str/split-lines answer)]
-       (if-let [[_ w n] (re-matches #"#\s*include\s*(\d+)-(\d+).*" line)]
+       (if-let [[_ _ w n]
+                (or (re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line)
+                    (re-matches #"from\s*(kp)*(\d+)_(\d+).*" line))]
          (expand-includes
           author
           (get-last-answer author (parse-long w) (parse-long n)))
@@ -97,7 +79,9 @@
   (let [f (create-tempfile-with (str answer "\n"))
         ret (timeout-sh
              timeout
-             (ruff-path) "format" "--diff" (str (fs/file f)))]
+             ;; 0.13.*
+             ;; (ruff-path "format" "--diff" (str (fs/file f)))
+             ruff-path "-q" "format" (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "using VScode/Ruff?")))))
@@ -112,10 +96,16 @@
   (let [f (create-tempfile-with answer)
         ret (timeout-sh
              timeout
-             (python-path) "-m" "doctest" (str (fs/file f)))]
+             python-path "-m" "doctest" (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "doctest failed")))))
+
+(defn- retrieve [pat s]
+  (->> (str/split-lines s)
+       (filter #(re-find pat %))
+       (map #(str % "<br>"))
+       (apply str)))
 
 (defn- pytest [answer testcode]
   (t/log! {:level :info :id "pytest"})
@@ -124,21 +114,22 @@
   (let [f (create-tempfile-with (str/join [answer "\n" testcode]))
         ret (timeout-sh
              timeout
-             (pytest-path) (str (fs/file f)))]
+             pytest-path (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
-      (throw (Exception. "pytest failed")))))
+      (throw (Exception. (str "pytest failed<br>" (retrieve #"^E\s" (:out ret))))))))
 
-(defn validate [author answer testcode]
+(defn validate [author answer testcode doctest?]
   (let [answer (expand-includes author answer)]
-    (t/log! :info "validate")
-    (t/log! {:level :info :data {:answer answer}})
+    (t/log! {:level :info :id "validate" :data {:answer answer}})
+    (t/log! :debug (str "doctest? " doctest?))
     (try
       (ruff answer)
-      (doctest answer)
+      (when doctest?
+        (doctest answer))
       (when-not (empty? testcode)
-        (t/log! {:level :error :data {:testcode testcode
-                                      :empty? (empty? testcode)}})
+        (t/log! {:level :error
+                 :data {:testcode testcode :empty? (empty? testcode)}})
         (pytest answer testcode))
       (catch Exception e
         (t/log! {:level :warn

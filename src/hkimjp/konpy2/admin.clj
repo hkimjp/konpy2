@@ -7,10 +7,11 @@
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
+   [hkimjp.konpy2.login :refer [l22]]
    [hkimjp.konpy2.response :refer [page redirect]]
    [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [btn user now abbrev]]
-   [hkimjp.konpy2.validate :refer [ruff-path python-path pytest-path]]))
+   [hkimjp.konpy2.validate :as v]))
 
 (defn- section [title]
   [:div.font-bold title])
@@ -19,7 +20,7 @@
   [:input.text-center.size-6.outline {:name label :value val}])
 
 (defn- problem-form
-  [{:keys [db/id problem/status week num problem testcode updated] :as params}]
+  [{:keys [db/id problem/status week num problem testcode doctest updated] :as params}]
   (t/log! {:level :info :id "problem-form"})
   (t/log! {:level :debug :data params})
   (t/log! {:level :debug :data {:id id :status status}})
@@ -36,11 +37,11 @@
     (section "week-num")
     [:div (input-box "week" week) " - " (input-box "num" num)]
     (section  "problem")
-    [:textarea.w-full.h-20.p-2.border-1
-     {:name "problem"} problem]
+    [:textarea.w-full.h-20.p-2.border-1 {:name "problem"} problem]
+    (section "skip-doctest")
+    (input-box "doctest" doctest) [:span.mx-4 "leave brank if want doctest)"]
     (section  "testcode")
-    [:textarea.w-full.h-40.p-2.border-1
-     {:name "testcode"} testcode]
+    [:textarea.w-full.h-40.p-2.border-1 {:name "testcode"} testcode]
     (section  "updated")
     [:div updated]
     [:br]
@@ -48,13 +49,14 @@
     [:br]]])
 
 (defn upsert! [{params :params}]
-  (let [{:keys [id status week num problem testcode]} params
+  (let [{:keys [id status week num problem doctest testcode]} params
         id (if (= -1 id) -1 (parse-long id))
         data {:db/id id
               :problem/status status
               :week (parse-long week)
               :num  (parse-long num)
               :problem problem
+              :doctest doctest
               :testcode testcode
               :updated (now)}]
     (t/log! {:level :debug :data data})
@@ -74,9 +76,9 @@
         '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
           :keys e  status  week  num  problem  testcode  updated
           :where
-          [?e :problem/status ?status]
           [?e :week ?week]
           [?e :num ?num]
+          [?e :problem/status ?status]
           [?e :problem ?problem]
           [?e :testcode ?testcode]
           [?e :updated ?updated]]]
@@ -100,44 +102,44 @@
    [:div.m-4
     [:p "develop: " (env :develop)]
     [:p "start-day:" (env :start-day)]
-    [:p "auth: " (env :auth)]
+    [:p "auth: " l22]
     [:p "port: " (env :port)]
     [:p "admin: " (env :admin)]
     [:p "datascript: " (env :datascript)]
     [:p "redis: " (env :redis)]
-    [:p]
     [:p "max-comments: " r/max-comments]
     [:p "max-uploads: "  r/max-uploads]
     [:p "min-interval-comments: " r/min-interval-comments]
     [:p "min-interval-uploads: " r/min-interval-uploads]
     [:p "must-read-before-upload: " r/must-read-before-upload]
-    [:p "must-write-berfore-upload: " r/must-write-before-upload]
-    [:p]
-    [:p "kp2-flash: " r/kp2-flash]]])
+    [:p "must-write-berfore-upload: " r/must-write-before-upload]]])
 
-; FIXME: user as an argument?
 (defn- redis-vars-section
-  []
+  "also includes Paths section"
+  [user]
   [:div
+   ; Redis
    [:div.text-2xl.font-bold "Redis Vars"]
    [:div.m-4
-    (for [key ((juxt r/key-comment-read r/key-comment-write) "hkimura")]
+    (for [key ((juxt r/key-comment-read r/key-comment-write) user)]
       [:div.flex.gap-4 [:div key] [:div (c/get key)]])
-    (for [key ((juxt r/key-comment r/key-upload) "hkimura")]
+    (for [key ((juxt r/key-comment r/key-upload) user)]
       [:div.flex.gap-4 [:div key] [:div (c/ttl key)]])
-    (for [key ((juxt r/key-comments r/key-uploads) "hkimura")]
+    (for [key ((juxt r/key-comments r/key-uploads) user)]
       [:div.flex.gap-4
        [:div key]
-       [:div (pr-str (interpose " " (c/lrange key)))]])]
-   ;
+       [:div (if-let [uploads (c/lrange key)]
+               (str uploads)
+               "NIL")]])]
+   ; Paths
    [:div.text-2xl.font-bold "Paths"]
    [:div.m-4
     [:div.flex.gap-4
-     [:div "ruff"] [:div (ruff-path)]]
+     [:div "python"] [:div v/python-path]]
     [:div.flex.gap-4
-     [:div "python"] [:div (python-path)]]
+     [:div "pytest"] [:div v/pytest-path]]
     [:div.flex.gap-4
-     [:div "pytest"] [:div (pytest-path)]]]])
+     [:div "ruff"] [:div v/ruff-path]]]])
 
 (defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
@@ -147,10 +149,10 @@
     [:br]
     [:div.flex
      (env-vars-section)
-     (redis-vars-section)]]))
+     (redis-vars-section (user request))]]))
 
 (defn new [request]
-  (t/log! {:lelvel :info :id (user request)})
+  (t/log! {:lelvel :info :id "new" :msg (user request)})
   (page
    (problem-form {:db/id -1
                   :problem/status "yes"

@@ -7,7 +7,7 @@
    [hkimjp.konpy2.util :refer [local-date]]))
 
 (defn- local-time []
-  (jt/format "HHmmss" (jt/local-time)))
+  (jt/format "HH:mm:ss" (jt/local-time)))
 
 (def min-interval-comments
   "minimum interval between comments"
@@ -24,8 +24,6 @@
 (def max-uploads
   "max number of uploads in a day"
   (-> (or (env :max-uploads)  "6") parse-long))
-
-(def kp2-flash (-> (or (env :flash) "1") parse-long))
 
 (def must-read-before-upload
   "min number of reading comments before uploading one's answer"

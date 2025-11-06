@@ -16,27 +16,30 @@
 (defn routes []
   [["/" {:middleware []}
     ["" {:get login :post login!}]
-    ["logout" logout!]]
-   ["/help"   {:get help}]
+    ["dl/:eid" {:get answers/dl}]
+    ["download/:author/:week/:num" {:get answers/download}]
+    ["logout" logout!]
+    ["help"   {:get help}]]
    ["/admin/" {:middleware [m/wrap-admin]}
     [""           {:get admin/admin}]
     ["new"        {:get admin/new  :post admin/upsert!}]
     ["update/:e"  {:get admin/edit :post admin/upsert!}]]
    ["/k/" {:middleware [m/wrap-users]}
-    ["tasks"        {:get tasks/konpy}]
-    ["problem/:e"   {:get tasks/problem}]
-    ["hx-answers"   {:get tasks/hx-answers}]
-    ["hx-comments"  {:get tasks/hx-comments}]
-    ["hx-stocks"    {:get tasks/hx-stocks}]
+    ; ["hx-stocks"    {:get tasks/hx-stocks}]
     ["answer"       {:post answers/answer!}]
     ["answer/:e/:p" {:get  answers/hx-answer}]
     ["comment"      {:post comments/comment!}]
     ["comment/:e"   {:get  comments/hx-comment}]
-    ["scores"       {:get scores/scores}]
+    ["hx-answers"   {:get tasks/hx-answers}]
+    ["hx-comments"  {:get tasks/hx-comments}]
+    ["hx-logins"    {:get tasks/hx-logins}]
+    ["problem/:e"   {:get tasks/problem}]
     ["score/:e"     {:get scores/hx-show}]
+    ["scores"       {:get scores/scores}]
     ["scores/peep"  {:post scores/hx-peep}]
+    ["stock/:e"     {:get stocks/stock}]
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
-    ["stock/:e"     {:get stocks/stock}]]])
+    ["tasks"        {:get tasks/konpy}]]])
 
 (defn root-handler
   [request]
@@ -59,4 +62,3 @@
                          :body "not acceptable"})}))
          {:middleware [[wrap-defaults site-defaults]]})]
     (handler request)))
-
