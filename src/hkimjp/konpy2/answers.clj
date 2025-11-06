@@ -112,6 +112,32 @@
         [:div.text-2xl "Error"]
         [:p.text-red-600 (h/raw (.getMessage e))]]))))
 
+(def ^:private week-num-q
+  '[:find [?week ?num]
+    :in $ ?e
+    :where
+    [?e :to ?p]
+    [?p :week ?week]
+    [?p :num ?num]])
+
+(defn dl [{{:keys [eid]} :path-params}]
+  (let [eid (parse-long eid)
+        {:keys [week num]} (ds/qq week-num-q eid)
+        filename (format "answer-%d-%d.py" week num)]
+    (t/log! {:level :info :id "dl" :date {:eid eid}})
+    {:status 200
+     :headers {"Content-Disposition"
+               (format "attachment; filename=\"%s\"" filename)}
+     :body  (:answer (ds/pl eid))}))
+
+(comment
+  (ds/qq week-num-q 2210)
+  (ds/qq '[:find ?e
+           :where
+           [?e :problem/status "yes"]])
+  (dl {:path-params {:eid "2210"}})
+  :rcf)
+
 (def download-q
   '[:find [?answer]
     :in $ ?author ?week ?num
@@ -123,8 +149,8 @@
     [?e :answer ?answer]
     [?e :answer/status "yes"]])
 
-(defn download [{{:keys [author week num]} :path-params :as request}]
-  (t/log! {:level :info :data (:path-params request)})
+(defn download [{{:keys [author week num]} :path-params}]
+  (t/log! {:level :info :data (:author author :week week :num num)})
   (let [week (parse-long week)
         num (parse-long num)
         [answer] (ds/qq download-q author week num)
