@@ -2,13 +2,13 @@
 
 * admin/toggle-status
 * effective upsert. update only changed elements
-* pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
 * dialog to enter comments
 * confirm upload py files
-* gather carmine calls to `util` namespace, more abstraction
+* more abstraction
+* gather carmine calls to `util` namespace,
 
 
 # 0.4.3-SNAPSHOT
