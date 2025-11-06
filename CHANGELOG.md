@@ -16,10 +16,14 @@
 - refactor
 - .env
 - essential vars, optional vars
+* gather carmine calls to `util` namespace, more abstraction
+* delete facility
+* FIXME: when two or more answers to one question,
+  `download` fetch the last answer.
 
 # 0.4.2 (2025-11-05)
 
-- `!/storage/fetch.sh` in .gitignore
+- gitignore '!/storage/fetch.sh`
 
 # 0.4.1 (2025-11-01)
 

@@ -30,6 +30,18 @@
 
 ;------------------------------------
 
+(def q '[:find ?e
+         :where
+         [?e :author "hkimura"]
+         [?e :to ?p]
+         [?p :week 5]
+         [?p :num 1]])
+
+(ds/q q @ds/conn)
+
+(:answer/status (ds/pull @ds/conn '[*] 2211))
+
+(ds/put! {:db/id 2211 :answer/status "deleted"})
 ; (require '[hiccup2.core :as h])
 ; (-> [:p [: "abc"]]
 ;     h/html
