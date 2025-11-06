@@ -38,7 +38,8 @@
        [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
        [:pre.border-1.p-2 (:answer ans)]
        [:div [:a {:class btn
-                  :href (format "/download/%s/%d/%d" author week num)
+                  ; :href (format "/download/%s/%d/%d" author week num)
+                  :href (format "/dl/%d" e)
                   :hx-boost "false"}
               "download"]]]
       ; right half, comments
@@ -122,7 +123,7 @@
 
 (defn dl [{{:keys [eid]} :path-params}]
   (let [eid (parse-long eid)
-        {:keys [week num]} (ds/qq week-num-q eid)
+        [week num] (ds/qq week-num-q eid)
         filename (format "answer-%d-%d.py" week num)]
     (t/log! {:level :info :id "dl" :date {:eid eid}})
     {:status 200
@@ -131,6 +132,9 @@
      :body  (:answer (ds/pl eid))}))
 
 (comment
+  (ds/qq week-num-q 2210)
+  (let [[week num] (ds/qq week-num-q 2210)]
+    [week num])
   (ds/qq week-num-q 2210)
   (ds/qq '[:find ?e
            :where

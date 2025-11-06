@@ -29,56 +29,55 @@
 ;; (reload/reload)
 
 ;------------------------------------
+(comment
+  (def q '[:find ?e
+           :where
+           [?e :author "hkimura"]
+           [?e :to ?p]
+           [?p :week 5]
+           [?p :num 1]])
 
-(def q '[:find ?e
-         :where
-         [?e :author "hkimura"]
-         [?e :to ?p]
-         [?p :week 5]
-         [?p :num 1]])
+  (ds/q q @ds/conn)
 
-(ds/q q @ds/conn)
+  (:answer/status (ds/pull @ds/conn '[*] 2211))
 
-(:answer/status (ds/pull @ds/conn '[*] 2211))
-
-(ds/put! {:db/id 2211 :answer/status "deleted"})
+  (ds/put! {:db/id 2211 :answer/status "deleted"})
 ; (require '[hiccup2.core :as h])
 ; (-> [:p [: "abc"]]
 ;     h/html
 ;     str)
 
-(defn authors [yyyy MM dd]
-  (let [query
-        '[:find ?author
-          :with ?e
-          :in $ ?yyyy ?MM ?dd
-          :where
-          [?e :answer/status "yes"]
-          [?e :updated ?jt]
-          [(java-time.api/local-date ?jt) ?updated]
-          [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
-          [(java-time.api/= ?updated ?date)]
-          [?e :author ?author]]]
-    (ds/qq query yyyy MM dd)))
+  (defn authors [yyyy MM dd]
+    (let [query
+          '[:find ?author
+            :with ?e
+            :in $ ?yyyy ?MM ?dd
+            :where
+            [?e :answer/status "yes"]
+            [?e :updated ?jt]
+            [(java-time.api/local-date ?jt) ?updated]
+            [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
+            [(java-time.api/= ?updated ?date)]
+            [?e :author ?author]]]
+      (ds/qq query yyyy MM dd)))
 
-(defn comments [yyyy MM dd]
-  (let [query
-        '[:find ?author
-          :with ?e
-          :in $ ?yyyy ?MM ?dd
-          :where
-          [?e :comment/status "yes"]
-          [?e :updated ?jt]
-          [(java-time.api/local-date ?jt) ?updated]
-          [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
-          [(java-time.api/= ?updated ?date)]
-          [?e :author ?author]]]
-    (ds/qq query yyyy MM dd)))
+  (defn comments [yyyy MM dd]
+    (let [query
+          '[:find ?author
+            :with ?e
+            :in $ ?yyyy ?MM ?dd
+            :where
+            [?e :comment/status "yes"]
+            [?e :updated ?jt]
+            [(java-time.api/local-date ?jt) ?updated]
+            [(java-time.api/local-date ?yyyy ?MM ?dd) ?date]
+            [(java-time.api/= ?updated ?date)]
+            [?e :author ?author]]]
+      (ds/qq query yyyy MM dd)))
 
 ; (authors 2025 10 24)
 ; (comments 2025 10 24)
 
-(comment
   (ds/qq '[:find ?author
            :where
            [?e :answer/status "yes"]
