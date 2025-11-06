@@ -2,14 +2,24 @@
 
 * admin/toggle-status
 * effective upsert. update only changed elements
-* pu-4 and wu-4 does not take effects.
 * reports who uploads now(SSE)
 * flag skip-validation
 * admin can see his/her answers/comments
 * dialog to enter comments
 * confirm upload py files
-* gather carmine calls to `util` namespace, more abstraction
+* more abstraction
+* gather carmine calls to `util` namespace,
 
+
+# 0.4.3 (2025-11-06)
+
+- refactor
+- .env
+- essential vars, optional vars
+
+# 0.4.2 (2025-11-05)
+
+- `!/storage/fetch.sh` in .gitignore
 
 # 0.4.1 (2025-11-01)
 

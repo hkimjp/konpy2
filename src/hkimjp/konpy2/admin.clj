@@ -7,10 +7,11 @@
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
+   [hkimjp.konpy2.login :refer [l22]]
    [hkimjp.konpy2.response :refer [page redirect]]
    [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [btn user now abbrev]]
-   [hkimjp.konpy2.validate :refer [ruff-path python-path pytest-path]]))
+   [hkimjp.konpy2.validate :as v]))
 
 (defn- section [title]
   [:div.font-bold title])
@@ -101,25 +102,23 @@
    [:div.m-4
     [:p "develop: " (env :develop)]
     [:p "start-day:" (env :start-day)]
-    [:p "auth: " (env :auth)]
+    [:p "auth: " l22]
     [:p "port: " (env :port)]
     [:p "admin: " (env :admin)]
     [:p "datascript: " (env :datascript)]
     [:p "redis: " (env :redis)]
-    [:p]
     [:p "max-comments: " r/max-comments]
     [:p "max-uploads: "  r/max-uploads]
     [:p "min-interval-comments: " r/min-interval-comments]
     [:p "min-interval-uploads: " r/min-interval-uploads]
     [:p "must-read-before-upload: " r/must-read-before-upload]
-    [:p "must-write-berfore-upload: " r/must-write-before-upload]
-    [:p]
-    [:p "kp2-flash: " r/kp2-flash]]])
+    [:p "must-write-berfore-upload: " r/must-write-before-upload]]])
 
 (defn- redis-vars-section
   "also includes Paths section"
   [user]
   [:div
+   ; Redis
    [:div.text-2xl.font-bold "Redis Vars"]
    [:div.m-4
     (for [key ((juxt r/key-comment-read r/key-comment-write) user)]
@@ -132,14 +131,15 @@
        [:div (if-let [uploads (c/lrange key)]
                (str uploads)
                "NIL")]])]
+   ; Paths
    [:div.text-2xl.font-bold "Paths"]
    [:div.m-4
     [:div.flex.gap-4
-     [:div "python"] [:div python-path]]
+     [:div "python"] [:div v/python-path]]
     [:div.flex.gap-4
-     [:div "pytest"] [:div pytest-path]]
+     [:div "pytest"] [:div v/pytest-path]]
     [:div.flex.gap-4
-     [:div "ruff"] [:div ruff-path]]]])
+     [:div "ruff"] [:div v/ruff-path]]]])
 
 (defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})

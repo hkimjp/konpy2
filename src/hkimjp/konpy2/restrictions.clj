@@ -25,8 +25,6 @@
   "max number of uploads in a day"
   (-> (or (env :max-uploads)  "6") parse-long))
 
-(def kp2-flash (-> (or (env :flash) "1") parse-long))
-
 (def must-read-before-upload
   "min number of reading comments before uploading one's answer"
   (-> (or (env :must-read-before-upload)  "3") parse-long))
