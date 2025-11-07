@@ -10,7 +10,7 @@
 * more abstraction
 * gather carmine calls to `util` namespace,
 
-# 0.4.5-SNAPSHOT
+# 0.4.5 (2025-11-07)
 
 - delete answers from admin page
 
