@@ -23,9 +23,10 @@
    ["/admin/" {:middleware [m/wrap-admin]}
     [""           {:get admin/admin}]
     ["new"        {:get admin/new  :post admin/upsert!}]
-    ["update/:e"  {:get admin/edit :post admin/upsert!}]]
+    ["update/:e"  {:get admin/edit :post admin/upsert!}]
+    ["eid"        {:post admin/eid}]
+    ["delete"     {:post admin/delete!}]]
    ["/k/" {:middleware [m/wrap-users]}
-    ; ["hx-stocks"    {:get tasks/hx-stocks}]
     ["answer"       {:post answers/answer!}]
     ["answer/:e/:p" {:get  answers/hx-answer}]
     ["comment"      {:post comments/comment!}]
@@ -62,3 +63,5 @@
                          :body "not acceptable"})}))
          {:middleware [[wrap-defaults site-defaults]]})]
     (handler request)))
+
+(root-handler {:uri "/admin/eid" :request-method "post"})

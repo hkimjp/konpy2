@@ -10,6 +10,10 @@
 * more abstraction
 * gather carmine calls to `util` namespace,
 
+# 0.4.5 (2025-11-07)
+
+- delete answers from admin page
+
 # 0.4.4 (2025-11-06)
 
 - `/dl/:eid` downloads the answer to problem `eid`
