@@ -27,7 +27,7 @@ kaocha:
 run:
   clojure -J--enable-native-access=ALL-UNNAMED -M:run-m
 
-build:
+build: minify
  clojure -T:build ci
 
 deploy: build
