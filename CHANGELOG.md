@@ -9,8 +9,11 @@
 * confirm upload py files
 * more abstraction
 * gather carmine calls to `util` namespace,
+* text over wraps next divs. layer?
+* place objects center verticaly
 
-# 0.4.6-SNAPSHOT
+
+# 0.4.6-SNAPSHOT (2025-11-08)
 
 - rearranged answer page
 - download answer as `author-week-num.py`
