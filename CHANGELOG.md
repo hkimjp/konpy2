@@ -10,6 +10,11 @@
 * more abstraction
 * gather carmine calls to `util` namespace,
 
+# 0.4.6-SNAPSHOT
+
+- rearranged answer page
+- download answer as `author-week-num.py`
+
 # 0.4.5 (2025-11-07)
 
 - delete answers from admin page
