@@ -13,7 +13,7 @@
 * place objects center verticaly
 * links to answers
 
-# 0.4.6-SNAPSHOT (2025-11-08)
+# 0.4.6 (2025-11-13) (2025-11-08)
 
 - include the typed message on the error page shown when exception occurs
 - rearranged answer page
