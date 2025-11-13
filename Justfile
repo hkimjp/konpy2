@@ -46,6 +46,7 @@ upgrade:
 
 clean:
   rm -rf target
+  rm resources/public/assets/css/output.css
   fd -I bak --exec rm
 
 #

@@ -13,6 +13,10 @@
 * place objects center verticaly
 * links to answers
 
+# 0.4.7-SNAPSHOT
+
+- tailwind.css - whitespace-pre-wrap
+
 # 0.4.6 (2025-11-13)
 
 - include the typed message on the error page shown when exception occurs
