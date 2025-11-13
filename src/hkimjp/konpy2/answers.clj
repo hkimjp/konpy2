@@ -36,7 +36,7 @@
           author
           "******")]
        [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-       [:pre.border-1.p-2 (:answer ans)]
+       [:pre.border-1.p-2 {:white-space "pre-wrap"} (:answer ans)]
        [:div [:a {:class btn
                   ; :href (format "/download/%s/%d/%d" author week num)
                   :href (format "/dl/%d" e)
