@@ -27,10 +27,10 @@ kaocha:
 run:
   clojure -J--enable-native-access=ALL-UNNAMED -M:run-m
 
-build:
+build: minify
  clojure -T:build ci
 
-deploy: build
+deploy: minify build
   scp target/io.github.hkimjp/konpy2-*.jar ${DEST}:konpy2/konpy.jar
   ssh ${DEST} 'sudo systemctl restart konpy'
   ssh ${DEST} 'systemctl status konpy'
@@ -62,7 +62,7 @@ eq: build
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.4.5'
+VER := '0.4.6-SNAPSHOT'
 
 hub: security manifest
 
