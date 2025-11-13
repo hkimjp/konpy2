@@ -9,13 +9,14 @@
 * confirm upload py files
 * more abstraction
 * gather carmine calls to `util` namespace,
-* text over wraps next divs. layer?
 * place objects center verticaly
 * links to answers
 
-# 0.4.7-SNAPSHOT
 
-- tailwind.css - whitespace-pre-wrap
+# 0.4.7 (2025-11-13)
+
+- text over wraps next divs. layer - tailwind.css. `whitespace-pre-wrap`
+
 
 # 0.4.6 (2025-11-13)
 
