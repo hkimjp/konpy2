@@ -9,8 +9,7 @@
 
 (defonce server (atom nil))
 
-(defn start-jetty
-  []
+(defn start-jetty []
   (let [port (parse-long (or (env :port) "3000"))
         handler (if (some? (env :develop))
                   #'routes/root-handler
