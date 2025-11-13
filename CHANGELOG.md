@@ -9,6 +9,19 @@
 * confirm upload py files
 * more abstraction
 * gather carmine calls to `util` namespace,
+* text over wraps next divs. layer?
+* place objects center verticaly
+* links to answers
+
+# 0.4.6 (2025-11-13)
+
+- include the typed message on the error page shown when exception occurs
+- rearranged answer page
+- download answer as `author-week-num.py`
+
+# 0.4.5 (2025-11-07)
+
+- delete answers from admin page
 
 # 0.4.4 (2025-11-06)
 

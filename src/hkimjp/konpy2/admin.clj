@@ -8,7 +8,7 @@
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.login :refer [l22]]
-   [hkimjp.konpy2.response :refer [page redirect]]
+   [hkimjp.konpy2.response :refer [page redirect hx]]
    [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [btn user now abbrev]]
    [hkimjp.konpy2.validate :as v]))
@@ -141,12 +141,38 @@
     [:div.flex.gap-4
      [:div "ruff"] [:div v/ruff-path]]]])
 
+(defn- delete-section []
+  [:div
+   [:div.text-2xl.font-bold "Find eid"]
+   [:div.m-4
+    [:form
+     (h/raw (anti-forgery-field))
+     [:input.border-1 {:name "author" :placeholder "author"}]
+     [:input.border-1 {:name "week" :placeholder "week"}]
+     [:input.border-1 {:name "num" :placeholder "num"}]
+     [:buttn
+      {:class btn
+       :hx-post "/admin/eid"
+       :hx-target "#eid"
+       :hx-swap "innerHTML"}
+      "find"]]
+    [:div#eid "eid"]]
+   [:div.text-2xl.font-bold "Delete"]
+   [:form.m-4
+    (h/raw (anti-forgery-field))
+    [:input.border-1 {:name "eid" :placeholder "eid"}]
+    [:button {:class btn
+              :hx-post "/admin/delete"
+              :hx-swap "none"}
+     "delete"]]])
+
 (defn admin [request]
   (t/log! {:level :info :id "problems" :msg (user request)})
   (page
    [:div.m-4
     (problems-section)
     [:br]
+    (delete-section)
     [:div.flex
      (env-vars-section)
      (redis-vars-section (user request))]]))
@@ -165,3 +191,28 @@
   (t/log! {:level :info :id "edit" :data {:e e}})
   (page
    (problem-form (ds/pl (parse-long e)))))
+
+(def ^:private eid-q
+  '[:find [?a ...]
+    :in $ ?author ?week ?num
+    :where
+    [?a :author ?author]
+    [?a :answer/status "yes"]
+    [?a :to ?e]
+    [?e :week ?week]
+    [?e :num ?num]])
+
+; (ds/qq eid-q "hkimura" (parse-long "5") (parse-long "5"))
+; (ds/pl [:answer] 2260)
+
+(defn eid [{{:keys [author week num]} :params :as request}]
+  (t/log! {:level :info :id "eid"
+           :data (dissoc (:params request) :__anti-forgery-token)})
+  (let [ret (ds/qq eid-q author (parse-long week) (parse-long num))]
+    (t/log! {:level :debug :msg ret})
+    (hx [:div (str "found: " ret)])))
+
+(defn delete! [{{:keys [eid]} :params}]
+  (t/log! {:level :info :id "delete" :msg (str "eid: " eid)})
+  (ds/put! {:db/id (parse-long eid) :answer/status "delete"})
+  (hx [:div (str "delete " eid)]))

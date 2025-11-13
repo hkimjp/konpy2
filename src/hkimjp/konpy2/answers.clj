@@ -26,7 +26,8 @@
         ans (ds/pl e)
         author (:author ans)
         p (parse-long p)
-        {:keys [week num]} (ds/pl '[:week :num] p)]
+        ; {:keys [week num]} (ds/pl '[:week :num] p)
+        ]
     (hx
      [:div#answer.my-4.flex.gap-4
       ; left half, answer
@@ -35,6 +36,7 @@
         (if (or (= "chatgpt" author) (= user author))
           author
           "******")]
+       [:div [:span.font-bold "same: "] (:same ans)]
        [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
        [:pre.border-1.p-2 {:white-space "pre-wrap"} (:answer ans)]
        [:div [:a {:class btn
@@ -43,31 +45,32 @@
                   :hx-boost "false"}
               "download"]]]
       ; right half, comments
-      [:div {:class "w-1/2"}
-       [:div.py-4 [:span.font-bold "same: "] (:same ans)]
+      [:div {:class "w-1/2 white"}
+       [:div.box-content.size-16 ""]
        [:div.py-2 [:span.font-bold "comments: "]
         (for [[eid author] (sort-by first comments)]
           [:button.pr-4.hover:underline
            {:hx-get (str "/k/comment/" eid)
             :hx-target "#comment"
             :hx-swap "innerHTML"}
-           author])]
-       [:div#comment.mx-4 "[comment]"]
-       [:br]
-       [:div.font-bold "your comment:"]
-       (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
-         [:div.mx-4 (format "1日%sコメに達しました。" r/max-comments)]
-         [:form {:method "post" :action "/k/comment"}
-          (h/raw (anti-forgery-field))
-          [:input {:type "hidden" :name "to" :value e}]
-          [:input {:type "hidden" :name "author" :value author}]
-          [:input {:type "hidden" :name "pid" :value p}]
-          [:textarea
-           {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
-            :name "comment"
-            :placeholder "markdown OK"}]
-          (for [pt ["A" "B" "C"]]
-            [:button {:class btn :name "pt" :value pt} pt])])]])))
+           author])
+        [:div#comment.mx-4 "[comment]"]]
+       [:div
+        [:div.font-bold "your comment:"]
+        (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
+          [:div.mx-4 (format "1日%sコメに達しました。" r/max-comments)]
+          [:div
+           [:form {:method "post" :action "/k/comment"}
+            (h/raw (anti-forgery-field))
+            [:input {:type "hidden" :name "to" :value e}]
+            [:input {:type "hidden" :name "author" :value author}]
+            [:input {:type "hidden" :name "pid" :value p}]
+            [:textarea
+             {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
+              :name "comment"
+              :placeholder "markdown OK"}]
+            (for [pt ["A" "B" "C"]]
+              [:button {:class btn :name "pt" :value pt} pt])]])]]])))
 
 (def ^:private same-answers
   '[:find ?author
@@ -113,18 +116,19 @@
         [:div.text-2xl "Error"]
         [:p.text-red-600 (h/raw (.getMessage e))]]))))
 
-(def ^:private week-num-q
-  '[:find [?week ?num]
+(def ^:private author-week-num-q
+  '[:find [?author ?week ?num]
     :in $ ?e
     :where
     [?e :to ?p]
+    [?e :author ?author]
     [?p :week ?week]
     [?p :num ?num]])
 
 (defn dl [{{:keys [eid]} :path-params}]
   (let [eid (parse-long eid)
-        [week num] (ds/qq week-num-q eid)
-        filename (format "answer-%d-%d.py" week num)]
+        [author week num] (ds/qq author-week-num-q eid)
+        filename (format "%s-%d-%d.py" author week num)]
     (t/log! {:level :info :id "dl" :date {:eid eid}})
     {:status 200
      :headers {"Content-Disposition"
@@ -132,6 +136,7 @@
      :body  (:answer (ds/pl eid))}))
 
 (comment
+  (ds/pl 2210)
   (ds/qq week-num-q 2210)
   (let [[week num] (ds/qq week-num-q 2210)]
     [week num])
