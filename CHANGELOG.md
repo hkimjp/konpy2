@@ -15,6 +15,7 @@
 
 # 0.4.6-SNAPSHOT (2025-11-08)
 
+- include the typed message on the error page shown when exception occurs
 - rearranged answer page
 - download answer as `author-week-num.py`
 

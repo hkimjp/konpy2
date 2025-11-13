@@ -36,7 +36,9 @@
         (page
          [:div.m-4
           [:div.text-2xl "Error"]
-          [:p.text-red-600  (.getMessage ex)]])))))
+          [:p.text-red-600  (.getMessage ex)]
+          [:p "your comment:"]
+          [:pre.m-4 comment]])))))
 
 (defn hx-comment [{{:keys [e]} :path-params :as request}]
   (t/log! {:level :info :id "hx-comment" :msg (user request)})
