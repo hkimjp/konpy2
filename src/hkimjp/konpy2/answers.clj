@@ -38,7 +38,8 @@
           "******")]
        [:div [:span.font-bold "same: "] (:same ans)]
        [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-       [:pre.border-1.p-2.whitespace-pre-wrap (:answer ans)]
+       ;; answer
+       [:pre.text-sm.border-1.p-2.whitespace-pre-wrap (:answer ans)]
        [:div [:a {:class btn
                   ; :href (format "/download/%s/%d/%d" author week num)
                   :href (format "/dl/%d" e)

@@ -13,6 +13,10 @@
 * links to answers
 
 
+# 0.4.8-SNAPSHOT
+
+- answers in `text-sm`(12pt).
+
 # 0.4.7 (2025-11-13)
 
 - text over wraps next divs. layer - tailwind.css. `whitespace-pre-wrap`
