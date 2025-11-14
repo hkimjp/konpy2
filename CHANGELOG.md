@@ -11,7 +11,7 @@
 * gather carmine calls to `util` namespace,
 * place objects center verticaly
 * links to answers
-
+* `fake-today` for development
 
 # 0.4.8-SNAPSHOT
 
