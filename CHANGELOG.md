@@ -15,7 +15,7 @@
 
 # 0.4.8-SNAPSHOT
 
-- answers in `text-sm`(12pt).
+- answers in `text-sm`(12pt). looks too small when use `text-sm` to comments.
 
 # 0.4.7 (2025-11-13)
 

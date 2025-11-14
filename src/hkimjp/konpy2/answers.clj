@@ -55,7 +55,7 @@
             :hx-target "#comment"
             :hx-swap "innerHTML"}
            author])
-        [:div#comment.mx-4 "[comment]"]]
+        [:div#comment.mx-4.text-base "[comment]"]]
        [:div
         [:div.font-bold "your comment:"]
         (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
@@ -135,18 +135,6 @@
      :headers {"Content-Disposition"
                (format "attachment; filename=\"%s\"" filename)}
      :body  (:answer (ds/pl eid))}))
-
-(comment
-  (ds/pl 2210)
-  (ds/qq week-num-q 2210)
-  (let [[week num] (ds/qq week-num-q 2210)]
-    [week num])
-  (ds/qq week-num-q 2210)
-  (ds/qq '[:find ?e
-           :where
-           [?e :problem/status "yes"]])
-  (dl {:path-params {:eid "2210"}})
-  :rcf)
 
 (def download-q
   '[:find [?answer]
