@@ -1,7 +1,5 @@
 (ns user
   (:require
-   ; [babashka.fs :as fs]
-   ; [clojure.java.io :as io]
    [clj-reload.core :as reload]
    [java-time.api :as jt]
    [taoensso.telemere :as t]

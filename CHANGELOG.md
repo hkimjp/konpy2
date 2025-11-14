@@ -11,7 +11,12 @@
 * gather carmine calls to `util` namespace,
 * place objects center verticaly
 * links to answers
+* `fake-today` for development
 
+# 0.4.8 (2025-11-14)
+
+- rearranged panes. headers went to right half, widened comment area.
+- answers in `text-sm`(12pt). looks too small when use `text-sm` to comments.
 
 # 0.4.7 (2025-11-13)
 

@@ -32,12 +32,17 @@
   ([date]
    (quot (jt/time-between start-day date :days) 7)))
 
-; not orthogonal
-(defn today []
-  (str (jt/local-date)))
+; not orthogonal, but
+; off 2025-11-14
+; (defn today []
+;   (str (jt/local-date)))
 
+; convenient for debug
 (defn now []
-  (jt/local-date-time))
+  (jt/local-date-time)
+  #_(jt/minus (jt/local-date-time) (jt/days 1)))
+
+; (now)
 
 ; this willl prefer?
 (defn local-date []

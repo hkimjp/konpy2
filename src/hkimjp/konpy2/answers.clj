@@ -32,13 +32,14 @@
      [:div#answer.my-4.flex.gap-4
       ; left half, answer
       [:div {:class "w-1/2"}
-       [:div [:span.font-bold "author: "]
-        (if (or (= "chatgpt" author) (= user author))
-          author
-          "******")]
-       [:div [:span.font-bold "same: "] (:same ans)]
-       [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-       [:pre.border-1.p-2.whitespace-pre-wrap (:answer ans)]
+       ; [:div [:span.font-bold "author: "]
+       ;  (if (or (= "chatgpt" author) (= user author))
+       ;    author
+       ;    "******")]
+       ; [:div [:span.font-bold "same: "] (:same ans)]
+       ; [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
+       ;; answer
+       [:pre.text-sm.border-1.p-2.whitespace-pre-wrap (:answer ans)]
        [:div [:a {:class btn
                   ; :href (format "/download/%s/%d/%d" author week num)
                   :href (format "/dl/%d" e)
@@ -46,7 +47,13 @@
               "download"]]]
       ; right half, comments
       [:div {:class "w-1/2 white"}
-       [:div.box-content.size-16 ""]
+       ;[:div.box-content.size-16 ""]
+       [:div [:span.font-bold "author: "]
+        (if (or (= "chatgpt" author) (= user author))
+          author
+          "******")]
+       [:div [:span.font-bold "same: "] (:same ans)]
+       [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
        [:div.py-2 [:span.font-bold "comments: "]
         (for [[eid author] (sort-by first comments)]
           [:button.pr-4.hover:underline
@@ -54,7 +61,7 @@
             :hx-target "#comment"
             :hx-swap "innerHTML"}
            author])
-        [:div#comment.mx-4 "[comment]"]]
+        [:div#comment.mx-4.text-base "[comment]"]]
        [:div
         [:div.font-bold "your comment:"]
         (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
@@ -66,9 +73,10 @@
             [:input {:type "hidden" :name "author" :value author}]
             [:input {:type "hidden" :name "pid" :value p}]
             [:textarea
-             {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
+             {:class "w-full bg-lime-100 h-40 border-1 p-2"
               :name "comment"
               :placeholder "markdown OK"}]
+            [:br]
             (for [pt ["A" "B" "C"]]
               [:button {:class btn :name "pt" :value pt} pt])]])]]])))
 
@@ -134,18 +142,6 @@
      :headers {"Content-Disposition"
                (format "attachment; filename=\"%s\"" filename)}
      :body  (:answer (ds/pl eid))}))
-
-(comment
-  (ds/pl 2210)
-  (ds/qq week-num-q 2210)
-  (let [[week num] (ds/qq week-num-q 2210)]
-    [week num])
-  (ds/qq week-num-q 2210)
-  (ds/qq '[:find ?e
-           :where
-           [?e :problem/status "yes"]])
-  (dl {:path-params {:eid "2210"}})
-  :rcf)
 
 (def download-q
   '[:find [?answer]
