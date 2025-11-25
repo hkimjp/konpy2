@@ -47,4 +47,8 @@
   pre {
     background-color: #eee;
   }
+
+  div  > p {
+    margin: 10px 0 10px 0;
+  }
 }

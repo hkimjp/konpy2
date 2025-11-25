@@ -10,10 +10,16 @@
 * links to answers - easy if use hx, but not follow the original intent.
 
 
-# 0.4.9-SNAPSHOT (2025-11-25)
+# 0.4.9-SNAPSHOT
 
 - improve router - still used function, `#'` in production. stopped them.
+- margin p css/input.css:
 
+```css
+  div  > p {
+    margin: 10px 0 10px 0;
+  }
+```
 
 # 0.4.8 (2025-11-14)
 
