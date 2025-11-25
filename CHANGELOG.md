@@ -3,20 +3,20 @@
 * admin/toggle-status
 * effective upsert. update only changed elements
 * reports who uploads now(SSE)
-* flag skip-validation
 * admin can see his/her answers/comments
 * dialog to enter comments
-* confirm upload py files
-* more abstraction
 * gather carmine calls to `util` namespace,
 * place objects center verticaly
-* links to answers
-* `fake-today` for development
+* links to answers - easy if use hx, but not follow the original intent.
+
+
 
 # 0.4.8 (2025-11-14)
 
 - rearranged panes. headers went to right half, widened comment area.
 - answers in `text-sm`(12pt). looks too small when use `text-sm` to comments.
+* `fake-today` for development - redefine util/now
+
 
 # 0.4.7 (2025-11-13)
 
