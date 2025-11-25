@@ -13,7 +13,8 @@
   metosin/reitit-ring            {:mvn/version "0.9.1"}
   org.slf4j/slf4j-nop            {:mvn/version "2.0.17"}
   ring/ring-defaults             {:mvn/version "0.7.0"}
-  ring/ring-jetty-adapter        {:mvn/version "1.15.3"}
+  ; ring/ring-jetty-adapter        {:mvn/version "1.15.3"}
+  http-kit/http-kit              {:mvn/version "2.9.0-beta3"}
   timeout-shell/timeout-shell    {:mvn/version "1.0.0"}
   ;;
   io.github.hkimjp/carmine-farm  {:git/tag "0.2.9" :git/sha "5fcacc1"}

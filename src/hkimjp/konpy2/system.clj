@@ -1,7 +1,8 @@
 (ns hkimjp.konpy2.system
   (:require
    [environ.core :refer [env]]
-   [ring.adapter.jetty :as jetty]
+   ; [ring.adapter.jetty :as jetty]
+   [org.httpkit.server :as hk]
    [taoensso.telemere :as t]
    [hkimjp.konpy2.routes :as routes]
    [hkimjp.carmine :as c]
@@ -14,13 +15,20 @@
         handler (if (some? (env :develop))
                   #'routes/root-handler
                   routes/root-handler)]
-    (reset! server (jetty/run-jetty handler {:port port :join? false}))
+    ; (reset! server (jetty/run-jetty handler {:port port :join? false}))
+    (reset! server (hk/run-server handler {:port port :join? false}))
     (t/log! :info (str "server started at port " port))))
 
+#_(defn stop-server []
+    (when @server
+      (.stop @server)
+      (reset! server nil)
+      (t/log! :info "server stopped.")))
+
 (defn stop-server []
-  (when @server
-    (.stop @server)
-    (t/log! :info "server stopped.")))
+  @server
+  (reset! server nil)
+  (t/log! :info "server stopped."))
 
 (defn start-system []
   (t/log! {:level :info
