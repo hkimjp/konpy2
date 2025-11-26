@@ -2,7 +2,7 @@
   (:require
    [reitit.ring :as rr]
    [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-   [taoensso.telemere :as t]
+   ; [taoensso.telemere :as t]
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
    [hkimjp.konpy2.answers :as answers]
@@ -13,7 +13,7 @@
    [hkimjp.konpy2.stocks :as stocks]
    [hkimjp.konpy2.tasks :as tasks]))
 
-(defn routes []
+(def routes
   [["/" {:middleware []}
     ["" {:get login :post login!}]
     ["dl/:eid" {:get answers/dl}]
@@ -42,26 +42,22 @@
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
     ["tasks"        {:get tasks/konpy}]]])
 
-(defn root-handler
-  [request]
-  (t/log! :info (str (:request-method request) " - " (:uri request)))
-  (let [handler
-        (rr/ring-handler
-         (rr/router (routes))
-         (rr/routes
-          (rr/create-resource-handler {:path "/"})
-          (rr/create-default-handler
-           {:not-found
-            (constantly {:status 404
-                         :headers {"Content-Type" "text/html"}
-                         :body "<h1>ERROR</h1><p>not found</p>"})
-            :method-not-allowed
-            (constantly {:status 405
-                         :body "not allowed"})
-            :not-acceptable
-            (constantly {:status 406
-                         :body "not acceptable"})}))
-         {:middleware [[wrap-defaults site-defaults]]})]
-    (handler request)))
+(def root-handler
+  (rr/ring-handler
+   (rr/router routes)
+   (rr/routes
+    (rr/create-resource-handler {:path "/"})
+    (rr/create-default-handler
+     {:not-found
+      (constantly {:status 404
+                   :headers {"Content-Type" "text/html"}
+                   :body "<h1>ERROR</h1><p>not found</p>"})
+      :method-not-allowed
+      (constantly {:status 405
+                   :body "not allowed"})
+      :not-acceptable
+      (constantly {:status 406
+                   :body "not acceptable"})}))
+   {:middleware [[wrap-defaults site-defaults]]}))
 
-(root-handler {:uri "/admin/eid" :request-method "post"})
+; (root-handler {:uri "/admin/eid" :request-method "post"})
