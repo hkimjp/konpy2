@@ -2,7 +2,7 @@
   (:require
    [reitit.ring :as rr]
    [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-   [taoensso.telemere :as t]
+   ; [taoensso.telemere :as t]
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
    [hkimjp.konpy2.answers :as answers]
