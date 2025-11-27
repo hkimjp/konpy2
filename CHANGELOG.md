@@ -10,9 +10,9 @@
 * links to answers - easy if use hx, but not follow the original intent.
 
 
-# 0.4.11-SNAPSHOT
+# 0.4.11 (2025-11-28)
 
-- fixed the bug on a new comment restriction
+- fixed the bug on a new comment restriction. mistook `author` for `author`
 - switched from `jetty` to `http-kit`
 
 # 0.4.10 (2025-11-27)
