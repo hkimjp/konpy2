@@ -9,6 +9,9 @@
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
 
+# 0.4.11-SNAPSHOT
+
+
 # 0.4.10 (2025-11-27)
 
 - admin(hkimura) can see author's id
