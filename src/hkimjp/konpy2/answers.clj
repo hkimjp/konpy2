@@ -64,8 +64,8 @@
         [:div#comment.mx-4.text-base "[comment]"]]
        [:div
         [:div.font-bold "your comment:"]
-        (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
-          [:div.mx-4 (format "1日%sコメに達しました。" r/max-comments)]
+        (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" user (local-date))))
+          [:div.mx-4 (format "1日 %d コメに達しました。" r/max-comments)]
           [:div
            [:form {:method "post" :action "/k/comment"}
             (h/raw (anti-forgery-field))
@@ -79,6 +79,11 @@
             [:br]
             (for [pt ["A" "B" "C"]]
               [:button {:class btn :name "pt" :value pt} pt])]])]]])))
+
+(comment
+  (type r/max-comments)
+  (format "kp2:%s:comments:%s" author (local-date))
+  :rcf)
 
 (def ^:private same-answers
   '[:find ?author

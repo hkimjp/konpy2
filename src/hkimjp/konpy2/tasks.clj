@@ -69,7 +69,7 @@
               [:span.hover:underline
                (if (or (= user "chatgpt") (= user author))
                  user
-                 (if (= "hkimura" author)
+                 (if (= author (System/getenv "ADMIN"))
                    user
                    "******"))]]))
      [:div#answer "[answer]"]]))
