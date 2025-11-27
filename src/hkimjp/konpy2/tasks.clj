@@ -65,11 +65,13 @@
              [:button.pr-4
               {:hx-get (str "/k/answer/" eid "/" pid)
                :hx-target "#answer"
-               :hx-swap "innerHTML"};
+               :hx-swap "innerHTML"}
               [:span.hover:underline
                (if (or (= user "chatgpt") (= user author))
                  user
-                 "******")]]))
+                 (if (= "hkimura" author)
+                   user
+                   "******"))]]))
      [:div#answer "[answer]"]]))
 
 (defn problem [{{:keys [e]} :path-params :as request}]
