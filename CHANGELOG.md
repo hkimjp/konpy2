@@ -8,9 +8,11 @@
 * gather carmine calls to `util` namespace,
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
+* bug in comment restriction
 
 # 0.4.11-SNAPSHOT
 
+- switched from `jetty` to `http-kit`
 
 # 0.4.10 (2025-11-27)
 
