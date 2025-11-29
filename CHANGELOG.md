@@ -10,7 +10,7 @@
 * links to answers - easy if use hx, but not follow the original intent.
 
 
-# 0.4.12-SNAPSHOT
+# 0.4.12 (2025-11-29)
 
 - do not hide author's accounts.
 - `text-red-500` if the account is login user's one.
