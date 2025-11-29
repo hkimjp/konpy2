@@ -12,6 +12,8 @@
 
 # 0.4.12-SNAPSHOT
 
+- do not hide author's accounts.
+- `text-red-500` if the account is login user's one.
 - switched http-kit - removed jetty
 - updated libraries
 
