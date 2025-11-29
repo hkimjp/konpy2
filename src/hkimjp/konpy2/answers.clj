@@ -30,28 +30,15 @@
         ]
     (hx
      [:div#answer.my-4.flex.gap-4
-      ; left half, answer
       [:div {:class "w-1/2"}
-       ; [:div [:span.font-bold "author: "]
-       ;  (if (or (= "chatgpt" author) (= user author))
-       ;    author
-       ;    "******")]
-       ; [:div [:span.font-bold "same: "] (:same ans)]
-       ; [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-       ;; answer
        [:pre.text-sm.border-1.p-2.whitespace-pre-wrap (:answer ans)]
        [:div [:a {:class btn
                   ; :href (format "/download/%s/%d/%d" author week num)
                   :href (format "/dl/%d" e)
                   :hx-boost "false"}
               "download"]]]
-      ; right half, comments
       [:div {:class "w-1/2 white"}
-       ;[:div.box-content.size-16 ""]
-       [:div [:span.font-bold "author: "]
-        (if (or (= "chatgpt" author) (= user author))
-          author
-          "******")]
+       [:div [:span.font-bold "author: "] author]
        [:div [:span.font-bold "same: "] (:same ans)]
        [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
        [:div.py-2 [:span.font-bold "comments: "]

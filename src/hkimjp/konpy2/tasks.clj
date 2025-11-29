@@ -67,11 +67,9 @@
                :hx-target "#answer"
                :hx-swap "innerHTML"}
               [:span.hover:underline
-               (if (or (= user "chatgpt") (= user author))
-                 user
-                 (if (= author (System/getenv "ADMIN"))
-                   user
-                   "******"))]]))
+               (if (= user author)
+                 [:span.text-red-600 user]
+                 user)]]))
      [:div#answer "[answer]"]]))
 
 (defn problem [{{:keys [e]} :path-params :as request}]

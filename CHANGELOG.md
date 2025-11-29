@@ -10,6 +10,22 @@
 * links to answers - easy if use hx, but not follow the original intent.
 
 
+# 0.4.12 (2025-11-29)
+
+- do not hide author's accounts.
+- `text-red-500` if the account is login user's one.
+- switched http-kit - removed jetty
+- updated libraries
+
+| :file    | :name                          | :current | :latest |
+|----------|--------------------------------|----------|---------|
+| deps.edn | babashka/fs                    | 0.5.27   | 0.5.30  |
+|          | io.github.hkimjp/carmine-farm  | 0.2.9    | 0.3.0   |
+|          | io.github.nextjournal/markdown | 0.7.189  | 0.7.213 |
+|          | metosin/reitit-ring            | 0.9.1    | 0.9.2   |
+|          | nrepl/nrepl                    | 1.4.0    | 1.5.1   |
+|          | org.clojure/test.check         | 1.1.1    | 1.1.2   |
+
 # 0.4.11 (2025-11-28)
 
 - fixed the bug on a new comment restriction. mistook `author` for `author`
