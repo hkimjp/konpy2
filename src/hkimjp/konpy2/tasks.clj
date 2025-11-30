@@ -23,8 +23,9 @@
     [:span.font-bold title]]
    [:div {:id target}]])
 
-(defn konpy [request]
-  (t/log! {:level :info :msg (str "tasks/konpy " (user request))})
+; ranamed
+(defn tasks [request]
+  (t/log! {:level :info :msg (str "tasks/tasks " (user request))})
   (let [fetch-problems '[:find ?e ?week ?num ?problem
                          :keys e  week num  problem
                          :in $ ?week
@@ -113,6 +114,11 @@
                         [?to :num ?num]]
                       (jt/adjust date-time (jt/local-time 0)))))
 
+(defn- color-author [author user]
+  (if (= author user)
+    [:span.text-red-500 author]
+    author))
+
 (defn hx-answers [request]
   (let [user (user request)
         answers (todays-answers)]
@@ -126,7 +132,9 @@
                      reverse)]
             (let [updated (subs (str updated) 11 19)]
               [:li.font-mono
-               (format "%d-%d %s %s" week num updated author)]))]])))
+               #_(format "%d-%d %s %s"
+                         week num updated (color-author author user))
+               week "-" num " " updated " " (color-author author user)]))]])))
 
 (defn- todays-comments
   "comments after `date-time`"
@@ -161,11 +169,16 @@
                   reverse)]
          (let [updated (subs (str updated) 11 19)]
            [:li.font-mono
-            (format "%d-%d %s %s → %s" week num updated author commentee)]))]])))
+            #_(format "%d-%d %s %s → %s" week num updated
+                      (color-author author user)
+                      (color-author commentee user))
+            week "-" num " " updated " "
+            (color-author author user) " -> " (color-author commentee user)]))]])));
 
-(defn hx-logins [_request]
-  (let [logins (c/lrange (format "kp2:login:%s" (local-date)))]
+(defn hx-logins [request]
+  (let [user (user request)
+        logins (c/lrange (format "kp2:login:%s" (local-date)))]
     (hx [:div (format "(%d)" (count logins))
          [:ul.list-disc.mx-4
           (for [login logins]
-            [:li.font-mono login])]])))
+            [:li.font-mono (color-author login user)])]])));

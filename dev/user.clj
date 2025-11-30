@@ -28,27 +28,8 @@
 
 ; ----------------
 
-(ds/conn?)
+; CHECK: whit this can't?
+#_(ds/q @ds/conn '[:find ?e
+                   :where
+                   [?e]])
 
-(ds/pull @ds/conn ['*] 100)
-
-; why this can't?
-(ds/q @ds/conn '[:find ?e
-                 :where
-                 [?e]])
-
-(ds/qq '[:find (count ?e)
-         :where [?e]])
-
-(def problems (ds/qq '[:find ?week ?num ?problem
-                       :keys week  num  problem
-                       :where
-                       [?e :week ?week]
-                       [?e :num ?num]
-                       [?e :problem ?problem]]))
-
-(sort-by :week problems)
-
-(sort-by (fn [x] (:week x)) problems)
-
-(spit (io/file "konpy.txt") (sort-by (fn [x] [(:week x) (:num x)]) problems))

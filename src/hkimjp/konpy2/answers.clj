@@ -40,7 +40,7 @@
       [:div {:class "w-1/2 white"}
        [:div [:span.font-bold "author: "] author]
        [:div [:span.font-bold "same: "] (:same ans)]
-       [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
+       [:div [:span.font-bold "updated: "] (-> (:updated ans) iso)]
        [:div.py-2 [:span.font-bold "comments: "]
         (for [[eid author] (sort-by first comments)]
           [:button.pr-4.hover:underline
@@ -66,11 +66,6 @@
             [:br]
             (for [pt ["A" "B" "C"]]
               [:button {:class btn :name "pt" :value pt} pt])]])]]])))
-
-(comment
-  (type r/max-comments)
-  (format "kp2:%s:comments:%s" author (local-date))
-  :rcf)
 
 (def ^:private same-answers
   '[:find ?author
@@ -135,24 +130,24 @@
                (format "attachment; filename=\"%s\"" filename)}
      :body  (:answer (ds/pl eid))}))
 
-(def download-q
-  '[:find [?answer]
-    :in $ ?author ?week ?num
-    :where
-    [?e :author ?author]
-    [?e :to ?to]
-    [?to :week ?week]
-    [?to :num ?num]
-    [?e :answer ?answer]
-    [?e :answer/status "yes"]])
+#_(def download-q
+    '[:find [?answer]
+      :in $ ?author ?week ?num
+      :where
+      [?e :author ?author]
+      [?e :to ?to]
+      [?to :week ?week]
+      [?to :num ?num]
+      [?e :answer ?answer]
+      [?e :answer/status "yes"]])
 
-(defn download [{{:keys [author week num]} :path-params}]
-  (t/log! {:level :info :data (:author author :week week :num num)})
-  (let [week (parse-long week)
-        num (parse-long num)
-        [answer] (ds/qq download-q author week num)
-        filename (format "%s_%d_%d.py" author week num)]
-    {:status 200
-     :headers {"Content-Disposition"
-               (format "attachment; filename=\"%s\"" filename)}
-     :body answer}))
+#_(defn download [{{:keys [author week num]} :path-params}]
+    (t/log! {:level :info :data (:author author :week week :num num)})
+    (let [week (parse-long week)
+          num (parse-long num)
+          [answer] (ds/qq download-q author week num)
+          filename (format "%s_%d_%d.py" author week num)]
+      {:status 200
+       :headers {"Content-Disposition"
+                 (format "attachment; filename=\"%s\"" filename)}
+       :body answer}))

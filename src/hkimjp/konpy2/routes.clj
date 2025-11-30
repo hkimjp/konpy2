@@ -17,7 +17,7 @@
   [["/" {:middleware []}
     ["" {:get login :post login!}]
     ["dl/:eid" {:get answers/dl}]
-    ["download/:author/:week/:num" {:get answers/download}]
+    ;["download/:author/:week/:num" {:get answers/download}]
     ["logout" logout!]
     ["help"   {:get help}]]
    ["/admin/" {:middleware [m/wrap-admin]}
@@ -40,7 +40,7 @@
     ["scores/peep"  {:post scores/hx-peep}]
     ["stock/:e"     {:get stocks/stock}]
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
-    ["tasks"        {:get tasks/konpy}]]])
+    ["tasks"        {:get tasks/tasks}]]])
 
 (def root-handler
   (rr/ring-handler
