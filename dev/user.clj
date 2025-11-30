@@ -1,7 +1,9 @@
 (ns user
   (:require
    [clj-reload.core :as reload]
+   [clojure.java.io :as io]
    [taoensso.telemere :as tel]
+   [hkimjp.datascript :as ds]
    [hkimjp.konpy2.system :refer [start-system stop-system restart-system]]))
 
 (tel/set-min-level! :debug)
@@ -24,4 +26,10 @@
 
 ;; (reload/reload)
 
+; ----------------
+
+; CHECK: whit this can't?
+#_(ds/q @ds/conn '[:find ?e
+                   :where
+                   [?e]])
 

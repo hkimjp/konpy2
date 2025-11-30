@@ -51,8 +51,9 @@
 (defn local-date-time []
   (str (jt/local-date-time)))
 
-; awkward
 (defn iso
-  "(iso \"2025-09-17T21:32:01.360441\") -> \"2025-09-17 21:32:01\""
   [tm]
-  (format "%s %s" (subs tm 0 10) (subs tm 11 19)))
+  (jt/format "YYYY-MM-dd hh-mm-ss" tm))
+
+(jt/format "YYYY-MM-dd hh:mm:ss" (jt/local-date-time))
+

@@ -10,6 +10,11 @@
 * links to answers - easy if use hx, but not follow the original intent.
 
 
+# 0.4.13 (2025-11-30)
+
+- renamed endpoint `/k/tasks/konpy` -> `/k/tasks/tasks`
+- util/iso now uses `jt/format`
+
 # 0.4.12 (2025-11-29)
 
 - do not hide author's accounts.
