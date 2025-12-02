@@ -11,6 +11,12 @@
 
 # 0.4.14-SNAPHOT
 
+- updated libraries
+
+| :file    | :name                          | :current | :latest |
+|----------|--------------------------------|----------|---------|
+| deps.edn | io.github.nextjournal/markdown | 0.7.213  | 0.7.222 |
+
 - fixed the command line to invoke `ruff`
 
 # 0.4.13 (2025-11-30)
