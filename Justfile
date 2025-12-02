@@ -63,7 +63,7 @@ eq: build
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.4.13'
+VER := '0.4.14'
 
 hub: security manifest
 
