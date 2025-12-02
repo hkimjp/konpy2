@@ -9,6 +9,9 @@
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
 
+# 0.4.14-SNAPHOT
+
+- fixed the command line to invoke `ruff`
 
 # 0.4.13 (2025-11-30)
 
