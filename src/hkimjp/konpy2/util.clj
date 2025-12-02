@@ -53,7 +53,4 @@
 
 (defn iso
   [tm]
-  (jt/format "YYYY-MM-dd hh:mm:ss" tm))
-
-
-
+  (jt/format "YYYY-MM-dd HH:mm:ss" tm))
