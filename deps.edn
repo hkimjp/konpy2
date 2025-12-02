@@ -9,7 +9,7 @@
   environ/environ                {:mvn/version "1.2.0"}
   hato/hato                      {:mvn/version "1.0.0"}
   hiccup/hiccup                  {:mvn/version "2.0.0"}
-  io.github.nextjournal/markdown {:mvn/version "0.7.213"}
+  io.github.nextjournal/markdown {:mvn/version "0.7.222"}
   metosin/reitit-ring            {:mvn/version "0.9.2"}
   org.slf4j/slf4j-nop            {:mvn/version "2.0.17"}
   ring/ring-defaults             {:mvn/version "0.7.0"}
