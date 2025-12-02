@@ -3,7 +3,7 @@
   (:require [clojure.tools.build.api :as b]))
 
 (def lib 'io.github.hkimjp/konpy2)
-(def version "0.4.13")
+(def version "0.4.14")
 (def main 'hkimjp.konpy2.main)
 (def class-dir "target/classes")
 
