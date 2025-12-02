@@ -3,17 +3,70 @@
 * admin/toggle-status
 * effective upsert. update only changed elements
 * reports who uploads now(SSE)
-* flag skip-validation
 * admin can see his/her answers/comments
 * dialog to enter comments
-* confirm upload py files
-* more abstraction
 * gather carmine calls to `util` namespace,
-* text over wraps next divs. layer?
 * place objects center verticaly
-* links to answers
+* links to answers - easy if use hx, but not follow the original intent.
 
-# 0.4.6 (2025-11-13) (2025-11-08)
+# 0.4.14-SNAPHOT
+
+- fixed the command line to invoke `ruff`
+
+# 0.4.13 (2025-11-30)
+
+- renamed endpoint `/k/tasks/konpy` -> `/k/tasks/tasks`
+- util/iso now uses `jt/format`
+
+# 0.4.12 (2025-11-29)
+
+- do not hide author's accounts.
+- `text-red-500` if the account is login user's one.
+- switched http-kit - removed jetty
+- updated libraries
+
+| :file    | :name                          | :current | :latest |
+|----------|--------------------------------|----------|---------|
+| deps.edn | babashka/fs                    | 0.5.27   | 0.5.30  |
+|          | io.github.hkimjp/carmine-farm  | 0.2.9    | 0.3.0   |
+|          | io.github.nextjournal/markdown | 0.7.189  | 0.7.213 |
+|          | metosin/reitit-ring            | 0.9.1    | 0.9.2   |
+|          | nrepl/nrepl                    | 1.4.0    | 1.5.1   |
+|          | org.clojure/test.check         | 1.1.1    | 1.1.2   |
+
+# 0.4.11 (2025-11-28)
+
+- fixed the bug on a new comment restriction. mistook `author` for `author`
+- switched from `jetty` to `http-kit`
+
+# 0.4.10 (2025-11-27)
+
+- admin(hkimura) can see author's id
+
+# 0.4.9 (2025-11-26)
+
+- improve router - still used function, `#'` in production. stopped them.
+- margin p css/input.css:
+
+```css
+  div  > p {
+    margin: 10px 0 10px 0;
+  }
+```
+
+# 0.4.8 (2025-11-14)
+
+- rearranged panes. headers went to right half, widened comment area.
+- answers in `text-sm`(12pt). looks too small when use `text-sm` to comments.
+* `fake-today` for development - redefine util/now
+
+
+# 0.4.7 (2025-11-13)
+
+- text over wraps next divs. layer - tailwind.css. `whitespace-pre-wrap`
+
+
+# 0.4.6 (2025-11-13)
 
 - include the typed message on the error page shown when exception occurs
 - rearranged answer page

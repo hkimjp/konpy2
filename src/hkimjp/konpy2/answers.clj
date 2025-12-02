@@ -30,23 +30,17 @@
         ]
     (hx
      [:div#answer.my-4.flex.gap-4
-      ; left half, answer
       [:div {:class "w-1/2"}
-       [:div [:span.font-bold "author: "]
-        (if (or (= "chatgpt" author) (= user author))
-          author
-          "******")]
-       [:div [:span.font-bold "same: "] (:same ans)]
-       [:div [:span.font-bold "updated: "] (-> (:updated ans) str iso)]
-       [:pre.border-1.p-2 (:answer ans)]
+       [:pre.text-sm.border-1.p-2.whitespace-pre-wrap (:answer ans)]
        [:div [:a {:class btn
                   ; :href (format "/download/%s/%d/%d" author week num)
                   :href (format "/dl/%d" e)
                   :hx-boost "false"}
               "download"]]]
-      ; right half, comments
       [:div {:class "w-1/2 white"}
-       [:div.box-content.size-16 ""]
+       [:div [:span.font-bold "author: "] author]
+       [:div [:span.font-bold "same: "] (:same ans)]
+       [:div [:span.font-bold "updated: "] (-> (:updated ans) iso)]
        [:div.py-2 [:span.font-bold "comments: "]
         (for [[eid author] (sort-by first comments)]
           [:button.pr-4.hover:underline
@@ -54,11 +48,11 @@
             :hx-target "#comment"
             :hx-swap "innerHTML"}
            author])
-        [:div#comment.mx-4 "[comment]"]]
+        [:div#comment.mx-4.text-base "[comment]"]]
        [:div
         [:div.font-bold "your comment:"]
-        (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" author (local-date))))
-          [:div.mx-4 (format "1日%sコメに達しました。" r/max-comments)]
+        (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" user (local-date))))
+          [:div.mx-4 (format "1日 %d コメに達しました。" r/max-comments)]
           [:div
            [:form {:method "post" :action "/k/comment"}
             (h/raw (anti-forgery-field))
@@ -66,9 +60,10 @@
             [:input {:type "hidden" :name "author" :value author}]
             [:input {:type "hidden" :name "pid" :value p}]
             [:textarea
-             {:class "w-3/4 bg-lime-100 h-40 border-1 p-2"
+             {:class "w-full bg-lime-100 h-40 border-1 p-2"
               :name "comment"
               :placeholder "markdown OK"}]
+            [:br]
             (for [pt ["A" "B" "C"]]
               [:button {:class btn :name "pt" :value pt} pt])]])]]])))
 
@@ -135,36 +130,24 @@
                (format "attachment; filename=\"%s\"" filename)}
      :body  (:answer (ds/pl eid))}))
 
-(comment
-  (ds/pl 2210)
-  (ds/qq week-num-q 2210)
-  (let [[week num] (ds/qq week-num-q 2210)]
-    [week num])
-  (ds/qq week-num-q 2210)
-  (ds/qq '[:find ?e
-           :where
-           [?e :problem/status "yes"]])
-  (dl {:path-params {:eid "2210"}})
-  :rcf)
+#_(def download-q
+    '[:find [?answer]
+      :in $ ?author ?week ?num
+      :where
+      [?e :author ?author]
+      [?e :to ?to]
+      [?to :week ?week]
+      [?to :num ?num]
+      [?e :answer ?answer]
+      [?e :answer/status "yes"]])
 
-(def download-q
-  '[:find [?answer]
-    :in $ ?author ?week ?num
-    :where
-    [?e :author ?author]
-    [?e :to ?to]
-    [?to :week ?week]
-    [?to :num ?num]
-    [?e :answer ?answer]
-    [?e :answer/status "yes"]])
-
-(defn download [{{:keys [author week num]} :path-params}]
-  (t/log! {:level :info :data (:author author :week week :num num)})
-  (let [week (parse-long week)
-        num (parse-long num)
-        [answer] (ds/qq download-q author week num)
-        filename (format "%s_%d_%d.py" author week num)]
-    {:status 200
-     :headers {"Content-Disposition"
-               (format "attachment; filename=\"%s\"" filename)}
-     :body answer}))
+#_(defn download [{{:keys [author week num]} :path-params}]
+    (t/log! {:level :info :data (:author author :week week :num num)})
+    (let [week (parse-long week)
+          num (parse-long num)
+          [answer] (ds/qq download-q author week num)
+          filename (format "%s_%d_%d.py" author week num)]
+      {:status 200
+       :headers {"Content-Disposition"
+                 (format "attachment; filename=\"%s\"" filename)}
+       :body answer}))

@@ -46,6 +46,7 @@ upgrade:
 
 clean:
   rm -rf target
+  rm resources/public/assets/css/output.css
   fd -I bak --exec rm
 
 #
@@ -62,7 +63,7 @@ eq: build
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.4.6'
+VER := '0.4.14'
 
 hub: security manifest
 
