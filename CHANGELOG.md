@@ -9,7 +9,11 @@
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
 
+
 # 0.4.15-SNAPHOT
+
+* short time format "HH:mm" is enough, display login time
+* markdown table
 
 - (ht/format "HH:mm:ss") - use HH for 24hour time format
 - updated libraries

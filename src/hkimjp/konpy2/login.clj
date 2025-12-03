@@ -44,7 +44,7 @@
         (if (and (some? resp) (hashers/check password (get-in resp [:body :password])))
           (do
             (t/log! :info (str "login success: " login))
-            (c/lpush (format "kp2:login:%s" (local-date)) login)
+            (c/lpush (format "kp2:login:%s" (local-date)) login) ;;
             (-> (resp/redirect "/k/tasks")
                 (assoc-in [:session :identity] login)))
           (do
