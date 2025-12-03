@@ -9,7 +9,19 @@
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
 
+# 0.4.17-SNAPSHOT
 
+- input.css:
+
+```css
+  blockquote {
+    display: inline;
+  }
+
+  blockquote > p {
+    display: inline;
+  }
+```
 
 # 0.4.16 (2025-12-03)
 
