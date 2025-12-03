@@ -8,13 +8,13 @@
 * gather carmine calls to `util` namespace,
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
+*
 
 
 # 0.4.15-SNAPHOT
 
-* short time format "HH:mm" is enough, display login time
-* markdown table
-
+- short time format "HH:mm" is enough
+- display login time
 - (ht/format "HH:mm:ss") - use HH for 24hour time format
 - updated libraries
 

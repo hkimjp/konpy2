@@ -1,6 +1,6 @@
 (ns hkimjp.konpy2.tasks
   (:require
-   ; [clojure.string :as str]
+   [clojure.string :as str]
    [hiccup2.core :as h]
    [java-time.api :as jt]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
@@ -8,7 +8,8 @@
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [page hx]]
-   [hkimjp.konpy2.util :refer [btn input-box user week now local-date]]))
+   [hkimjp.konpy2.util :refer
+    [btn input-box user week now local-date HH:mm]]))
 
 (defn- wk
   "今週は授業開始後、第何週か？"
@@ -130,10 +131,8 @@
                 (->> answers
                      (sort-by :e)
                      reverse)]
-            (let [updated (subs (str updated) 11 19)]
+            (let [updated (HH:mm updated)]
               [:li.font-mono
-               #_(format "%d-%d %s %s"
-                         week num updated (color-author author user))
                week "-" num " " updated " " (color-author author user)]))]])))
 
 (defn- todays-comments
@@ -167,11 +166,8 @@
              (->> comments
                   (sort-by :e)
                   reverse)]
-         (let [updated (subs (str updated) 11 19)]
+         (let [updated (HH:mm updated)]
            [:li.font-mono
-            #_(format "%d-%d %s %s → %s" week num updated
-                      (color-author author user)
-                      (color-author commentee user))
             week "-" num " " updated " "
             (color-author author user) " -> " (color-author commentee user)]))]])));
 
@@ -181,4 +177,6 @@
     (hx [:div (format "(%d)" (count logins))
          [:ul.list-disc.mx-4
           (for [login logins]
-            [:li.font-mono (color-author login user)])]])));
+            (let [[login time] (str/split login #"\s")]
+              (println "login " login " time " time)
+              [:li.font-mono time " " (color-author login user)]))]])));
