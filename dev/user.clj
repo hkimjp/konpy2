@@ -26,6 +26,14 @@
 
 ;; (reload/reload)
 
+;; (reload/reload) does not invoke :unload-hook nor :after-reload
+(defn reload []
+  (stop-system)
+  (reload/reload)
+  (start-system))
+
+; (reload)
+
 ; ----------------
 
 ; CHECK: whit this can't?
