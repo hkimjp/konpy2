@@ -11,6 +11,10 @@
 
 
 
+# 0.4.16 (2025-12-03)
+
+- same with 0.4.15
+
 # 0.4.15 (2025-12-03)
 
 - short time format "HH:mm" is enough
