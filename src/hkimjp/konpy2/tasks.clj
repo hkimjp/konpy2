@@ -169,7 +169,7 @@
          (let [updated (HH:mm updated)]
            [:li.font-mono
             week "-" num " " updated " "
-            (color-author author user) " -> " (color-author commentee user)]))]])));
+            (color-author author user) " -> " (color-author commentee user)]))]])))
 
 (defn hx-logins [request]
   (let [user (user request)
@@ -178,5 +178,4 @@
          [:ul.list-disc.mx-4
           (for [login logins]
             (let [[login time] (str/split login #"\s")]
-              (println "login " login " time " time)
-              [:li.font-mono time " " (color-author login user)]))]])));
+              [:li.font-mono time " " (color-author login user)]))]])))

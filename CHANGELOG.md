@@ -8,10 +8,10 @@
 * gather carmine calls to `util` namespace,
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
-*
 
 
-# 0.4.15-SNAPHOT
+
+# 0.4.15 (2025-12-03)
 
 - short time format "HH:mm" is enough
 - display login time
