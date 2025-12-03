@@ -9,7 +9,7 @@
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
 
-# 0.4.17-SNAPSHOT
+# 0.4.17-SNAPSHOT (2025-12-03)
 
 - input.css:
 
