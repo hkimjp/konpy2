@@ -120,34 +120,15 @@
     [?p :week ?week]
     [?p :num ?num]])
 
-(defn dl [{{:keys [eid]} :path-params}]
-  (let [eid (parse-long eid)
+(defn dl [{{:keys [eid]} :path-params :as request}]
+  (let [user (user request)
+        eid (parse-long eid)
         [author week num] (ds/qq author-week-num-q eid)
         filename (format "%s-%d-%d.py" author week num)]
-    (t/log! {:level :info :id "dl" :date {:eid eid}})
+    (t/log! {:level :info
+             :id "dl"
+             :data {:user user :author author :week week :num num}})
     {:status 200
      :headers {"Content-Disposition"
                (format "attachment; filename=\"%s\"" filename)}
      :body  (:answer (ds/pl eid))}))
-
-#_(def download-q
-    '[:find [?answer]
-      :in $ ?author ?week ?num
-      :where
-      [?e :author ?author]
-      [?e :to ?to]
-      [?to :week ?week]
-      [?to :num ?num]
-      [?e :answer ?answer]
-      [?e :answer/status "yes"]])
-
-#_(defn download [{{:keys [author week num]} :path-params}]
-    (t/log! {:level :info :data (:author author :week week :num num)})
-    (let [week (parse-long week)
-          num (parse-long num)
-          [answer] (ds/qq download-q author week num)
-          filename (format "%s_%d_%d.py" author week num)]
-      {:status 200
-       :headers {"Content-Disposition"
-                 (format "attachment; filename=\"%s\"" filename)}
-       :body answer}))
