@@ -9,7 +9,9 @@
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
 
+# 0.4.19 (2025-12-04)
 
+- show sum of answers and comments-sent in scores page.
 
 # 0.4.18 (2025-12-04)
 

@@ -100,8 +100,8 @@
   (let [ans (sort (ds/qq answered user))
         coms (sort (ds/qq sent user))]
     (hx [:div
-         (section ans  "💪" (str user " answered") "peep-answer")
-         (section coms "😃" (str user " comments") "peep-sent")])))
+         (section ans  "💪" (str user " answered(" (count ans) ")") "peep-answer")
+         (section coms "😃" (str user " comments(" (count coms) ")") "peep-sent")])))
 
 (defn scores [request]
   (let [author   (user request)
@@ -115,8 +115,8 @@
       [:p "失った平常点は取り返せない。日頃から取り組まないと平常点がなくなる。"]
       [:p "konpy の出題は週平均6つの予定。一題解いたら3個は他の回答読んでコメントしなさい。"]
       [:br]
-      (section answered "💪" "Your Answers" "answered")
-      (section sent "😃" "Comments Sent" "sent")
+      (section answered "💪" (str "Your Answers(" (count answered) ")") "answered")
+      (section sent "😃" (str "Comments Sent(" (count sent) ")") "sent")
       [:div.font-bold.my-4 "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]
