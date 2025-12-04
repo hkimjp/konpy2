@@ -41,3 +41,6 @@
                    :where
                    [?e]])
 
+; ----------------
+(slurp (io/resource "user.txt"))
+

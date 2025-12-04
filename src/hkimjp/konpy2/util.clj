@@ -42,9 +42,7 @@
   (jt/local-date-time)
   #_(jt/minus (jt/local-date-time) (jt/days 1)))
 
-; (now)
-
-; this willl prefer?
+; preferable?
 (defn local-date []
   (str (jt/local-date)))
 
@@ -59,4 +57,3 @@
   [tm]
   (jt/format "HH:mm" tm))
 
-; (HH:mm (jt/local-date-time))

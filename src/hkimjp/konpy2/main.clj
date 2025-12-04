@@ -4,5 +4,3 @@
 
 (defn -main [& _args]
   (system/start-system))
-
-
