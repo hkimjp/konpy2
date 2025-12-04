@@ -17,7 +17,6 @@
   [["/" {:middleware []}
     ["" {:get login :post login!}]
     ["dl/:eid" {:get answers/dl}]
-    ;["download/:author/:week/:num" {:get answers/download}]
     ["logout" logout!]
     ["help"   {:get help}]]
    ["/admin/" {:middleware [m/wrap-admin]}
