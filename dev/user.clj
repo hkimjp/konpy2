@@ -24,9 +24,9 @@
   :unload-hook 'before-unload
   :after-reload 'start-system})
 
+;; CHECK:(reload/reload) does not invoke :unload-hook nor :after-reload
 ;; (reload/reload)
 
-;; (reload/reload) does not invoke :unload-hook nor :after-reload
 (defn reload []
   (stop-system)
   (reload/reload)
