@@ -4,32 +4,9 @@
    [nextjournal.markdown :as md]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [taoensso.telemere :as t]
-   [hkimjp.datascript :as ds]
+   [hkimjp.konpy2.queries :as q]
    [hkimjp.konpy2.response :refer [page hx]]
    [hkimjp.konpy2.util :refer [user btn]]))
-
-(def ^:private answered
-  '[:find ?e
-    :in $ ?author
-    :where
-    [?e :author ?author]
-    [?e :answer/status "yes"]])
-
-(def ^:private sent
-  '[:find ?e
-    :in $ ?author
-    :where
-    [?e :author ?author]
-    [?e :comment/status "yes"]])
-
-(def ^:private received
-  '[:find ?e ?pt
-    :in $ ?author
-    :where
-    [?e :to ?a]
-    [?a :author ?author]
-    [?e :pt ?pt]
-    [?e :comment/status "yes"]])
 
 (defn- score [sym coll target]
   [:div
@@ -51,7 +28,7 @@
      [:div.mx-4 {:id ABC}]]))
 
 (defn- week-num [e]
-  (let [record (ds/pl e)]
+  (let [record (q/entries e)]
     (t/log! {:level :debug :data record})
     (try
       (if (some? (:week record))
@@ -66,7 +43,7 @@
   [{{:keys [e]} :path-params}]
   (t/log! {:level :info :id "hx-show"})
   (let [e (parse-long e)
-        submit (ds/pl e)]
+        submit (q/entries e)]
     (hx [:div
          [:div [:span.font-bold "problem: "] (week-num e)]
          [:div [:span.font-bold "updated: "] (:updated submit)]
@@ -97,17 +74,17 @@
 
 (defn hx-peep [{{:keys [user]} :params}]
   (t/log! {:level :info :id "hx-peep" :data user})
-  (let [ans (sort (ds/qq answered user))
-        coms (sort (ds/qq sent user))]
+  (let [ans  (sort (q/answers user))
+        coms (sort (q/sent user))]
     (hx [:div
-         (section ans  "💪" (str user " answered") "peep-answer")
-         (section coms "😃" (str user " comments") "peep-sent")])))
+         (section ans  "💪" (str user " answered(" (count ans) ")") "peep-answer")
+         (section coms "😃" (str user " comments(" (count coms) ")") "peep-sent")])))
 
 (defn scores [request]
   (let [author   (user request)
-        answered (sort (ds/qq answered author))
-        sent     (sort (ds/qq sent author))
-        received (sort (ds/qq received author))]
+        answered (sort (q/answers author))
+        sent     (sort (q/sent author))
+        received (sort (q/received author))]
     (t/log! {:level :info :msg (str "scores " author)})
     (page
      [:div.m-4
@@ -115,8 +92,8 @@
       [:p "失った平常点は取り返せない。日頃から取り組まないと平常点がなくなる。"]
       [:p "konpy の出題は週平均6つの予定。一題解いたら3個は他の回答読んでコメントしなさい。"]
       [:br]
-      (section answered "💪" "Your Answers" "answered")
-      (section sent "😃" "Comments Sent" "sent")
+      (section answered "💪" (str "Your Answers(" (count answered) ")") "answered")
+      (section sent "😃" (str "Comments Sent(" (count sent) ")") "sent")
       [:div.font-bold.my-4 "Comments Received"]
       [:div.mx-4
        (for [sc ["A" "B" "C"]]

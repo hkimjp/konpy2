@@ -25,15 +25,12 @@
         comments (ds/qq comments-q e)
         ans (ds/pl e)
         author (:author ans)
-        p (parse-long p)
-        ; {:keys [week num]} (ds/pl '[:week :num] p)
-        ]
+        p (parse-long p)]
     (hx
      [:div#answer.my-4.flex.gap-4
       [:div {:class "w-1/2"}
        [:pre.text-sm.border-1.p-2.whitespace-pre-wrap (:answer ans)]
        [:div [:a {:class btn
-                  ; :href (format "/download/%s/%d/%d" author week num)
                   :href (format "/dl/%d" e)
                   :hx-boost "false"}
               "download"]]]
