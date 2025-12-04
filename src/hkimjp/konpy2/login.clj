@@ -8,7 +8,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
-   [hkimjp.konpy2.util :refer [user btn local-date]]
+   [hkimjp.konpy2.util :refer [user btn local-date now HH:mm]]
    [hkimjp.konpy2.response :refer [page]]))
 
 (def l22 (or (env :auth) "https://l22.melt.kyutech.ac.jp"))
@@ -44,7 +44,8 @@
         (if (and (some? resp) (hashers/check password (get-in resp [:body :password])))
           (do
             (t/log! :info (str "login success: " login))
-            (c/lpush (format "kp2:login:%s" (local-date)) login)
+            (c/lpush (format "kp2:login:%s" (local-date))
+                     (str login " " (HH:mm (now)))) ;;
             (-> (resp/redirect "/k/tasks")
                 (assoc-in [:session :identity] login)))
           (do

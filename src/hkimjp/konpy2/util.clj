@@ -53,7 +53,10 @@
 
 (defn iso
   [tm]
-  (jt/format "YYYY-MM-dd hh-mm-ss" tm))
+  (jt/format "YYYY-MM-dd HH:mm:ss" tm))
 
-(jt/format "YYYY-MM-dd hh:mm:ss" (jt/local-date-time))
+(defn HH:mm
+  [tm]
+  (jt/format "HH:mm" tm))
 
+; (HH:mm (jt/local-date-time))

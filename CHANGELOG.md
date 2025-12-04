@@ -10,6 +10,43 @@
 * links to answers - easy if use hx, but not follow the original intent.
 
 
+
+# 0.4.18 (2025-12-04)
+
+- input.css:
+
+```css
+  blockquote {
+    display: inline;
+  }
+
+  blockquote > p {
+    display: inline;
+  }
+```
+
+# 0.4.17 (2025-12-03)
+
+- fixed typo in download.clj
+- removed endpoint `/download` and its handler
+
+# 0.4.16 (2025-12-03)
+
+- same with 0.4.15
+
+# 0.4.15 (2025-12-03)
+
+- short time format "HH:mm" is enough
+- display login time
+- (ht/format "HH:mm:ss") - use HH for 24hour time format
+- updated libraries
+
+| :file    | :name                          | :current | :latest |
+|----------|--------------------------------|----------|---------|
+| deps.edn | io.github.nextjournal/markdown | 0.7.213  | 0.7.222 |
+
+- fixed the command line to invoke `ruff`
+
 # 0.4.13 (2025-11-30)
 
 - renamed endpoint `/k/tasks/konpy` -> `/k/tasks/tasks`

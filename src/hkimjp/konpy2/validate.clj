@@ -79,9 +79,8 @@
   (let [f (create-tempfile-with (str answer "\n"))
         ret (timeout-sh
              timeout
-             ;; 0.13.*
-             ;; (ruff-path "format" "--diff" (str (fs/file f)))
-             ruff-path "-q" "format" (str (fs/file f)))]
+             ;; 0.14.7
+             ruff-path "-q" "format" "--check" (str (fs/file f)))]
     (if (zero? (:exit ret))
       (fs/delete f)
       (throw (Exception. "using VScode/Ruff?")))))

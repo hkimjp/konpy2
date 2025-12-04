@@ -73,12 +73,12 @@
 
 (defn- problems-section []
   (let [get-problems
-        '[:find ?e ?status ?week ?num ?problem ?testcode ?updated
-          :keys e  status  week  num  problem  testcode  updated
+        '[:find ?e ?week ?num ?problem ?testcode ?updated
+          :keys e  week  num  problem  testcode  updated
           :where
           [?e :week ?week]
           [?e :num ?num]
-          [?e :problem/status ?status]
+          [?e :problem/status "yes"]
           [?e :problem ?problem]
           [?e :testcode ?testcode]
           [?e :updated ?updated]]]
@@ -93,6 +93,7 @@
           [:a.hover:underline {:href (str "/admin/update/" (:e p))}
            [:div.flex.gap-4
             [:div (:week p) "-" (:num p)]
+            #_[:div (:status p)]
             [:div {:class "w-2/3"} (-> (:problem p)  (first-n 40))]
             [:div {:class "w-1/4"} (-> (:testcode p) (first-n 20))]]]])]]]))
 
