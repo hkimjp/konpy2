@@ -8,6 +8,7 @@
 * gather carmine calls to `util` namespace,
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
+* counts answers and comments-sent
 
 # 0.4.17 (2025-12-03)
 
