@@ -3,12 +3,18 @@
 * admin/toggle-status
 * effective upsert. update only changed elements
 * reports who uploads now(SSE)
-* admin can see his/her answers/comments
 * dialog to enter comments
 * gather carmine calls to `util` namespace,
 * place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
+* hover -> dialog. CLJS?
 * counts answers and comments-sent
+
+
+# 0.5.0-SNAPSHOT
+
+- updated clojure 1.2.3 -> 1.2.4
+- updated telemere 1.1.0 -> 1.2.0
 
 # 0.4.19 (2025-12-04)
 
