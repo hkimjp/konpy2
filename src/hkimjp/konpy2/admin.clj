@@ -203,9 +203,6 @@
     [?e :week ?week]
     [?e :num ?num]])
 
-; (ds/qq eid-q "hkimura" (parse-long "5") (parse-long "5"))
-; (ds/pl [:answer] 2260)
-
 (defn eid [{{:keys [author week num]} :params :as request}]
   (t/log! {:level :info :id "eid"
            :data (dissoc (:params request) :__anti-forgery-token)})
