@@ -15,6 +15,7 @@
 
 - updated clojure 1.2.3 -> 1.2.4
 - updated telemere 1.1.0 -> 1.2.0
+- replaced hato with http-kit
 
 # 0.4.19 (2025-12-04)
 
