@@ -3,7 +3,6 @@
    [buddy.hashers :as hashers]
    [charred.api :as charred]
    [environ.core :refer [env]]
-   ; [hato.client :as hc]
    [hiccup2.core :as h]
    [org.httpkit.client :as hk-client]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
