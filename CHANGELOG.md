@@ -11,7 +11,7 @@
 * counts answers and comments-sent
 
 
-# 0.5.0-SNAPSHOT (2025-12-14)
+# 0.5.0 (2025-12-16) (2025-12-14)
 
 - div left half:right half = 3/5:2/5
 - updated clojure 1.2.3 -> 1.2.4
