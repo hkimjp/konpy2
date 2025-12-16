@@ -11,7 +11,7 @@
 * counts answers and comments-sent
 
 
-# 0.5.0-SNAPSHOT (2025-12-13)
+# 0.5.0-SNAPSHOT (2025-12-14) (2025-12-13)
 
 - updated clojure 1.2.3 -> 1.2.4
 - updated telemere 1.1.0 -> 1.2.0
