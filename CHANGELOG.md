@@ -11,7 +11,11 @@
 * counts answers and comments-sent
 
 
-# 0.5.0 (2025-12-16) (2025-12-14)
+# 0.5.1-SNAPSHOT
+
+- updated `expand-include` -- append "\n\n" to extracted answers.
+
+# 0.5.0 (2025-12-16)
 
 - div left:right=1:1 => 3:2
 - updated clojure 1.2.3 -> 1.2.4

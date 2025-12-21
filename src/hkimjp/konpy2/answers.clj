@@ -84,7 +84,7 @@
           entry    (ds/pl e)
           testcode (:testcode entry)
           doctest  (empty? (:doctest entry))
-          _        (t/log! :debug (str "doctest " doctest))
+          _        (t/log! :debug (str "doctest? " doctest))
           dgst     (digest answer)
           same     (->> (ds/qq same-answers dgst)
                         (map first)
