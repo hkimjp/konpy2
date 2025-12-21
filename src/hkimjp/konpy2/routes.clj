@@ -18,7 +18,9 @@
     ["" {:get login :post login!}]
     ["dl/:eid" {:get answers/dl}]
     ["logout" logout!]
-    ["help"   {:get help}]]
+    ["help"   {:get help}]
+    ["stats" {:get {:middleware [[m/wrap-admin] wrap-stats]
+                    :handler (fn [_] {:status 200 :body ""})}}]]
    ["/admin/" {:middleware [m/wrap-admin]}
     [""           {:get admin/admin}]
     ["new"        {:get admin/new  :post admin/upsert!}]
@@ -57,8 +59,7 @@
       :not-acceptable
       (constantly {:status 406
                    :body "not acceptable"})}))
-   {:middleware [[wrap-defaults site-defaults]
-                 wrap-stats]}))
+   {:middleware [[wrap-defaults site-defaults]]}))
 
 ; (root-handler {:uri "/admin/eid" :request-method "post"})
 ; site-defaults

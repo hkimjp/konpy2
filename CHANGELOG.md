@@ -10,6 +10,9 @@
 * hover -> dialog. CLJS?
 * counts answers and comments-sent
 
+# 0.6.1-SNAPSHOT
+
+- admin only /stats
 
 # 0.6.0 (2025-12-22)
 
