@@ -11,6 +11,10 @@
 * counts answers and comments-sent
 
 
+# 0.6.0 (2025-12-22)
+
+- clj-simple-stats
+
 # 0.5.1 (2025-12-21)
 
 - updated `expand-include` -- append "\n\n" to extracted answers.

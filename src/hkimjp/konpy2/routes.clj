@@ -1,5 +1,6 @@
 (ns hkimjp.konpy2.routes
   (:require
+   [clj-simple-stats.core :refer [wrap-stats]]
    [reitit.ring :as rr]
    [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
    [hkimjp.konpy2.middleware :as m]
@@ -56,6 +57,8 @@
       :not-acceptable
       (constantly {:status 406
                    :body "not acceptable"})}))
-   {:middleware [[wrap-defaults site-defaults]]}))
+   {:middleware [[wrap-defaults site-defaults]
+                 wrap-stats]}))
 
 ; (root-handler {:uri "/admin/eid" :request-method "post"})
+; site-defaults
