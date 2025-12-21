@@ -11,7 +11,7 @@
 * counts answers and comments-sent
 
 
-# 0.6.0-SNAPSHOT
+# 0.6.0 (2025-12-22)
 
 - clj-simple-stats
 
