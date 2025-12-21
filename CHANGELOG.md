@@ -11,7 +11,7 @@
 * counts answers and comments-sent
 
 
-# 0.5.1-SNAPSHOT
+# 0.5.1 (2025-12-21)
 
 - updated `expand-include` -- append "\n\n" to extracted answers.
 
