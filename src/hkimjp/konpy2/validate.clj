@@ -18,33 +18,42 @@
 (def pytest-path
   (or (env :pytest-path) "/usr/bin/pytest"))
 
+(def last-answer-q
+  '[:find ?a ?answer
+    :in $ ?author ?week ?num
+    :where
+    [?e :problem/status _]
+    [?e :week ?week]
+    [?e :num ?num]
+    [?a :answer/status "yes"]
+    [?a :author ?author]
+    [?a :answer ?answer]
+    [?a :to ?e]])
+
+(comment
+  (->> (ds/qq last-answer-q "hkimura" 11 9)
+       (sort-by first)
+       last
+       second)
+  (get-last-answer "hkimura" 11 9)
+  :rcf)
+
 (defn- get-last-answer [author week num]
   (t/log! {:level :debug
            :id "get-last-answer"
            :data {:author author :week week :num num}})
-  (let [fetch-answers
-        '[:find ?a ?answer
-          :in $ ?author ?week ?num
-          :where
-          [?e :problem/status _]
-          [?e :week ?week]
-          [?e :num ?num]
-          [?a :answer/status "yes"]
-          [?a :author ?author]
-          [?a :answer ?answer]
-          [?a :to ?e]]]
-    (try
-      (->> (ds/qq fetch-answers author week num)
-           (sort-by first)
-           last
-           second)
-      (catch Exception e
-        (t/log! {:level :error
-                 :id "get-last-answer"
-                 :msg (.getMessage e)})))))
+  (try
+    (->> (ds/qq last-answer-q author week num)
+         (sort-by first)
+         last
+         second)
+    (catch Exception e
+      (t/log! {:level :error
+               :id "get-last-answer"
+               :msg (.getMessage e)}))))
 
 (defn- expand-includes
-  "expand `#include` recursively."
+  "expand `#include` or `from kpn_m` recursively."
   [author answer]
   (t/log! :debug "expand-inludes")
   (try
@@ -56,7 +65,8 @@
                     (re-matches #"from\s*(kp)*(\d+)_(\d+).*" line))]
          (expand-includes
           author
-          (get-last-answer author (parse-long w) (parse-long n)))
+          ;; 2025-12-21
+          (str (get-last-answer author (parse-long w) (parse-long n)) "\n\n"))
          line)))
     (catch Exception e
       (t/log! {:level :warn :id "expand-includes" :msg (.getMessage e)})

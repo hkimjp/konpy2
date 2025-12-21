@@ -11,9 +11,13 @@
 * counts answers and comments-sent
 
 
-# 0.5.0 (2025-12-16) (2025-12-14)
+# 0.5.1 (2025-12-21)
 
-- div left half:right half = 3/5:2/5
+- updated `expand-include` -- append "\n\n" to extracted answers.
+
+# 0.5.0 (2025-12-16)
+
+- div left:right=1:1 => 3:2
 - updated clojure 1.2.3 -> 1.2.4
 - updated telemere 1.1.0 -> 1.2.0
 - replaced hato with http-kit
