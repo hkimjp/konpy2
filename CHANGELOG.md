@@ -12,7 +12,7 @@
 
 # 0.6.1-SNAPSHOT (2025-12-22)
 
-- admin only /stats
+- admin only /stats - does not go well?
 
 # 0.6.0 (2025-12-22)
 
