@@ -19,8 +19,8 @@
     ["dl/:eid" {:get answers/dl}]
     ["logout" logout!]
     ["help"   {:get help}]
-    #_["stats" {:get {:middleware [m/wrap-admin wrap-stats]
-                      :handler (fn [_] {:status 200 :body ""})}}]]
+    ["stats" {:get {:middleware [m/wrap-admin wrap-stats]
+                    :handler (fn [_] {:status 200 :body ""})}}]]
    ["/admin/" {:middleware [m/wrap-admin]}
     [""           {:get admin/admin}]
     ["new"        {:get admin/new  :post admin/upsert!}]
