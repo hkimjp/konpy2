@@ -10,9 +10,9 @@
 * hover -> dialog. CLJS?
 * counts answers and comments-sent
 
-# 0.6.1-SNAPSHOT (2025-12-22)
+# 0.6.2 (2025-12-22) (2025-12-22)
 
-- admin only /stats - does not go well?
+- admin only /stats - does not go well. `/stats` returns before router.
 
 # 0.6.0 (2025-12-22)
 
