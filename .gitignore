@@ -38,3 +38,4 @@ resources/public/assets/css/output.css
 !/storage/.keep
 /systemd
 __pycache__
+clj_simple_stats.duckdb

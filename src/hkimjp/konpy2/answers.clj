@@ -28,13 +28,13 @@
         p (parse-long p)]
     (hx
      [:div#answer.my-4.flex.gap-4
-      [:div {:class "w-1/2"}
+      [:div {:class "w-3/5"}
        [:pre.text-sm.border-1.p-2.whitespace-pre-wrap (:answer ans)]
        [:div [:a {:class btn
                   :href (format "/dl/%d" e)
                   :hx-boost "false"}
               "download"]]]
-      [:div {:class "w-1/2 white"}
+      [:div {:class "w-2/5 white"}
        [:div [:span.font-bold "author: "] author]
        [:div [:span.font-bold "same: "] (:same ans)]
        [:div [:span.font-bold "updated: "] (-> (:updated ans) iso)]
@@ -84,7 +84,7 @@
           entry    (ds/pl e)
           testcode (:testcode entry)
           doctest  (empty? (:doctest entry))
-          _        (t/log! :debug (str "doctest " doctest))
+          _        (t/log! :debug (str "doctest? " doctest))
           dgst     (digest answer)
           same     (->> (ds/qq same-answers dgst)
                         (map first)
