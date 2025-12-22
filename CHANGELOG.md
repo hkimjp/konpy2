@@ -2,15 +2,13 @@
 
 * admin/toggle-status
 * effective upsert. update only changed elements
-* reports who uploads now(SSE)
 * dialog to enter comments
 * gather carmine calls to `util` namespace,
-* place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
-* hover -> dialog. CLJS?
-* counts answers and comments-sent
+* change CSS hover to dialog. CLJS?
 
-# 0.6.2 (2025-12-22) (2025-12-22)
+
+# 0.6.2 (2025-12-22)
 
 - admin only /stats - does not go well. `/stats` returns before router.
 
