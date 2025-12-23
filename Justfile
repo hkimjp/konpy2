@@ -62,7 +62,7 @@ clean:
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.6.0'
+VER := '0.7.0'
 
 hub: security manifest
 
