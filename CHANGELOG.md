@@ -11,8 +11,6 @@
 
 - winter vacation menu, `all` -- display answered as ⭕️, and not yet as ✖️.
 
-# 0.6.1 (2025-12-22)
-
 # 0.6.2 (2025-12-22)
 
 - admin only /stats - does not go well. `/stats` returns before router.
