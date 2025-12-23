@@ -10,7 +10,7 @@
 * hover -> dialog. CLJS?
 * counts answers and comments-sent
 
-# 0.7.0-SNAPSHOT
+# 0.7.0 (2025-12-23)
 
 - winter vacation menu, `all` -- display answered as ⭕️, and not yet as ✖️.
 
