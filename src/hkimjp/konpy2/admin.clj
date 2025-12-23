@@ -171,6 +171,7 @@
   (t/log! {:level :info :id "problems" :msg (user request)})
   (page
    [:div.m-4
+    [:p [:a.hover:underline {:href "/stats"} "stats"]]
     (problems-section)
     [:br]
     (delete-section)
