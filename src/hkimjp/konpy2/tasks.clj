@@ -50,6 +50,34 @@
        (hx-component "/k/hx-comments" "comments" "コメント")
        (hx-component "/k/hx-logins" "logins" "ログイン")]])))
 
+;; winter vacation
+(def fetch-problems-all
+  '[:find ?e ?week ?num ?problem
+    :keys e  week  num  problem
+    :where
+    [?e :problem/status "yes"]
+    [?e :week ?week]
+    [?e :num ?num]
+    [?e :problem ?problem]])
+
+(comment
+  (->> (ds/qq fetch-problems-all)
+       (sort-by (juxt :week :num)))
+  :rcf)
+
+(defn tasks-all [_request]
+  (page
+   [:div.m-4
+    [:div "winter special: problems all"]
+    (into [:div.m-4]
+          (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems-all)
+                                                  (sort-by (juxt :week :num)))]
+            [:div
+             [:a.hover:underline
+              {:href (str "/k/problem/" e)}
+              [:span.mr-4 week "-" num] [:span problem]]]))]))
+
+;;
 (defn- answerers [pid author]
   (t/log! {:level :debug :id "answerers" :msg (str "pid " pid)})
   (let [fetch-answers '[:find ?e ?author

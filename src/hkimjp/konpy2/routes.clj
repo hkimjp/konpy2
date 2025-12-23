@@ -41,7 +41,8 @@
     ["scores/peep"  {:post scores/hx-peep}]
     ["stock/:e"     {:get stocks/stock}]
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
-    ["tasks"        {:get tasks/tasks}]]])
+    ["tasks"        {:get tasks/tasks}]
+    ["tasks-all"    {:get tasks/tasks-all}]]])
 
 (def root-handler
   (rr/ring-handler
