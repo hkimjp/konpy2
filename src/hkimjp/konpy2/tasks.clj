@@ -60,22 +60,41 @@
     [?e :num ?num]
     [?e :problem ?problem]])
 
+(def answered-q
+  '[:find [?pid ...]
+    :in $ ?author
+    :where
+    [?e :author ?author]
+    [?e :answer/status "yes"]
+    [?e :to ?pid]])
+
 (comment
   (->> (ds/qq fetch-problems-all)
        (sort-by (juxt :week :num)))
+  (ds/qq answered-q "tue2")
+  (let [author "tue2"]
+    (ds/qq answered-q  author))
   :rcf)
 
-(defn tasks-all [_request]
-  (page
-   [:div.m-4
-    [:div "winter special: problems all"]
-    (into [:div.m-4]
-          (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems-all)
-                                                  (sort-by (juxt :week :num)))]
-            [:div
-             [:a.hover:underline
-              {:href (str "/k/problem/" e)}
-              [:span.mr-4 week "-" num] [:span problem]]]))]))
+(defn tasks-all [request]
+  (let [author   (user request)
+        answered (set (ds/qq answered-q author))]
+    (t/log! {:level :debug
+             :id "tasks-all"
+             :data {:author author :answered answered}})
+    (page
+     [:div.m-4
+      [:div "winter special: problems all"]
+      (into [:div.m-4]
+            (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems-all)
+                                                    (sort-by (juxt :week :num)))]
+              [:div
+               (if (answered e)
+                 "⭕️ "
+                 "✖️ ")
+               [:a.hover:underline
+                {:href (str "/k/problem/" e)}
+                [:span.mr-4 week "-" num] [:span problem]]]))])))
 
 ;;
 (defn- answerers [pid author]
