@@ -7,6 +7,10 @@
 * links to answers - easy if use hx, but not follow the original intent.
 * change CSS hover to dialog. CLJS?
 
+# 0.7.1-SNAPSHOT
+
+- return to normal version. winter vacation is over.
+
 # 0.7.0 (2025-12-23)
 
 - winter vacation menu, `all` -- display answered as ⭕️, and not yet as ✖️.

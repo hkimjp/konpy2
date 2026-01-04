@@ -1,6 +1,6 @@
 (ns hkimjp.konpy2.routes
   (:require
-   ; [clj-simple-stats.core :refer [wrap-stats]]
+   [clj-simple-stats.core :refer [wrap-stats]]
    [reitit.ring :as rr]
    [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
    [hkimjp.konpy2.middleware :as m]
@@ -42,7 +42,7 @@
     ["stock/:e"     {:get stocks/stock}]
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
     ["tasks"        {:get tasks/tasks}]
-    ["tasks-all"    {:get tasks/tasks-all}]]])
+    #_["tasks-all"    {:get tasks/tasks-all}]]])
 
 (def root-handler
   (rr/ring-handler
@@ -60,7 +60,7 @@
       :not-acceptable
       (constantly {:status 406
                    :body "not acceptable"})}))
-   {:middleware [; wrap-stats
+   {:middleware [wrap-stats
                  [wrap-defaults site-defaults]]}))
 
 ; (root-handler {:uri "/admin/eid" :request-method "post"})
