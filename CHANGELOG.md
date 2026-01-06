@@ -7,6 +7,11 @@
 * links to answers - easy if use hx, but not follow the original intent.
 * change CSS hover to dialog. CLJS?
 
+# 0.7.3-SNAPSHOT
+
+- ring/ring-devel
+- `<div#com-{e}>` inside `<ul>` for hx outputs
+
 # 0.7.2 (2026-01-06)
 
 - peep selected comments
