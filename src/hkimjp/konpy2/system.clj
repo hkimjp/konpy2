@@ -2,6 +2,7 @@
   (:require
    [environ.core :refer [env]]
    [org.httpkit.server :as hk]
+   [ring.middleware.reload :refer [wrap-reload]]
    [taoensso.telemere :as t]
    [hkimjp.konpy2.routes :as routes]
    [hkimjp.carmine :as c]
@@ -12,7 +13,7 @@
 (defn start-server []
   (let [port (parse-long (or (env :port) "3000"))
         handler (if (some? (env :develop))
-                  #'routes/root-handler
+                  (wrap-reload #'routes/root-handler)
                   routes/root-handler)]
     (reset! server (hk/run-server handler {:port port :join? false}))
     (t/log! :info (str "server started at port " port))))

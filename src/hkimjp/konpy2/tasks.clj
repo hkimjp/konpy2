@@ -67,14 +67,6 @@
     [?e :answer/status "yes"]
     [?e :to ?pid]])
 
-(comment
-  (->> (ds/qq fetch-problems-all)
-       (sort-by (juxt :week :num)))
-  (ds/qq answered-q "tue2")
-  (let [author "tue2"]
-    (ds/qq answered-q  author))
-  :rcf)
-
 (defn tasks-all [request]
   (let [author   (user request)
         answered (set (ds/qq answered-q author))]
@@ -95,7 +87,6 @@
                 {:href (str "/k/problem/" e)}
                 [:span.mr-4 week "-" num] [:span problem]]]))])))
 
-;;
 (defn- answerers [pid author]
   (t/log! {:level :debug :id "answerers" :msg (str "pid " pid)})
   (let [fetch-answers '[:find ?e ?author
@@ -216,11 +207,11 @@
           (let [updated (HH:mm updated)]
             [:li.font-mono
              [:a.hover:underline {:hx-get (str "/k/comment/" e)
-                                  :hx-target "#com"
+                                  :hx-target (str "#com-" e)
                                   :hx-swap "innerHTML"}
-              week "-" num " " updated " "]
-             (color-author author user) " -> " (color-author commentee user)]))]]
-      [:div#com {:class "max-w-80"} ""]])))
+              week "-" num " " updated " "
+              (color-author author user) " -> " (color-author commentee user)]
+             [:div {:id (str "com-" e) :class "w-96"} ""]]))]]])))
 
 (defn hx-logins [request]
   (let [user (user request)
