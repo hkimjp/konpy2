@@ -7,6 +7,10 @@
 * links to answers - easy if use hx, but not follow the original intent.
 * change CSS hover to dialog. CLJS?
 
+# 0.7.2 (2026-01-06)
+
+- peep selected comments
+
 # 0.7.1 (2026-01-05)
 
 - return to normal version. winter vacation is over.
