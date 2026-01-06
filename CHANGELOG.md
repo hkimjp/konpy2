@@ -7,7 +7,7 @@
 * links to answers - easy if use hx, but not follow the original intent.
 * change CSS hover to dialog. CLJS?
 
-# 0.7.2-SNAPSHOT
+# 0.7.2 (2026-01-06)
 
 - peep selected comments
 
