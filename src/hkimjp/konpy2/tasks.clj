@@ -24,7 +24,6 @@
     [:span.font-bold title]]
    [:div {:id target}]])
 
-; ranamed
 (defn tasks [request]
   (t/log! {:level :info :msg (str "tasks/tasks " (user request))})
   (let [fetch-problems '[:find ?e ?week ?num ?problem
@@ -206,17 +205,22 @@
         comments (todays-comments)]
     (t/log! {:level :info :id "hx-comments" :msg user})
     (hx
-     [:div
-      [:div (format "(%d)" (count comments))]
-      [:ul.list-disc.mx-4
-       (for [{:keys [week num author updated commentee]}
-             (->> comments
-                  (sort-by :e)
-                  reverse)]
-         (let [updated (HH:mm updated)]
-           [:li.font-mono
-            week "-" num " " updated " "
-            (color-author author user) " -> " (color-author commentee user)]))]])))
+     [:div.flex
+      [:div
+       [:div (format "(%d)" (count comments))]
+       [:ul.list-disc.mx-4
+        (for [{:keys [week num author updated commentee e]}
+              (->> comments
+                   (sort-by :e)
+                   reverse)]
+          (let [updated (HH:mm updated)]
+            [:li.font-mono
+             [:a.hover:underline {:hx-get (str "/k/comment/" e)
+                                  :hx-target "#com"
+                                  :hx-swap "innerHTML"}
+              week "-" num " " updated " "]
+             (color-author author user) " -> " (color-author commentee user)]))]]
+      [:div#com {:class "max-w-80"} ""]])))
 
 (defn hx-logins [request]
   (let [user (user request)
