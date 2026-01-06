@@ -11,6 +11,7 @@
 
 - ring/ring-devel
 - `<div#com-{e}>` inside `<ul>` for hx outputs
+- add dependency `ring/ring-devel`, `(wrap-reload #'handler)`
 
 # 0.7.2 (2026-01-06)
 
