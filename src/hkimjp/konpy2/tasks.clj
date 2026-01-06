@@ -24,7 +24,6 @@
     [:span.font-bold title]]
    [:div {:id target}]])
 
-; ranamed
 (defn tasks [request]
   (t/log! {:level :info :msg (str "tasks/tasks " (user request))})
   (let [fetch-problems '[:find ?e ?week ?num ?problem
@@ -50,6 +49,53 @@
        (hx-component "/k/hx-comments" "comments" "コメント")
        (hx-component "/k/hx-logins" "logins" "ログイン")]])))
 
+;; winter vacation
+(def fetch-problems-all
+  '[:find ?e ?week ?num ?problem
+    :keys e  week  num  problem
+    :where
+    [?e :problem/status "yes"]
+    [?e :week ?week]
+    [?e :num ?num]
+    [?e :problem ?problem]])
+
+(def answered-q
+  '[:find [?pid ...]
+    :in $ ?author
+    :where
+    [?e :author ?author]
+    [?e :answer/status "yes"]
+    [?e :to ?pid]])
+
+(comment
+  (->> (ds/qq fetch-problems-all)
+       (sort-by (juxt :week :num)))
+  (ds/qq answered-q "tue2")
+  (let [author "tue2"]
+    (ds/qq answered-q  author))
+  :rcf)
+
+(defn tasks-all [request]
+  (let [author   (user request)
+        answered (set (ds/qq answered-q author))]
+    (t/log! {:level :debug
+             :id "tasks-all"
+             :data {:author author :answered answered}})
+    (page
+     [:div.m-4
+      [:div "winter special: problems all"]
+      (into [:div.m-4]
+            (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems-all)
+                                                    (sort-by (juxt :week :num)))]
+              [:div
+               (if (answered e)
+                 "⭕️ "
+                 "✖️ ")
+               [:a.hover:underline
+                {:href (str "/k/problem/" e)}
+                [:span.mr-4 week "-" num] [:span problem]]]))])))
+
+;;
 (defn- answerers [pid author]
   (t/log! {:level :debug :id "answerers" :msg (str "pid " pid)})
   (let [fetch-answers '[:find ?e ?author
@@ -159,17 +205,22 @@
         comments (todays-comments)]
     (t/log! {:level :info :id "hx-comments" :msg user})
     (hx
-     [:div
-      [:div (format "(%d)" (count comments))]
-      [:ul.list-disc.mx-4
-       (for [{:keys [week num author updated commentee]}
-             (->> comments
-                  (sort-by :e)
-                  reverse)]
-         (let [updated (HH:mm updated)]
-           [:li.font-mono
-            week "-" num " " updated " "
-            (color-author author user) " -> " (color-author commentee user)]))]])))
+     [:div.flex
+      [:div
+       [:div (format "(%d)" (count comments))]
+       [:ul.list-disc.mx-4
+        (for [{:keys [week num author updated commentee e]}
+              (->> comments
+                   (sort-by :e)
+                   reverse)]
+          (let [updated (HH:mm updated)]
+            [:li.font-mono
+             [:a.hover:underline {:hx-get (str "/k/comment/" e)
+                                  :hx-target "#com"
+                                  :hx-swap "innerHTML"}
+              week "-" num " " updated " "]
+             (color-author author user) " -> " (color-author commentee user)]))]]
+      [:div#com {:class "max-w-80"} ""]])))
 
 (defn hx-logins [request]
   (let [user (user request)

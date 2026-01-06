@@ -1,8 +1,8 @@
 (ns hkimjp.konpy2.routes
   (:require
+   [clj-simple-stats.core :refer [wrap-stats]]
    [reitit.ring :as rr]
    [ring.middleware.defaults :refer [wrap-defaults site-defaults]]
-   ; [taoensso.telemere :as t]
    [hkimjp.konpy2.middleware :as m]
    [hkimjp.konpy2.admin :as admin]
    [hkimjp.konpy2.answers :as answers]
@@ -18,7 +18,9 @@
     ["" {:get login :post login!}]
     ["dl/:eid" {:get answers/dl}]
     ["logout" logout!]
-    ["help"   {:get help}]]
+    ["help"   {:get help}]
+    #_["stats" {:get {:middleware [m/wrap-admin wrap-stats]
+                      :handler (fn [_] {:status 200 :body ""})}}]]
    ["/admin/" {:middleware [m/wrap-admin]}
     [""           {:get admin/admin}]
     ["new"        {:get admin/new  :post admin/upsert!}]
@@ -39,7 +41,8 @@
     ["scores/peep"  {:post scores/hx-peep}]
     ["stock/:e"     {:get stocks/stock}]
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
-    ["tasks"        {:get tasks/tasks}]]])
+    ["tasks"        {:get tasks/tasks}]
+    #_["tasks-all"    {:get tasks/tasks-all}]]])
 
 (def root-handler
   (rr/ring-handler
@@ -57,6 +60,8 @@
       :not-acceptable
       (constantly {:status 406
                    :body "not acceptable"})}))
-   {:middleware [[wrap-defaults site-defaults]]}))
+   {:middleware [wrap-stats
+                 [wrap-defaults site-defaults]]}))
 
 ; (root-handler {:uri "/admin/eid" :request-method "post"})
+; site-defaults

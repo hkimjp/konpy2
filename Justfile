@@ -30,6 +30,13 @@ run:
 build: minify
  clojure -T:build ci
 
+STAGE :="eq.local"
+
+stage: build
+  # scp compose-prod.yml {{STAGE}}:konpy2/compose.yml
+  scp target/io.github.hkimjp/konpy2-*.jar {{STAGE}}:konpy2/konpy2.jar
+  ssh {{STAGE}} 'cd konpy2 && docker compose down && docker compose up -d'
+
 deploy: minify build
   scp target/io.github.hkimjp/konpy2-*.jar ${DEST}:konpy2/konpy.jar
   ssh ${DEST} 'sudo systemctl restart konpy'
@@ -49,21 +56,13 @@ clean:
   rm resources/public/assets/css/output.css
   fd -I bak --exec rm
 
-#
-# test on eq.local
-#
-
-eq: build
-  # scp compose-prod.yml eq.local:konpy2/compose.yml
-  scp target/io.github.hkimjp/konpy2-*.jar eq.local:konpy2/konpy2.jar
-  ssh eq.local 'cd konpy2 && docker compose down && docker compose up -d'
 
 #
 # docker container
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.4.17'
+VER := '0.7.2'
 
 hub: security manifest
 

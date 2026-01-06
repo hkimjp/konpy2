@@ -2,14 +2,61 @@
 
 * admin/toggle-status
 * effective upsert. update only changed elements
-* reports who uploads now(SSE)
-* admin can see his/her answers/comments
 * dialog to enter comments
 * gather carmine calls to `util` namespace,
-* place objects center verticaly
 * links to answers - easy if use hx, but not follow the original intent.
+* change CSS hover to dialog. CLJS?
 
-# 0.4.17 (2025-12-04)
+# 0.7.2 (2026-01-06)
+
+- peep selected comments
+
+# 0.7.1 (2026-01-05)
+
+- return to normal version. winter vacation is over.
+
+# 0.7.0 (2025-12-23)
+
+- winter vacation menu, `all` -- display answered as ⭕️, and not yet as ✖️.
+
+# 0.6.2 (2025-12-22)
+
+- admin only /stats - does not go well. `/stats` returns before router.
+
+# 0.6.0 (2025-12-22)
+
+- clj-simple-stats
+
+# 0.5.1 (2025-12-21)
+
+- updated `expand-include` -- append "\n\n" to extracted answers.
+
+# 0.5.0 (2025-12-16)
+
+- div left:right=1:1 => 3:2
+- updated clojure 1.2.3 -> 1.2.4
+- updated telemere 1.1.0 -> 1.2.0
+- replaced hato with http-kit
+
+# 0.4.19 (2025-12-04)
+
+- show sum of answers and comments-sent in scores page.
+
+# 0.4.18 (2025-12-04)
+
+- input.css:
+
+```css
+  blockquote {
+    display: inline;
+  }
+
+  blockquote > p {
+    display: inline;
+  }
+```
+
+# 0.4.17 (2025-12-03)
 
 - fixed typo in download.clj
 - removed endpoint `/download` and its handler

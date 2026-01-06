@@ -51,4 +51,17 @@
   div  > p {
     margin: 10px 0 10px 0;
   }
+
+  blockquote::before {
+    content: "> ";
+  }
+
+  blockquote {
+    display: inline;
+  }
+
+  blockquote > p {
+    display: inline;
+  }
+
 }

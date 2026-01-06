@@ -171,6 +171,7 @@
   (t/log! {:level :info :id "problems" :msg (user request)})
   (page
    [:div.m-4
+    [:p [:a.hover:underline {:href "/stats"} "stats"]]
     (problems-section)
     [:br]
     (delete-section)
@@ -202,9 +203,6 @@
     [?a :to ?e]
     [?e :week ?week]
     [?e :num ?num]])
-
-; (ds/qq eid-q "hkimura" (parse-long "5") (parse-long "5"))
-; (ds/pl [:answer] 2260)
 
 (defn eid [{{:keys [author week num]} :params :as request}]
   (t/log! {:level :info :id "eid"

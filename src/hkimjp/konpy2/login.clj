@@ -1,9 +1,10 @@
 (ns hkimjp.konpy2.login
   (:require
    [buddy.hashers :as hashers]
+   [charred.api :as charred]
    [environ.core :refer [env]]
-   [hato.client :as hc]
    [hiccup2.core :as h]
+   [org.httpkit.client :as hk-client]
    [ring.util.anti-forgery :refer [anti-forgery-field]]
    [ring.util.response :as resp]
    [taoensso.telemere :as t]
@@ -27,7 +28,10 @@
        {:name "login" :placeholder "account" :autocomplete "username"}]
       [:span.mx-1 ""]
       [:input.border-1.px-1.rounded
-       {:name "password" :type "password" :placeholder "password" :autocomplete "current-password"}]
+       {:name         "password"
+        :type         "password"
+        :placeholder  "password"
+        :autocomplete "current-password"}]
       [:button {:class btn} "LOGIN"]]]
     [:br]]))
 
@@ -40,8 +44,12 @@
       (-> (resp/redirect "/k/tasks")
           (assoc-in [:session :identity] login)))
     (try
-      (let [resp (hc/get (str l22 "/api/user/" login) {:timeout 3000 :as :json})]
-        (if (and (some? resp) (hashers/check password (get-in resp [:body :password])))
+      (let [pw (-> (hk-client/get (str l22 "/api/user/" login))
+                   deref
+                   :body
+                   charred/read-json
+                   (get "password"))]
+        (if (hashers/check password pw)
           (do
             (t/log! :info (str "login success: " login))
             (c/lpush (format "kp2:login:%s" (local-date))
@@ -52,7 +60,6 @@
             (t/log! :info (str "login failed: " login))
             (-> (resp/redirect "/")
                 (assoc :session {} :flash "login failed")))))
-      ;; maybe auth server error
       (catch Exception e
         (t/log! :warn (.getMessage e))
         (-> (resp/redirect "/")

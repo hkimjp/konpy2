@@ -1,15 +1,16 @@
 {:paths ["src" "resources"]
 
  :deps
- {org.clojure/clojure            {:mvn/version "1.12.3"}
+ {org.clojure/clojure            {:mvn/version "1.12.4"}
   babashka/fs                    {:mvn/version "0.5.30"}
   buddy/buddy-hashers            {:mvn/version "2.0.167"}
   clojure.java-time/clojure.java-time {:mvn/version "1.4.3"}
-  com.taoensso/telemere          {:mvn/version "1.1.0"}
+  com.cnuernber/charred          {:mvn/version "1.037"}
+  com.taoensso/telemere          {:mvn/version "1.2.1"}
   environ/environ                {:mvn/version "1.2.0"}
-  hato/hato                      {:mvn/version "1.0.0"}
   hiccup/hiccup                  {:mvn/version "2.0.0"}
   io.github.nextjournal/markdown {:mvn/version "0.7.222"}
+  io.github.tonsky/clj-simple-stats {:mvn/version "1.1.0"}
   metosin/reitit-ring            {:mvn/version "0.9.2"}
   org.slf4j/slf4j-nop            {:mvn/version "2.0.17"}
   ring/ring-defaults             {:mvn/version "0.7.0"}
