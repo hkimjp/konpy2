@@ -7,6 +7,11 @@
 * links to answers - easy if use hx, but not follow the original intent.
 * change CSS hover to dialog. CLJS?
 
+
+# 0.7.4-SMAPSHOT
+
+* prepend updated date to comment displayed.
+
 # 0.7.3 (2026-01-06)
 
 - ring/ring-devel
