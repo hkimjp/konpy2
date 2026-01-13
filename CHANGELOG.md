@@ -9,7 +9,7 @@
 * prepend updated date to comment displayed.
 
 
-# 0.7.4-SNAPSHOT
+# 0.7.4 (2026-01-13)
 
 - faked-all - display as `(all)` on navbar.
 
