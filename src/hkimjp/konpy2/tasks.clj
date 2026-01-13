@@ -83,7 +83,8 @@
                (if (answered e)
                  "⭕️ "
                  "✖️ ")
-               [:a.hover:underline
+               ;[:a.hover:underline
+               [:span
                 {:href (str "/k/problem/" e)}
                 [:span.mr-4 week "-" num] [:span problem]]]))])))
 
