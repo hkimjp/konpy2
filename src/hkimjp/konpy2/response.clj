@@ -4,7 +4,7 @@
    [ring.util.response :as resp]
    [taoensso.telemere :as t]))
 
-(def version "0.7.3")
+(def version "0.7.4")
 
 (def ^:private menu "text-xl font-medium text-white px-1 hover:bg-red-500")
 
@@ -12,7 +12,7 @@
   [:div.flex.bg-red-600.items-baseline.gap-x-4
    [:div.text-2xl.font-medium.text-white " KONPY "]
    [:div {:class menu} [:a {:href "/k/tasks"}  "tasks"]]
-   ; [:div {:class menu} [:a {:href "/k/tasks-all"} "all"]]
+   [:div {:class menu} [:a {:href "/k/tasks-all"} "(all)"]]
    [:div {:class menu} [:a {:href "/k/scores"} "scores"]]
    [:div {:class menu} [:a {:href "/k/stocks"} "stocks"]]
    [:div {:class menu} [:a {:href "/logout"}   "logout"]]

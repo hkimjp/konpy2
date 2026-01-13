@@ -42,7 +42,7 @@
     ["stock/:e"     {:get stocks/stock}]
     ["stocks"       {:get stocks/stocks :post stocks/stocks!}]
     ["tasks"        {:get tasks/tasks}]
-    #_["tasks-all"    {:get tasks/tasks-all}]]])
+    ["tasks-all"    {:get tasks/tasks-all}]]])
 
 (def root-handler
   (rr/ring-handler

@@ -6,9 +6,16 @@
 * gather carmine calls to `util` namespace,
 * links to answers - easy if use hx, but not follow the original intent.
 * change CSS hover to dialog. CLJS?
+* prepend updated date to comment displayed.
+
+
+# 0.7.4 (2026-01-13)
+
+- faked-all - display as `(all)` on navbar.
 
 # 0.7.3 (2026-01-06)
 
+- peep comments just below comment headers
 - ring/ring-devel
 - `<div#com-{e}>` inside `<ul>` for hx outputs
 - add dependency `ring/ring-devel`, `(wrap-reload #'handler)`
