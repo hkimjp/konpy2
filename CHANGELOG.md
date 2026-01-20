@@ -8,6 +8,10 @@
 * change CSS hover to dialog. CLJS?
 * prepend updated date to comment displayed.
 
+# 0.7.7 (2026-01-20)
+
+- fixed bug: can not comment
+
 # 0.7.6 (2026-01-20)
 
 - comments only to current week's answers.
