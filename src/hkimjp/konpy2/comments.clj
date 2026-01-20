@@ -7,7 +7,7 @@
    [hkimjp.datascript :as ds]
    [hkimjp.konpy2.response :refer [hx redirect page]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [now user]]))
+   [hkimjp.konpy2.util :refer [now user week]]))
 
 (defn comment!
   "send comments to `e`.
@@ -18,6 +18,8 @@
            :data  {:to to :author author :comment comment :pid pid :pt pt}})
   (let [author (user request)]
     (try
+      (when-not (= (week) (:week (ds/pl (parse-long to))))
+        (throw (Exception. "コメントできません。")))
       (when-not (re-find #"\S" comment)
         (throw (Exception. "empty comment")))
       (when (< (count (str/split-lines comment)) 3)
