@@ -9,6 +9,15 @@
    [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [now user week]]))
 
+(defn- problem-week [to]
+  (-> (ds/qq '[:find [?week]
+               :in $ ?e
+               :where
+               [?e :to ?to]
+               [?to :week ?week]]
+             to)
+      first))
+
 (defn comment!
   "send comments to `e`.
    returns clickable commenters list"
@@ -18,8 +27,10 @@
            :data  {:to to :author author :comment comment :pid pid :pt pt}})
   (let [author (user request)]
     (try
-      ; (when-not (= (week) (:week (ds/pl (parse-long to))))
-      ;   (throw (Exception. "コメントできません。")))
+      ;;
+      (when-not (= (week) (problem-week (parse-long to)))
+        (t/log! {:level :info :data {:week (week) :to to}})
+        (throw (Exception. "コメントできません。")))
       (when-not (re-find #"\S" comment)
         (throw (Exception. "empty comment")))
       (when (< (count (str/split-lines comment)) 3)
