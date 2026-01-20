@@ -8,7 +8,7 @@
    [hkimjp.konpy2.digest :refer [digest]]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [user now btn iso local-date]]
+   [hkimjp.konpy2.util :refer [user now btn iso local-date week]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
 (def comments-q '[:find ?e ?author
@@ -78,6 +78,9 @@
   (try
     (when (nil? file)
       (throw (Exception. "please select your python file.")))
+    ; 0.7.5
+    (when-not (= (week) (:week (ds/pl (parse-long e))))
+      (throw (Exception. "アップロードはできません。")))
     (let [author   (user request)
           answer   (slurp (:tempfile file))
           e        (parse-long e)

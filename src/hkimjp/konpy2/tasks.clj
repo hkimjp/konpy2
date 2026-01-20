@@ -75,16 +75,17 @@
              :data {:author author :answered answered}})
     (page
      [:div.m-4
-      [:div "winter special: problems all"]
+      [:div "winter vacation special: problems all"]
       (into [:div.m-4]
-            (for [{:keys [e week num problem]} (->> (ds/qq fetch-problems-all)
-                                                    (sort-by (juxt :week :num)))]
+            (for [{:keys [e week num problem]}
+                  (->> (ds/qq fetch-problems-all)
+                       (sort-by (juxt :week :num)))]
               [:div
                (if (answered e)
                  "⭕️ "
                  "✖️ ")
-               ;[:a.hover:underline
-               [:span
+               [:a.hover:underline
+               ;[:span
                 {:href (str "/k/problem/" e)}
                 [:span.mr-4 week "-" num] [:span problem]]]))])))
 

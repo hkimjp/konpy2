@@ -40,10 +40,24 @@
 
 ; ----------------
 
-; CHECK: whit this can't?
-#_(ds/q @ds/conn '[:find ?e
-                   :where
-                   [?e]])
+(comment
+  (ds/qq '[:find ?week
+           :in $ ?e
+           :where
+           [?e :week ?week]]
+         2354)
+
+  (:week (ds/pl 1))
+
+  ; 2026-01-17
+  (ds/qq '[:find ?answer
+           :where
+           [?e :week 14]
+           [?e :num 1]
+           [?a :to ?e]
+           [?a :author "yuudai1201"]
+           [?a :answer ?answer]])
+  :rcf)
 
 ; --------------------------------
 ; midterm daily points aggregation
