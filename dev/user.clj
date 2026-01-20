@@ -41,6 +41,14 @@
 ; ----------------
 
 (comment
+  (ds/qq '[:find ?week
+           :in $ ?e
+           :where
+           [?e :week ?week]]
+         2354)
+
+  (:week (ds/pl 1))
+
   ; 2026-01-17
   (ds/qq '[:find ?answer
            :where
