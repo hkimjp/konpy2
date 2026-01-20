@@ -8,7 +8,7 @@
 * change CSS hover to dialog. CLJS?
 * prepend updated date to comment displayed.
 
-# 0.7.5-SNAPSHOT
+# 0.7.5 (2026-01-20)
 
 - restrict uploads to current week's problem only.
 
