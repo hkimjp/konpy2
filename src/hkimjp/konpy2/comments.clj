@@ -18,8 +18,8 @@
            :data  {:to to :author author :comment comment :pid pid :pt pt}})
   (let [author (user request)]
     (try
-      (when-not (= (week) (:week (ds/pl (parse-long to))))
-        (throw (Exception. "コメントできません。")))
+      ; (when-not (= (week) (:week (ds/pl (parse-long to))))
+      ;   (throw (Exception. "コメントできません。")))
       (when-not (re-find #"\S" comment)
         (throw (Exception. "empty comment")))
       (when (< (count (str/split-lines comment)) 3)
