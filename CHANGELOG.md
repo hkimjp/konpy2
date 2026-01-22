@@ -8,6 +8,10 @@
 * change CSS hover to dialog. CLJS?
 * prepend updated date to comment displayed.
 
+# 0.7.8 (2026-01-22)
+
+- time to solve problems.
+
 # 0.7.7 (2026-01-20)
 
 - fixed bug: can not comment
