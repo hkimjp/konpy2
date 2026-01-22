@@ -137,6 +137,7 @@
          (h/raw (anti-forgery-field))
          [:input {:type "hidden" :name "e" :value eid}]
          [:input {:class input-box :type "file" :accept ".py" :name "file"}]
+         [:input.w-18 {:class input-box :name "took" :placeholder "時間(分)"}]
          [:button {:class btn} "upload"]]]]])))
 
 (defn todays-answers
