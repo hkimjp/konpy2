@@ -18,6 +18,7 @@
 :answer s
 :digest sha1
 :same authors
+:took minutes
 :updated jt
 
 

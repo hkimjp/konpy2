@@ -36,6 +36,7 @@
               "download"]]]
       [:div {:class "w-2/5 white"}
        [:div [:span.font-bold "author: "] author]
+       [:div [:span.font-bold "took: "] (:took ans) "min."]
        [:div [:span.font-bold "same: "] (:same ans)]
        [:div [:span.font-bold "updated: "] (-> (:updated ans) iso)]
        [:div.py-2 [:span.font-bold "comments: "]
@@ -72,12 +73,14 @@
     [?e :author ?author]
     [?e :answer/status "yes"]])
 
-(defn answer! [{{:keys [file e]} :params :as request}]
+(defn answer! [{{:keys [e file took]} :params :as request}]
   (t/log! {:level :info :id "answer!"})
-  (t/log! {:level :debug :data {:e e :file file}})
+  (t/log! {:level :debug :data {:e e :file file :took took}})
   (try
     (when (nil? file)
       (throw (Exception. "please select your python file.")))
+    (when (empty? took)
+      (throw (Exception. "回答に要した時間(分）が入っていません。")))
     ; 0.7.5
     (when-not (= (week) (:week (ds/pl (parse-long e))))
       (throw (Exception. "アップロードはできません。")))
@@ -87,12 +90,13 @@
           entry    (ds/pl e)
           testcode (:testcode entry)
           doctest  (empty? (:doctest entry))
-          _        (t/log! :debug (str "doctest? " doctest))
+          ; _        (t/log! :debug (str "doctest? " doctest))
           dgst     (digest answer)
           same     (->> (ds/qq same-answers dgst)
                         (map first)
                         (interpose " ")
-                        (apply str))]
+                        (apply str))
+          took     (parse-long took)]
       (r/before-upload author)
       (validate author answer testcode doctest)
       (ds/put! {:answer/status "yes"
@@ -101,6 +105,7 @@
                 :answer  answer
                 :digest  dgst
                 :same    same
+                :took    took
                 :updated (now)})
       (r/after-upload author)
       (redirect (str "/k/problem/" e)))
