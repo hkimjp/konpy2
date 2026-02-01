@@ -10,6 +10,8 @@
 
 # 0.7.9-SNAPSHOT (2026-02-01)
 
+- changed display order - logins, answers, comments
+- added took (min) to answers
 - antq-upgrade
 
 | :fie     | :name                             | :current | :latest |

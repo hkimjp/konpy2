@@ -45,9 +45,9 @@
                 {:href (str "/k/problem/" e)}
                 [:span.mr-4 week "-" num] [:span problem]]]))
       [:div.m-4.flex.gap-4
+       (hx-component "/k/hx-logins" "logins" "ログイン")
        (hx-component "/k/hx-answers" "answers" "本日の回答")
-       (hx-component "/k/hx-comments" "comments" "コメント")
-       (hx-component "/k/hx-logins" "logins" "ログイン")]])))
+       (hx-component "/k/hx-comments" "comments" "コメント")]])))
 
 ;; winter vacation
 (def fetch-problems-all
@@ -142,8 +142,8 @@
 
 (defn todays-answers
   ([] (todays-answers (now)))
-  ([date-time] (ds/qq '[:find ?e ?author ?week ?num ?updated
-                        :keys e  author  week  num  updated
+  ([date-time] (ds/qq '[:find ?e ?author ?week ?num ?updated ?took
+                        :keys e  author  week  num  updated took
                         :in $ ?now
                         :where
                         [?e :answer/status "yes"]
@@ -151,6 +151,7 @@
                         [(java-time.api/before? ?now ?updated)]
                         [?e :to ?to]
                         [?e :author ?author]
+                        [?e :took ?took]
                         [?to :week ?week]
                         [?to :num ?num]]
                       (jt/adjust date-time (jt/local-time 0)))))
@@ -167,13 +168,13 @@
     (hx [:div
          [:div (format "(%d)" (count answers))]
          [:ul.list-disc.mx-4
-          (for [{:keys [week num author updated]}
+          (for [{:keys [week num author updated took]}
                 (->> answers
                      (sort-by :e)
                      reverse)]
             (let [updated (HH:mm updated)]
               [:li.font-mono
-               week "-" num " " updated " " (color-author author user)]))]])))
+               week "-" num " " updated " " (color-author author user) "(" took ")"]))]])))
 
 (defn- todays-comments
   "comments after `date-time`"

@@ -36,7 +36,7 @@
               "download"]]]
       [:div {:class "w-2/5 white"}
        [:div [:span.font-bold "author: "] author]
-       [:div [:span.font-bold "took: "] (:took ans) "min."]
+       [:div [:span.font-bold "took: "] (:took ans) " min."]
        [:div [:span.font-bold "same: "] (:same ans)]
        [:div [:span.font-bold "updated: "] (-> (:updated ans) iso)]
        [:div.py-2 [:span.font-bold "comments: "]
