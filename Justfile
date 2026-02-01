@@ -62,7 +62,7 @@ clean:
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.7.8'
+VER := '0.7.9-SNAPSHOT'
 
 dockerhub: security manifest
 

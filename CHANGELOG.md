@@ -8,7 +8,7 @@
 * change CSS hover to dialog. CLJS?
 * prepend updated date to comment displayed.
 
-# 0.7.9-SNAPSHOT
+# 0.7.9-SNAPSHOT (2026-02-01)
 
 - antq-upgrade
 
