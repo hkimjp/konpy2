@@ -24,7 +24,7 @@ dev:
 kaocha:
   clojure -M:dev -m kaocha.runner
 
-run:
+run: minify
   clojure -J--enable-native-access=ALL-UNNAMED -M:run-m
 
 build: minify
@@ -62,9 +62,9 @@ clean:
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.7.8'
+VER := '0.7.9'
 
-hub: security manifest
+dockerhub: security manifest
 
 security:
   security -v unlock-keychain ~/Library/Keychains/login.keychain-db

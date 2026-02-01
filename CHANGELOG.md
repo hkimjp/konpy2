@@ -8,6 +8,17 @@
 * change CSS hover to dialog. CLJS?
 * prepend updated date to comment displayed.
 
+# 0.7.9 (2026-02-01) (2026-02-01)
+
+- changed display order - logins, answers, comments
+- added took (min) to answers
+- antq-upgrade
+
+| :fie     | :name                             | :current | :latest |
+|----------|-----------------------------------|----------|---------|
+| deps.edn | com.cnuernber/charred             | 1.037    | 1.038   |
+|          | io.github.tonsky/clj-simple-stats | 1.1.0    | 1.2.0   |
+
 # 0.7.8 (2026-01-22)
 
 - time to solve problems.
