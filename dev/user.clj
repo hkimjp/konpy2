@@ -10,12 +10,7 @@
    [hkimjp.konpy2.queries :as q]
    [hkimjp.konpy2.system :refer [start-system stop-system restart-system]]))
 
-;----
-
-;----
 (tel/set-min-level! :debug)
-; (stop-system)
-
 (restart-system)
 
 ;--- clj-reload ---
@@ -41,27 +36,6 @@
   (start-system))
 
 ; (reload)
-
-; ----------------
-
-(comment
-  (ds/qq '[:find ?week
-           :in $ ?e
-           :where
-           [?e :week ?week]]
-         2354)
-
-  (:week (ds/pl 1))
-
-  ; 2026-01-17
-  (ds/qq '[:find ?answer
-           :where
-           [?e :week 14]
-           [?e :num 1]
-           [?a :to ?e]
-           [?a :author "yuudai1201"]
-           [?a :answer ?answer]])
-  :rcf)
 
 ; --------------------------------
 ; midterm daily points aggregation
