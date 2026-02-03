@@ -10,8 +10,12 @@
    [hkimjp.konpy2.queries :as q]
    [hkimjp.konpy2.system :refer [start-system stop-system restart-system]]))
 
+;----
+
+;----
 (tel/set-min-level! :debug)
 ; (stop-system)
+
 (restart-system)
 
 ;--- clj-reload ---

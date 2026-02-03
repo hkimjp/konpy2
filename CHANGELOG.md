@@ -8,7 +8,15 @@
 * change CSS hover to dialog. CLJS?
 * prepend updated date to comment displayed.
 
-# 0.7.9 (2026-02-01) (2026-02-01)
+
+# 0.7.10-SNAPSHOT
+
+- updated `validation.clj`
+- invoke `ruff format --check`
+* restrict browsing until day
+- `fs/delete-if-exists` instead of `fs/delete` in `validation.clj`.
+
+# 0.7.9 (2026-02-01)
 
 - changed display order - logins, answers, comments
 - added took (min) to answers

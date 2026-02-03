@@ -30,14 +30,6 @@
     [?a :answer ?answer]
     [?a :to ?e]])
 
-(comment
-  (->> (ds/qq last-answer-q "hkimura" 11 9)
-       (sort-by first)
-       last
-       second)
-  (get-last-answer "hkimura" 11 9)
-  :rcf)
-
 (defn- get-last-answer [author week num]
   (t/log! {:level :debug
            :id "get-last-answer"
@@ -62,38 +54,41 @@
      (for [line (str/split-lines answer)]
        (if-let [[_ _ w n]
                 (or (re-matches #"#\s*include\s*(kp)*(\d+)_(\d+).*" line)
-                    (re-matches #"from\s*(kp)*(\d+)_(\d+).*" line))]
-         (expand-includes
-          author
-          ;; 2025-12-21
-          (str (get-last-answer author (parse-long w) (parse-long n)) "\n\n"))
+                    (re-matches #"from\s+(kp)(\d+)_(\d+).*" line))]
+         (str
+          (expand-includes
+           author
+           (get-last-answer author (parse-long w) (parse-long n)))
+          "\n\n")
          line)))
     (catch Exception e
       (t/log! {:level :warn :id "expand-includes" :msg (.getMessage e)})
       (throw (Exception. (.getMessage e))))))
 
 (defn- create-tempfile-with
-  "returns fs/file f#object[sun.nio.fs.UnixPath object]"
+  "create a tempfile with contents `answer`.
+   returns unixify path of the tempfile."
   [answer]
-  (let [f (fs/create-temp-file {:suffix ".py"})]
+  (let [f (fs/unixify (fs/create-temp-file {:suffix ".py"}))]
     (t/log! {:level :debug
              :id "create-tempfile-with"
-             :data {:tempfile (str (fs/file f))}})
-    (spit (fs/file f) answer)
+             :data {:tempfile f}})
+    (spit f answer)
     f))
 
 (defn- ruff
   "ruff requires '\n' at the end of the code"
   [answer]
   (t/log! {:level :info :id "ruff"})
-  (let [f (create-tempfile-with (str answer "\n"))
+  (let [f (create-tempfile-with answer); changed remove `str`
         ret (timeout-sh
              timeout
-             ;; 0.14.7
-             ruff-path "-q" "format" "--check" (str (fs/file f)))]
+             ruff-path "format" "--check" f)]; why str?
     (if (zero? (:exit ret))
-      (fs/delete f)
-      (throw (Exception. "using VScode/Ruff?")))))
+      (fs/delete-if-exists f)
+      (do
+        (t/log! {:level :info :id "ruff" :data ret})
+        (throw (Exception. "using VScode/Ruff?"))))))
 
 (defn- has-doctest? [answer]
   (re-find #">>> " (-> answer str/split-lines str/join)))
@@ -107,7 +102,7 @@
              timeout
              python-path "-m" "doctest" (str (fs/file f)))]
     (if (zero? (:exit ret))
-      (fs/delete f)
+      (fs/delete-if-exists f)
       (throw (Exception. "doctest failed")))))
 
 (defn- retrieve [pat s]
@@ -125,21 +120,24 @@
              timeout
              pytest-path (str (fs/file f)))]
     (if (zero? (:exit ret))
-      (fs/delete f)
+      (fs/delete-if-exists f)
       (throw (Exception. (str "pytest failed<br>" (retrieve #"^E\s" (:out ret))))))))
 
-(defn validate [author answer testcode doctest?]
-  (let [answer (expand-includes author answer)]
-    (t/log! {:level :info :id "validate" :data {:answer answer}})
-    (t/log! :debug (str "doctest? " doctest?))
+(defn validate
+  "ruff... pass the answer before expand
+   others ... after fully expanded"
+  [author answer testcode doctest?]
+  (let [expanded (expand-includes author answer)]
+    ;; (t/log! {:level :info :id "validate" :data {:answer answer}})
+    ;;(t/log! :debug (str "doctest? " doctest?))
+    (when (env :develop)
+      (spit "/tmp/debug.py" expanded))
     (try
       (ruff answer)
-      (when doctest?
-        (doctest answer))
-      (when-not (empty? testcode)
-        (t/log! {:level :error
-                 :data {:testcode testcode :empty? (empty? testcode)}})
-        (pytest answer testcode))
+      (when (some? doctest?)
+        (doctest expanded))
+      (when (some? testcode)
+        (pytest expanded testcode))
       (catch Exception e
         (t/log! {:level :warn
                  :msg   "validate error"
