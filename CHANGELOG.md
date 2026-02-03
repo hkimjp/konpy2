@@ -9,7 +9,7 @@
 * prepend updated date to comment displayed.
 * restrict browsing until day
 
-# 0.7.10-SNAPSHOT
+# 0.7.10 (2026-02-03)
 
 - updated `validate.clj`
 - invoke `ruff format --check` with original answer
