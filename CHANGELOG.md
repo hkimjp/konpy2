@@ -7,14 +7,15 @@
 * links to answers - easy if use hx, but not follow the original intent.
 * change CSS hover to dialog. CLJS?
 * prepend updated date to comment displayed.
-
+* restrict browsing until day
 
 # 0.7.10-SNAPSHOT
 
-- updated `validation.clj`
-- invoke `ruff format --check`
-* restrict browsing until day
-- `fs/delete-if-exists` instead of `fs/delete` in `validation.clj`.
+- updated `validate.clj`
+- invoke `ruff format --check` with original answer
+  other validations, doctest, pytest are executed after expanding
+  recursively `from kp{n}_{m}`.
+- `fs/delete-if-exists` instead of `fs/delete`
 
 # 0.7.9 (2026-02-01)
 

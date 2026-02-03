@@ -67,12 +67,10 @@
 
 (defn- create-tempfile-with
   "create a tempfile with contents `answer`.
-   returns unixify path of the tempfile."
+   returns the path of the tempfile."
   [answer]
   (let [f (fs/unixify (fs/create-temp-file {:suffix ".py"}))]
-    (t/log! {:level :debug
-             :id "create-tempfile-with"
-             :data {:tempfile f}})
+    (t/log! {:level :debug :id "create-tempfile-with"})
     (spit f answer)
     f))
 
@@ -80,10 +78,10 @@
   "ruff requires '\n' at the end of the code"
   [answer]
   (t/log! {:level :info :id "ruff"})
-  (let [f (create-tempfile-with answer); changed remove `str`
+  (let [f (create-tempfile-with answer)
         ret (timeout-sh
              timeout
-             ruff-path "format" "--check" f)]; why str?
+             ruff-path "format" "--check" f)]
     (if (zero? (:exit ret))
       (fs/delete-if-exists f)
       (do
@@ -100,7 +98,7 @@
   (let [f (create-tempfile-with answer)
         ret (timeout-sh
              timeout
-             python-path "-m" "doctest" (str (fs/file f)))]
+             python-path "-m" "doctest" f)]
     (if (zero? (:exit ret))
       (fs/delete-if-exists f)
       (throw (Exception. "doctest failed")))))
@@ -118,25 +116,22 @@
   (let [f (create-tempfile-with (str/join [answer "\n" testcode]))
         ret (timeout-sh
              timeout
-             pytest-path (str (fs/file f)))]
+             pytest-path f)]
     (if (zero? (:exit ret))
       (fs/delete-if-exists f)
-      (throw (Exception. (str "pytest failed<br>" (retrieve #"^E\s" (:out ret))))))))
+      (throw (Exception. (str "pytest failed<br>"
+                              (retrieve #"^E\s" (:out ret))))))))
 
 (defn validate
   "ruff... pass the answer before expand
    others ... after fully expanded"
   [author answer testcode doctest?]
   (let [expanded (expand-includes author answer)]
-    ;; (t/log! {:level :info :id "validate" :data {:answer answer}})
-    ;;(t/log! :debug (str "doctest? " doctest?))
-    (when (env :develop)
-      (spit "/tmp/debug.py" expanded))
     (try
       (ruff answer)
-      (when (some? doctest?)
+      (when doctest?
         (doctest expanded))
-      (when (some? testcode)
+      (when-not (empty? testcode)
         (pytest expanded testcode))
       (catch Exception e
         (t/log! {:level :warn
