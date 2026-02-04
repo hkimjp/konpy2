@@ -10,7 +10,7 @@
 * restrict browsing until day
 
 
-# 0.7.11-SNAPSHOT
+# 0.7.11 (2026-02-04)
 
 - ruff-0.15.0
 - rectriction on browse 18-1 answers.
