@@ -27,7 +27,6 @@
            :data  {:to to :author author :comment comment :pid pid :pt pt}})
   (let [author (user request)]
     (try
-      ;;
       (when-not (= (week) (problem-week (parse-long to)))
         (t/log! {:level :info :data {:week (week) :to to}})
         (throw (Exception. "コメントできません。")))

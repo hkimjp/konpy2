@@ -23,7 +23,7 @@
       (jt/local-date (parse-long year)
                      (parse-long month)
                      (parse-long date)))
-    (jt/local-date 2025 10 1))) ; production 2025 10 1
+    (jt/local-date 2025 10 1)))
 
 (defn week
   "Returns how many weeks have passed since the argument `date`.
@@ -31,11 +31,6 @@
   ([] (week (jt/local-date)))
   ([date]
    (quot (jt/time-between start-day date :days) 7)))
-
-; not orthogonal, but
-; off 2025-11-14
-; (defn today []
-;   (str (jt/local-date)))
 
 ; convenient for debug
 (defn now []
@@ -60,4 +55,3 @@
 (defn date-before? [yyyy mm dd]
   (jt/before? (jt/local-date) (jt/local-date yyyy mm dd)))
 
-; (date-before? 2026 2 5)

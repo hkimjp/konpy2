@@ -53,7 +53,7 @@
           (do
             (t/log! :info (str "login success: " login))
             (c/lpush (format "kp2:login:%s" (local-date))
-                     (str login " " (HH:mm (now)))) ;;
+                     (str login " " (HH:mm (now))))
             (-> (resp/redirect "/k/tasks")
                 (assoc-in [:session :identity] login)))
           (do
