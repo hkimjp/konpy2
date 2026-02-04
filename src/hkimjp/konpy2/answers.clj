@@ -8,7 +8,7 @@
    [hkimjp.konpy2.digest :refer [digest]]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [user now btn local-date iso week]]
+   [hkimjp.konpy2.util :refer [user now btn local-date iso week date-before?]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
 (def comments-q '[:find ?e ?author
@@ -27,7 +27,7 @@
         author (:author ans)
         p (parse-long p)]
     ;;(t/log! {:level :debug :id "hx-answer" :data (ds/pl p)})
-    (if (= 18 (:week (ds/pl p)))
+    (if (and (date-before? 2026 2 13) (= 18 (:week (ds/pl p))))
       (hx
        [:div "2/13 以降、見れるようになります。"])
       (hx

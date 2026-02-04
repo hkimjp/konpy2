@@ -60,7 +60,11 @@
   (tel/set-min-level! :info)
 
   (jt/before? (jt/local-date-time 2025 12 2) (jt/local-date-time))
-; => true
+
+  (jt/after? (jt/local-date) (jt/local-date 2026 2 13))
+
+  ; => false
+  ; => true
 
   (def q
     '[:find (count ?e)

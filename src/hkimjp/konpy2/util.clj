@@ -57,3 +57,7 @@
   [tm]
   (jt/format "HH:mm" tm))
 
+(defn date-before? [yyyy mm dd]
+  (jt/before? (jt/local-date) (jt/local-date yyyy mm dd)))
+
+; (date-before? 2026 2 5)
