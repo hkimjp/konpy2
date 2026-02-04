@@ -9,6 +9,12 @@
 * prepend updated date to comment displayed.
 * restrict browsing until day
 
+
+# 0.7.11-SNAPSHOT
+
+- ruff-0.15.0
+- rectriction on browse 18-1 answers.
+
 # 0.7.10 (2026-02-03)
 
 - updated `validate.clj`

@@ -64,7 +64,7 @@
     (throw (Exception.
             (format "アップロードは %d 秒以内にはできない。一題ずつ自力でな。最終アップロード %s"
                     min-interval-uploads last-submission))))
-  (when (and (pos? (c/llen (key-uploads user))) ;
+  (when (and (pos? (c/llen (key-uploads user)))
              (< (-> (c/get (key-comment-read user)) parse-long)
                 must-read-before-upload)
              (< (-> (c/get (key-comment-write user)) parse-long)
