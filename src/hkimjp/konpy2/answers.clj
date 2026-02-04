@@ -26,7 +26,6 @@
         ans (ds/pl e)
         author (:author ans)
         p (parse-long p)]
-    ;;(t/log! {:level :debug :id "hx-answer" :data (ds/pl p)})
     (if (and (date-before? 2026 2 13) (= 18 (:week (ds/pl p))))
       (hx
        [:div "2/13 以降、見れるようになります。"])
@@ -85,7 +84,6 @@
       (throw (Exception. "please select your python file.")))
     (when (empty? took)
       (throw (Exception. "回答に要した時間(分）が入っていません。")))
-    ; 0.7.5
     (when-not (= (week) (:week (ds/pl (parse-long e))))
       (throw (Exception. "アップロードはできません。")))
     (let [author   (user request)
@@ -94,7 +92,6 @@
           entry    (ds/pl e)
           testcode (:testcode entry)
           doctest  (empty? (:doctest entry))
-          ; _        (t/log! :debug (str "doctest? " doctest))
           dgst     (digest answer)
           same     (->> (ds/qq same-answers dgst)
                         (map first)
