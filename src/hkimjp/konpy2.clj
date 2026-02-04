@@ -1,1 +1,0 @@
-(ns hkimjp.konpy2)

@@ -8,7 +8,7 @@
    [hkimjp.konpy2.digest :refer [digest]]
    [hkimjp.konpy2.response :refer [page hx redirect]]
    [hkimjp.konpy2.restrictions :as r]
-   [hkimjp.konpy2.util :refer [user now btn iso local-date week]]
+   [hkimjp.konpy2.util :refer [user now btn local-date iso week date-before?]]
    [hkimjp.konpy2.validate :refer [validate]]))
 
 (def comments-q '[:find ?e ?author
@@ -26,44 +26,47 @@
         ans (ds/pl e)
         author (:author ans)
         p (parse-long p)]
-    (hx
-     [:div#answer.my-4.flex.gap-4
-      [:div {:class "w-3/5"}
-       [:pre.text-sm.border-1.p-2.whitespace-pre-wrap (:answer ans)]
-       [:div [:a {:class btn
-                  :href (format "/dl/%d" e)
-                  :hx-boost "false"}
-              "download"]]]
-      [:div {:class "w-2/5 white"}
-       [:div [:span.font-bold "author: "] author]
-       [:div [:span.font-bold "took: "] (:took ans) " min."]
-       [:div [:span.font-bold "same: "] (:same ans)]
-       [:div [:span.font-bold "updated: "] (-> (:updated ans) iso)]
-       [:div.py-2 [:span.font-bold "comments: "]
-        (for [[eid author] (sort-by first comments)]
-          [:button.pr-4.hover:underline
-           {:hx-get (str "/k/comment/" eid)
-            :hx-target "#comment"
-            :hx-swap "innerHTML"}
-           author])
-        [:div#comment.mx-4.text-base "[comment]"]]
-       [:div
-        [:div.font-bold "your comment:"]
-        (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" user (local-date))))
-          [:div.mx-4 (format "1日 %d コメに達しました。" r/max-comments)]
-          [:div
-           [:form {:method "post" :action "/k/comment"}
-            (h/raw (anti-forgery-field))
-            [:input {:type "hidden" :name "to" :value e}]
-            [:input {:type "hidden" :name "author" :value author}]
-            [:input {:type "hidden" :name "pid" :value p}]
-            [:textarea
-             {:class "w-full bg-lime-100 h-40 border-1 p-2"
-              :name "comment"
-              :placeholder "markdown OK"}]
-            [:br]
-            (for [pt ["A" "B" "C"]]
-              [:button {:class btn :name "pt" :value pt} pt])]])]]])))
+    (if (and (= 18 (:week (ds/pl p))) (date-before? 2026 2 13))
+      (hx
+       [:div "2/13 以降、見れるようになります。"])
+      (hx
+       [:div#answer.my-4.flex.gap-4
+        [:div {:class "w-3/5"}
+         [:pre.text-sm.border-1.p-2.whitespace-pre-wrap (:answer ans)]
+         [:div [:a {:class btn
+                    :href (format "/dl/%d" e)
+                    :hx-boost "false"}
+                "download"]]]
+        [:div {:class "w-2/5 white"}
+         [:div [:span.font-bold "author: "] author]
+         [:div [:span.font-bold "took: "] (:took ans) " min."]
+         [:div [:span.font-bold "same: "] (:same ans)]
+         [:div [:span.font-bold "updated: "] (-> (:updated ans) iso)]
+         [:div.py-2 [:span.font-bold "comments: "]
+          (for [[eid author] (sort-by first comments)]
+            [:button.pr-4.hover:underline
+             {:hx-get (str "/k/comment/" eid)
+              :hx-target "#comment"
+              :hx-swap "innerHTML"}
+             author])
+          [:div#comment.mx-4.text-base "[comment]"]]
+         [:div
+          [:div.font-bold "your comment:"]
+          (if (<= r/max-comments (c/llen (format "kp2:%s:comments:%s" user (local-date))))
+            [:div.mx-4 (format "1日 %d コメに達しました。" r/max-comments)]
+            [:div
+             [:form {:method "post" :action "/k/comment"}
+              (h/raw (anti-forgery-field))
+              [:input {:type "hidden" :name "to" :value e}]
+              [:input {:type "hidden" :name "author" :value author}]
+              [:input {:type "hidden" :name "pid" :value p}]
+              [:textarea
+               {:class "w-full bg-lime-100 h-40 border-1 p-2"
+                :name "comment"
+                :placeholder "markdown OK"}]
+              [:br]
+              (for [pt ["A" "B" "C"]]
+                [:button {:class btn :name "pt" :value pt} pt])]])]]]))))
 
 (def ^:private same-answers
   '[:find ?author
@@ -81,7 +84,6 @@
       (throw (Exception. "please select your python file.")))
     (when (empty? took)
       (throw (Exception. "回答に要した時間(分）が入っていません。")))
-    ; 0.7.5
     (when-not (= (week) (:week (ds/pl (parse-long e))))
       (throw (Exception. "アップロードはできません。")))
     (let [author   (user request)
@@ -90,7 +92,6 @@
           entry    (ds/pl e)
           testcode (:testcode entry)
           doctest  (empty? (:doctest entry))
-          ; _        (t/log! :debug (str "doctest? " doctest))
           dgst     (digest answer)
           same     (->> (ds/qq same-answers dgst)
                         (map first)
