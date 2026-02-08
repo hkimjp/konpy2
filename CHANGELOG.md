@@ -9,6 +9,9 @@
 * prepend updated date to comment displayed.
 * restrict browsing until day
 
+# 0.7.12-SNAPSHOT
+
+* stats.clj
 
 # 0.7.11 (2026-02-04)
 
