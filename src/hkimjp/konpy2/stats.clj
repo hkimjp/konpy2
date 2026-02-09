@@ -11,6 +11,26 @@
        :users
        (map :login)))
 
+(comment
+  (class users)
+  (count users)
+  (.indexOf users "patinca-nu")
+
+  ; set ok
+  (#{"123" "456" "789"} "456")
+
+  ; map understandable
+  ({"123" 1, "456" 2, "789",3} "456")
+
+  ; key must be integer
+  (get ["123" "455" "789"] "455")
+  ; => nil
+  (get [123 455 789] 455)
+  ; => nil
+  (.indexOf ["123" "455" "789"] "455")
+
+  :rcf)
+
 (ds/start-or-restore {:url (env :datascript)})
 
 (def answers-q
@@ -63,7 +83,7 @@
     :where
     [?e :author ?author]
     [?e :comment/status "yes"]
-    [?e :comment ?omment]])
+    [?e :comment ?comment]])
 
 (defn comment-chars [user]
   (->> (ds/qq comment-chars-q user)
@@ -93,8 +113,6 @@
          (format "%10s %4d %4d %5d %5d" user a c cc 0))
         (println
          (format "%10s %4d %4d %5d %5.1f" user a c cc (* 1.0 (/ cc c)))))))
-
-  (conj users "hkimura")
 
   (doseq [user (sort (conj users "hkimura"))]
     (println (format "%10s %4.1f" user (answers-with-weight user))))
