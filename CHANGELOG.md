@@ -9,9 +9,17 @@
 * prepend updated date to comment displayed.
 * restrict browsing until day
 
+
 # 0.7.12-SNAPSHOT
 
 * stats.clj
+
+- updated library
+
+| :file    | :name       | :current | :latest |
+|----------|-------------|----------|---------|
+| deps.edn | babashka/fs | 0.5.30   | 0.5.31  |
+
 
 # 0.7.11 (2026-02-04)
 
