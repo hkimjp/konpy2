@@ -55,9 +55,10 @@
       (:num answer))))
 
 (defn answers-with-weight [user]
-  (-> (reduce + (for [e (ds/qq answers-q user)]
-                  (let [n (num e)]
-                    (+ 1.0 (/ n 5)))))
+  (-> (reduce +
+              (for [e (ds/qq answers-q user)]
+                (let [n (num e)]
+                  (+ 1.0 (/ n 5)))))
       (* 100)
       int
       (/ 100.0)))
@@ -92,7 +93,16 @@
 
 ; (comment-chars "hkimura")
 
+(defn comments-with-weight [c cc]
+  (if (zero? c)
+    0.0
+    (if (< 60 cc)
+      (* c 1.2)
+      (* 1.0 c))))
+
 (comment
+  (t/set-min-level! :info)
+
   users
 
   (doseq [[score id] (-> (sort-by first
@@ -101,20 +111,20 @@
                          reverse)]
     (println (format "%8d %s" score id)))
 
-  (t/set-min-level! :info)
-
   (doseq [user (sort (conj users "hkimura"))]
     (let
      [a (answers-by user)
+      aw (answers-with-weight user)
       c (comments-by user)
-      cc (comment-chars user)]
-      (if (zero? c)
-        (println
-         (format "%10s %4d %4d %5d %5d" user a c cc 0))
-        (println
-         (format "%10s %4d %4d %5d %5.1f" user a c cc (* 1.0 (/ cc c)))))))
+      cc (comment-chars user)
+      cw (comments-with-weight c cc)]
+      (println  (format "%10s %5.1f %5.1f" user aw cw))))
+      ;;(println user " | " aw "|" cw)))
 
-  (doseq [user (sort (conj users "hkimura"))]
-    (println (format "%10s %4.1f" user (answers-with-weight user))))
+  #_(doseq [user (sort (conj users "hkimura"))]
+      (println (format "%10s %4.1f" user (answers-with-weight user))))
 
   :rcf)
+
+
+
