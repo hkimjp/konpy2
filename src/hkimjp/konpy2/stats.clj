@@ -6,12 +6,18 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]))
 
-(def users
-  (->> (charred/read-json (io/resource "users.json") :key-fn keyword)
-       :users
-       (map :login)))
+(when-not (ds/conn?)
+  (ds/start-or-restore {:url (env :datascript)}))
 
-(ds/start-or-restore {:url (env :datascript)})
+(def users
+  (map :login (-> (io/resource "users.json")
+                  (charred/read-json :key-fn keyword)
+                  :users)))
+
+(comment
+  users
+  (.indexOf users "pacinca-nu")
+  :rcf)
 
 (def answers-q
   '[:find [?e ...]
@@ -26,7 +32,7 @@
 
 ; (answers-by "hkimura")
 
-(defn- num [e]
+(defn- get-num [e]
   (let [answer (-> (ds/pl e)
                    :to
                    (ds/pl))]
@@ -36,7 +42,7 @@
 
 (defn answers-with-weight [user]
   (-> (reduce + (for [e (ds/qq answers-q user)]
-                  (let [n (num e)]
+                  (let [n (get-num e)]
                     (+ 1.0 (/ n 5)))))
       (* 100)
       int
