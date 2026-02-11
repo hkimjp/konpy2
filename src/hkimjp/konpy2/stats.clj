@@ -6,32 +6,16 @@
    [taoensso.telemere :as t]
    [hkimjp.datascript :as ds]))
 
+(when-not (ds/conn?)
+  (ds/start-or-restore {:url (env :datascript)}))
+
 (def users
-  (->> (charred/read-json (io/resource "users.json") :key-fn keyword)
-       :users
-       (map :login)))
-
+  (map :login (-> (io/resource "users.json")
+                  (charred/read-json :key-fn keyword)
+                  :users)))
 (comment
-  (class users)
-  (count users)
   (.indexOf users "patinca-nu")
-
-  ; set ok
-  (#{"123" "456" "789"} "456")
-
-  ; map understandable
-  ({"123" 1, "456" 2, "789",3} "456")
-
-  ; key must be integer
-  (get ["123" "455" "789"] "455")
-  ; => nil
-  (get [123 455 789] 455)
-  ; => nil
-  (.indexOf ["123" "455" "789"] "455")
-
   :rcf)
-
-(ds/start-or-restore {:url (env :datascript)})
 
 (def answers-q
   '[:find [?e ...]
@@ -44,9 +28,9 @@
   (-> (ds/qq answers-q user)
       count))
 
-; (answers-by "hkimura")
+; (answers-by "pacinca-nu")
 
-(defn- num [e]
+(defn- get-num [e]
   (let [answer (-> (ds/pl e)
                    :to
                    (ds/pl))]
@@ -57,7 +41,7 @@
 (defn answers-with-weight [user]
   (-> (reduce +
               (for [e (ds/qq answers-q user)]
-                (let [n (num e)]
+                (let [n (get-num e)]
                   (+ 1.0 (/ n 5)))))
       (* 100)
       int
@@ -103,8 +87,6 @@
 (comment
   (t/set-min-level! :info)
 
-  users
-
   (doseq [[score id] (-> (sort-by first
                                   (for [user users]
                                     [(comment-chars user) user]))
@@ -113,18 +95,11 @@
 
   (doseq [user (sort (conj users "hkimura"))]
     (let
-     [a (answers-by user)
+     [;;a (answers-by user)
       aw (answers-with-weight user)
       c (comments-by user)
       cc (comment-chars user)
       cw (comments-with-weight c cc)]
-      (println  (format "%10s %5.1f %5.1f" user aw cw))))
-      ;;(println user " | " aw "|" cw)))
-
-  #_(doseq [user (sort (conj users "hkimura"))]
-      (println (format "%10s %4.1f" user (answers-with-weight user))))
+      (println  (format "%10s %5.1f %5.1f %5.1f" user aw cw (+ aw cw)))))
 
   :rcf)
-
-
-
