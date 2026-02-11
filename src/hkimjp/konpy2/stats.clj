@@ -28,7 +28,7 @@
   (-> (ds/qq answers-q user)
       count))
 
-; (answers-by "hkimura")
+; (answers-by "pacinca-nu")
 
 (defn- get-num [e]
   (let [answer (-> (ds/pl e)
@@ -95,15 +95,11 @@
 
   (doseq [user (sort (conj users "hkimura"))]
     (let
-     [a (answers-by user)
-      c (comments-by user)
+     [;;a (answers-by user)
       aw (answers-with-weight user)
+      c (comments-by user)
       cc (comment-chars user)
       cw (comments-with-weight c cc)]
-      (println  (format "%10s %5.1f %5.1f" user aw cw)))
-    #_(println user " | " aw "|" cw))
-
-  #_(doseq [user (sort (conj users "hkimura"))]
-      (println (format "%10s %4.1f" user (answers-with-weight user))))
+      (println  (format "%10s %5.1f %5.1f %5.1f" user aw cw (+ aw cw)))))
 
   :rcf)
