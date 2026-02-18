@@ -12,8 +12,7 @@
 
 # 0.7.12-SNAPSHOT
 
-* stats.clj
-
+- changed scores.clj - stop peep service.
 - updated library
 
 | :file    | :name       | :current | :latest |

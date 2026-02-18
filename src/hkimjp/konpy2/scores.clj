@@ -77,8 +77,10 @@
   (let [ans  (sort (q/answers user))
         coms (sort (q/sent user))]
     (hx [:div
-         (section ans  "💪" (str user " answered(" (count ans) ")") "peep-answer")
-         (section coms "😃" (str user " comments(" (count coms) ")") "peep-sent")])))
+         "peep service was stopped"])
+    #_(hx [:div
+           (section ans  "💪" (str user " answered(" (count ans) ")") "peep-answer")
+           (section coms "😃" (str user " comments(" (count coms) ")") "peep-sent")])))
 
 (defn scores [request]
   (let [author   (user request)
