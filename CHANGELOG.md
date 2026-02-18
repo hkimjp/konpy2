@@ -10,7 +10,7 @@
 * restrict browsing until day
 
 
-# 0.7.12-SNAPSHOT
+# 0.7.12 (2026-02-18)
 
 - changed scores.clj - stop peep service.
 - updated library
