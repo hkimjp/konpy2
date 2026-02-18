@@ -26,7 +26,7 @@
         ans (ds/pl e)
         author (:author ans)
         p (parse-long p)]
-    (if (and (= 18 (:week (ds/pl p))) (date-before? 2026 2 13))
+    (if (and (<= 18 (:week (ds/pl p))) (date-before? 2026 2 13))
       (hx
        [:div "2/13 以降、見れるようになります。"])
       (hx
