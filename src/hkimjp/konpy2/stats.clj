@@ -84,6 +84,23 @@
       (* c 1.2)
       (* 1.0 c))))
 
+(defn score [pt]
+  "400 以上は S (40点）
+   300 以上は A (35点, あとの5点は自分顔認証で）
+   200 以上は B (30点 250ポイント以上にしたいところ。10回答、10コメ以降の tue2 ですら 239ポイントの事実を見よ）
+   150 以上は C （ここを60％とする。35*0.6 = 21.0 になる）
+   100 以上は D
+   50 以上は E
+   50 未満は 0"
+  (condp <= pt
+    400 40
+    300 35
+    200 30
+    150 20
+    100 15
+    50  10
+    0))
+
 (comment
   (t/set-min-level! :info)
 
@@ -100,6 +117,7 @@
       c (comments-by user)
       cc (comment-chars user)
       cw (comments-with-weight c cc)]
-      (println  (format "%10s %5.1f %5.1f %5.1f" user aw cw (+ aw cw)))))
+      #_(println  (format "%10s %5.1f %5.1f %5.1f" user aw cw (+ aw cw)))
+      #_(println user (score (+ aw cw)))))
 
   :rcf)
