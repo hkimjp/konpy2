@@ -7,7 +7,7 @@
    [taoensso.telemere :as t]
    [hkimjp.carmine :as c]
    [hkimjp.datascript :as ds]
-   [hkimjp.konpy2.login :refer [l22]]
+   [hkimjp.konpy2.login :refer [auth]]
    [hkimjp.konpy2.response :refer [page redirect hx]]
    [hkimjp.konpy2.restrictions :as r]
    [hkimjp.konpy2.util :refer [btn user now abbrev]]
@@ -103,7 +103,7 @@
    [:div.m-4
     [:p "develop: " (env :develop)]
     [:p "start-day:" (env :start-day)]
-    [:p "auth: " l22]
+    [:p "auth: " auth]
     [:p "port: " (env :port)]
     [:p "admin: " (env :admin)]
     [:p "datascript: " (env :datascript)]

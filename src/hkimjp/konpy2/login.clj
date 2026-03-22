@@ -12,7 +12,7 @@
    [hkimjp.konpy2.util :refer [user btn local-date now HH:mm]]
    [hkimjp.konpy2.response :refer [page]]))
 
-(def l22 (or (env :auth) "https://l22.melt.kyutech.ac.jp"))
+(def auth (or (env :auth) "https://l22.melt.kyutech.ac.jp"))
 
 (defn login
   [request]
@@ -35,6 +35,16 @@
       [:button {:class btn} "LOGIN"]]]
     [:br]]))
 
+(comment
+  auth
+  (-> (hk-client/get (str auth "hkimura"))
+      deref
+      :body
+      charred/read-json
+      (get "password"))
+
+  :rcf)
+
 (defn login!
   [{{:keys [login password]} :params}]
   (t/log! {:level :debug :id "login!" :msg (str login " " password)})
@@ -44,7 +54,7 @@
       (-> (resp/redirect "/k/tasks")
           (assoc-in [:session :identity] login)))
     (try
-      (let [pw (-> (hk-client/get (str l22 "/api/user/" login))
+      (let [pw (-> (hk-client/get (str auth login))
                    deref
                    :body
                    charred/read-json
