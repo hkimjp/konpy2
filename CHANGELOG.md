@@ -10,6 +10,12 @@
 * restrict browsing until day
 
 
+
+# 0.8.0-SNAPSHOT
+
+- docker compose
+
+
 # 0.7.12 (2026-02-18)
 
 - changed scores.clj - stop peep service.

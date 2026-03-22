@@ -37,11 +37,13 @@
 
 (comment
   auth
-  (-> (hk-client/get (str auth "hkimura"))
-      deref
-      :body
-      charred/read-json
-      (get "password"))
+
+  (let [pw (-> (hk-client/get (str auth "hkimura"))
+               deref
+               :body
+               charred/read-json
+               (get "password"))]
+    pw)
 
   :rcf)
 
@@ -57,8 +59,9 @@
       (let [pw (-> (hk-client/get (str auth login))
                    deref
                    :body
-                   charred/read-json
-                   (get "password"))]
+                   (charred/read-json :key-fn keyword)
+                   :password)]
+        (println "pw " pw " password " password)
         (if (hashers/check password pw)
           (do
             (t/log! :info (str "login success: " login))
