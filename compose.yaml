@@ -11,9 +11,11 @@ services:
       sh -c "java --enable-native-access ALL-UNNAMED -jar konpy2.jar"
 
   redis:
-    image: redis:8
+    image: redis:7
     env_file: .env
     volumes:
+      - redis:/data
+
 volumes:
   m2:
   gitlibs:
