@@ -30,15 +30,16 @@ run: minify
 build: minify
     clojure -T:build ci
 
-stage: build
+deploy host: minify build
     scp compose.yaml ${STAGE}:konpy2/compose.yaml
     scp target/io.github.hkimjp/konpy2-*.jar ${STAGE}:konpy2/konpy2.jar
     ssh ${STAGE} 'cd konpy2 && docker compose down && docker compose up -d'
 
-prod: minify build
-    scp target/io.github.hkimjp/konpy2-*.jar ${PROD}:konpy2/konpy.jar
-    ssh ${PROD} 'sudo systemctl restart konpy'
-    ssh ${PROD} 'systemctl status konpy'
+stage:
+    just deploy ${STAGE}
+
+prod:
+    just deploy ${PROD}
 
 up:
     docker compose up -d
@@ -46,11 +47,11 @@ up:
 down:
     docker compose down
 
-start:
-    #!/usr/bin/env bash
-    java -jar konpy.jar >> log/konpy.log 2>> log/error.log
-
-stop:
+# start:
+#     #!/usr/bin/env bash
+#     java -jar konpy.jar >> log/konpy.log 2>> log/error.log
+# 
+# stop:
 
 restart:
     stop
@@ -69,7 +70,7 @@ clean:
 #
 
 TAG := 'hkim0331/konpy2'
-VER := '0.8.0'
+VER := '0.8.1'
 
 dockerhub: security manifest
 
