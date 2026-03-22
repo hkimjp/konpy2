@@ -1,6 +1,6 @@
 services:
   konpy2:
-    image: hkim0331/konpy2:latest
+    image: hkim0331/konpy2:0.8.0
     env_file: .env
     working_dir: /usr/src/app
     volumes:
@@ -9,13 +9,9 @@ services:
       - "127.0.0.1:${PORT}:${PORT}"
     entrypoint: >
       sh -c "java --enable-native-access ALL-UNNAMED -jar konpy2.jar"
-
   redis:
-    image: redis:7
+    image: redis:8
     env_file: .env
     volumes:
-      - redis:/data
-
-volumes:
-  m2:
-  gitlibs:
+      - ./redis:/data
+  
