@@ -90,6 +90,6 @@ docker-build:
     docker build --pull -t {{ TAG }} .
     docker tag {{ TAG }} {{ TAG }}:{{ VER }}
 
-docker-push:
+docker-push: docker-build
     docker push {{ TAG }}
     docker push {{ TAG }}:{{ VER }}

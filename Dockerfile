@@ -5,11 +5,11 @@ ENV DEBCONF_NOWARNINGS=yes
 
 RUN set -ex; \
     apt-get -y update; \
-#    apt-get -y upgrade; \
     apt-get -y --no-install-recommends install \
             curl \
             python3 python3-pytest \
-            python3-opencvpython3-numpy python3-matplotlib
+            python3-opencv python3-numpy python3-matplotlib \
+            redis
 
 # don't forget in production
 RUN set -ex; apt-get -y autoremove; apt-get -y clean; rm -rf /var/lib/apt/lists/*
