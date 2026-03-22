@@ -10,8 +10,12 @@
 * restrict browsing until day
 
 
+# 0.8.1 (2026-03-22)
 
-# 0.8.0-SNAPSHOT
+- check deployment
+
+
+# 0.8.0
 
 - docker compose
 
